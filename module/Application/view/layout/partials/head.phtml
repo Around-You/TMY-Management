@@ -1,0 +1,59 @@
+    <head>
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta charset="utf-8" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <?php $this->headscript()->appendFile($this->basepath('js/jquery.min.js'))?>
+        <?php $this->headscript()->appendFile($this->basepath('js/bootstrap.min.js'))?>
+        <?php $this->headscript()->appendFile($this->basepath('js/bootstrap-wysiwyg.min.js'))?>
+        <?php $this->headscript()->appendFile($this->basepath('js/ace.min.js'))?>
+        <?php $this->headscript()->appendFile($this->basepath('js/ace-elements.min.js'))?>
+        <?php $this->headscript()->appendFile($this->basepath('js/ace-extra.min.js'))?>
+        <?php $this->headscript()->appendFile($this->basepath('js/jquery.qrcode.min.js'))?>
+
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/css/font-awesome.min.css" />
+
+		<!-- page specific plugin styles -->
+
+		<!-- text fonts -->
+		<link rel="stylesheet" href="/css/ace-fonts.css" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="/css/ace.min.css" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/css/ace-part2.min.css" />
+		<![endif]-->
+		<link rel="stylesheet" href="/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="/css/admin-site/admin.css" />
+
+
+		<?php echo $this->headscript();?>
+		<?php echo $this->headLink() ?>
+        <?php echo $this->headTitle('捷店')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="/js/html5shiv.js"></script>
+		<script src="/js/respond.min.js"></script>
+		<![endif]-->
+        <meta property="wb:webmaster" content="176d06dc51ce9a74" />
+    </head>

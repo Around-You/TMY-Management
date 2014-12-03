@@ -1,0 +1,14 @@
+<?php
+
+$form->setAttribute('class', 'form-horizontal');
+$form->setAttribute('role', 'form');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+echo $this->formRow($form->get('title'));
+
+echo $this->formActions( $form->get('cancel'), $form->get('submit'));
+echo $this->form()->closeTag();
+?>
+

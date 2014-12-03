@@ -1,0 +1,13 @@
+<?php
+
+$this->layout()->headerTitle = $product->title;
+echo $this->partial('mobile/layout/breadcrumbs', array( 'category' => $category));
+?>
+
+<h3 class="ui-bar ui-bar-a ui-corner-all"><?=$product->title?></h3>
+<p>请输入您的微信账号或姓名，以方便我们在到货后及时通知您</p>
+<form action="" method="post">
+<label for="text-basic">微信账号或姓名:</label>
+<input name="weixin" id="text-basic" value="" type="text">
+<input data-mini="true" value="提交" type="submit">
+</form>

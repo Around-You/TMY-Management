@@ -1,0 +1,64 @@
+<?php
+
+$this->layout()->headerTitle = $product->title;
+echo $this->partial('mobile/layout/breadcrumbs', array( 'category' => $category));
+$this->inlinescript()->appendFile( $this->basePath('js/wds/mobile/imageswitcher.js') );
+?>
+<p>
+<?php foreach ($flashMessage as $message)
+{
+    echo $message;
+}
+?>
+</p>
+<div class="ui-corner-all product-single-info">
+  <div class="ui-bar ui-bar-a ui-first-bar">
+    <h3>商品信息</h3>
+  </div>
+  <div class="ui-body ui-body-a">
+        <div class="product-images imageswitcher">
+            <?php if (!empty($product->product_images)):?>
+            <table>
+                <tr>
+                    <td class="image-col">
+                        <div class="full-image-wrapper">
+                            <img alt="" src="<?=$product->product_images[0]->uri?>">
+                        </div>
+                    </td>
+                    <td class="thumbnails-col">
+                        <?php foreach ($product->product_images as $key => $image):?>
+                        <?php if ($key == 0) :?>
+                        <div><img alt="" src="<?=$image->thumbnail_uri?>" data-fullimage="<?=$image->uri?>" class="thumb-active"></div>
+                        <?php else :?>
+                        <div><img alt="" src="<?=$image->thumbnail_uri?>" data-fullimage="<?=$image->uri?>"></div>
+                        <?php endif;?>
+                        <?php endforeach;?>
+                    </td>
+                </tr>
+            </table>
+            <?php endif;?>
+        </div>
+        <div class="product-info">
+            <p class="ui-li-desc"><?=$product->title?></p>
+            <p><?=$category->title?></p>
+            <p>¥ <?=$product->price?> / <?=$product->unit?></p>
+        </div>
+  </div>
+  <div class="ui-bar ui-bar-a">
+    <h3>详细说明</h3>
+  </div>
+  <div class="ui-body ui-body-a ui-last-body">
+    <p><?=$product->description?></p>
+  </div>
+</div>
+
+<a href="/p/buy/<?=$product->id?>" data-transition="fade" class="ui-btn ui-corner-all btn-buy">预订</a>
+
+<ul data-role="listview" data-inset="true" class="ui-nodisc-icon ui-alt-icon">
+	<li>
+		<a href="/g/<?=$category->id?>" data-transition="fade">
+		更多相关商品
+		</a>
+	</li>
+</ul>
+

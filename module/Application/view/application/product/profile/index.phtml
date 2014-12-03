@@ -1,0 +1,55 @@
+<?php
+$title = '商品详情';
+$this->layout()->currentItem = '商品管理';
+$this->headTitle($title);
+$this->inlinescript()->appendFile( $this->basePath('js/wds/admin/product-profile.js'));
+$this->inlinescript()->appendScript( 'wds_admin_product_profile.options.productId = ' . $product->id );
+$this->inlinescript()->appendFile( $this->basePath('js/jquery.dataTables.min.js'))
+                     ->appendFile( $this->basePath('js/jquery.dataTables.bootstrap.js'));
+?>
+<?=$this->flashMessenger()->render();?>
+<div class="widget-box">
+    <div class="widget-header widget-header-flat">
+    	<h4 class="widget-title"><?=$this->escapehtml($product->title)?></h4>
+
+        <div class="widget-toolbar">
+			<a href="/admin/product/product/edit/<?=$product->id?>"><button class="btn btn-xs btn-info">
+				<i class="ace-icon fa fa-pencil"></i>
+				编辑
+			</button></a>
+    	</div>
+    	<div class="widget-toolbar no-border">
+    		<label>
+    		     <small class="text-primary">
+    				<b>推荐到首页</b>
+    			</small>
+    			<input id='recommend' name="recommend" type="checkbox" class="ace ace-switch ace-switch-3" <?= $product->recommend?'checked="checked"':'';?> >
+    			<span class="lbl middle"></span>
+    		</label>
+    	</div>
+    </div>
+
+    <div class="widget-body">
+        <div class="widget-main">
+            <dl id="dt-list-1" class="">
+            	<dt>售价</dt>
+            	<dd><?=$this->escapehtml($product->priceString)?></dd>
+            	<dt>上架时间</dd>
+            	<dd><?=$this->escapehtml($product->create_time)?></dt>
+            	<dt>说明</dt>
+            	<dd><?=$this->escapehtml($product->description)?></dd>
+            </dl>
+        </div>
+    </div>
+</div>
+<h3 class="header smaller lighter blue">买家信息</h3>
+<table id="buyer-table" class="table table-striped table-bordered table-hover">
+    <thead>
+    	<tr>
+            <th>微信名</th>
+            <th>数量</th>
+            <th>总计</th>
+            <th>&nbsp;</th>
+    	</tr>
+    </thead>
+</table>

@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+
+a {
+    cursor: pointer;
+}
+.table .cols-actions{
+	width: 56px;
+}

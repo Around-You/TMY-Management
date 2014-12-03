@@ -1,0 +1,13 @@
+!.gitignore
+.composer
+composer
+zendframework
+autoload.php
+bjyoungblood
+mobiledetect
+masterexploder
+symfony
+sebastian
+phpunit
+ocramius
+doctrine

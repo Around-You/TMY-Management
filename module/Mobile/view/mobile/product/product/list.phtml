@@ -1,0 +1,16 @@
+<?php
+
+$this->layout()->headerTitle = $category->title;
+echo $this->partial('mobile/layout/breadcrumbs', array( 'category' => $category));
+?>
+<ul data-role="listview" data-inset="true" class="ui-nodisc-icon ui-alt-icon">
+    <?php foreach ($products as $product):?>
+	<li>
+		<a href="/p/<?=$product->id?>" data-transition="fade">
+			<img src="<?=$product->product_thumbnail?>">
+			<h2><?=$product->title?></h2>
+			<p>¥ <?=$product->price?> / <?=$product->unit?></p>
+		</a>
+	</li>
+	<?php endforeach;?>
+</ul>

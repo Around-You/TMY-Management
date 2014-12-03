@@ -1,0 +1,21 @@
+ <?php
+
+ $title = 'Model';
+ $this->headTitle($title);
+ ?>
+  <div class="page-content">
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+ <?php
+ $form->setAttribute('action', $this->url('CodeGenerator/default', array('controller'=>'index', 'action' => 'model')));
+ $form->setAttribute('class', 'form-horizontal');
+ $form->prepare();
+
+ echo $this->form()->openTag($form);
+ echo $this->formRow($form->get('table_name'));
+ echo $this->formRow($form->get('model_class'));
+ echo $this->formRow($form->get('namespace'));
+ echo $this->formRow($form->get('path'));
+ echo $this->formSubmit($form->get('submit'));
+ echo $this->form()->closeTag();
+ ?>
+ </div>

@@ -1,0 +1,102 @@
+<?php
+$this->headlink()->appendStylesheet( $this->basePath('css/uncompressed/dropzone.css') );
+$this->headlink()->appendStylesheet( $this->basePath('css/uncompressed/dropzone.overlap.css') );
+$this->inlinescript()->appendFile( $this->basePath('js/dropzone.min.js') )
+                     ->appendFile( $this->basePath('js/wds/admin/product.js') );
+
+
+$form->setAttribute('role', 'form');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+echo $this->formRow($form->get('title'));
+echo $this->formRow($form->get('category_id'));
+?>
+<a href="#modal-form" role="button" class="blue" data-toggle="modal"><i class="ace-icon fa fa-plus"></i>新增一个商品类别</a>
+<?php
+echo $this->formRow($form->get('price'));
+echo $this->formRow($form->get('unit'));
+echo $this->formRow($form->get('description'));
+
+$product_images = $form->get('product_images')->getValue();
+
+?>
+<div class="form-group">
+    <label class="control-label no-padding-right"><span>商品图片</span></label>
+    <div >
+        <div class="dropzone">
+    		<div class="fallback">
+    			<input name="file" type="file" multiple="" />
+    		</div>
+		</div>
+    </div>
+</div>
+<?php
+echo $this->formActions($form->get('submit'));
+echo $this->form()->closeTag();
+?>
+
+<div id="dropzone_uploadedFiles" class="hidden">
+    <?= json_encode($product_images)?>
+</div>
+<div id="dropzone_dictDefaultMessage" class="hidden">
+    <span class="bigger-150 bolder"><i class="ace-icon fa fa-caret-right red"></i> Drop files</span> to upload
+	<span class="smaller-80 grey">(or click)</span> <br />
+	<i class="upload-icon ace-icon fa fa-cloud-upload blue fa-3x"></i>
+</div>
+
+<div id="dropzone_previewTemplate" class="hidden">
+    <div class="dz-preview dz-file-preview">
+        <div class="dz-details" data-dz-id>
+            <div class="dz-filename"><span data-dz-name></span></div>
+            <img data-dz-thumbnail />
+        </div>
+        <div class="dz-error-mark"><span></span></div>
+        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+    </div>
+</div>
+
+<div id="dropzone_removeButtonTemplate"  class="hidden" >
+    <a href="javascript:undefined;" class="dz-button-remove pull-left" >删除</a>"
+</div>
+<div id="dropzone_premierButtonTemplate"  class="hidden" >
+    <a href="javascript:undefined;" class="dz-button-premier pull-right">设为默认</a>"
+</div>
+
+
+<div id="modal-form" class="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="blue bigger">请输入商品类别</h4>
+			</div>
+			<div class="modal-body">
+			    <form action="/admin/product/category/addByAjax" id="category-form">
+    				<div class="row">
+    					<div class="col-xs-12">
+    						<div class="form-group">
+    							<label for="form-field-username">商品类别</label>
+    							<div>
+    								<input class="input-large" type="text" id="form-field-category" name="title" placeholder="商品类别" value="" />
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-sm" data-dismiss="modal">
+					<i class="ace-icon fa fa-times"></i>
+					取消
+				</button>
+
+				<button class="btn btn-sm btn-primary btn-modal-form-submit" data-submit="category-form">
+					<i class="ace-icon fa fa-check"></i>
+					保存
+				</button>
+			</div>
+		</div>
+	</div>
+</div><!-- PAGE CONTENT ENDS -->

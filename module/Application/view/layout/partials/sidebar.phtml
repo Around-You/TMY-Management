@@ -1,0 +1,60 @@
+<?php
+$menus = array(
+	'商品类别管理' => array(
+	    'title' =>'商品类别管理',
+	    'icon' => 'fa fa-tachometer',
+	    'url' => '/product/category'
+    ),
+    '商品管理' => array(
+	    'title' =>'商品管理',
+	    'url' => '/product'
+    ),
+    '订单' => array(
+	    'title' =>'订单',
+	    'url' => '/product/order'
+    ),
+//     '购买记录' => array(
+// 	    'title' =>'购买记录',
+// 	    'url' => '/admin/product/category'
+//     ),
+);
+
+?>
+<div class="sidebar responsive" id="sidebar">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'fixed')
+        } catch(e) {}
+    </script>
+    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+    	<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+    	</div>
+    	<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+    	</div>
+    </div><!-- /.sidebar-shortcuts -->
+    <!-- #sidebar-shortcuts -->
+    <ul class="nav nav-list">
+    <?php foreach ($menus as $key => $item):?>
+        <li class="<?=($currentItem == $key)?'active':''?>">
+            <a href="<?=$item['url']?>">
+                <i class=""></i>
+                <span class="menu-text">
+                    <?=$item['title']?>
+                </span>
+            </a>
+        </li>
+    <?php endforeach;?>
+    </ul>
+    <!-- /.nav-list -->
+
+	<!-- #section:basics/sidebar.layout.minimize -->
+	<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+		<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+	</div>
+
+	<!-- /section:basics/sidebar.layout.minimize -->
+	<script type="text/javascript">
+		try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+	</script>
+</div>
+<!-- End .sidebar -->

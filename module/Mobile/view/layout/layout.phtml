@@ -1,0 +1,30 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta property="wb:webmaster" content="176d06dc51ce9a74" />
+        <meta charset="utf-8" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    	<link rel="stylesheet" href="/css/jquery.mobile-1.4.3.min.css" />
+    	<link rel="stylesheet" href="/css/mobile-site/mobile.css" />
+    	<script src="/js/jquery.min.js"></script>
+    	<script src="/js/jquery.mobile-1.4.3.min.js"></script>
+        <?php echo $this->headTitle( $this->escapehtml($headerTitle))?>
+
+    </head>
+    <body>
+    	<div data-role="page" id="testpage" class="ui-page-theme-a noshadow">
+    		<div class="ui-content" role="main">
+    			<?php echo $this->content; ?>
+    		</div><!-- /content -->
+
+
+		    <?=$this->partial('mobile/layout/footer')?>
+
+            <?php echo $this->inlineScript() ?>
+      	</div>
+
+
+    </body>
+</html>

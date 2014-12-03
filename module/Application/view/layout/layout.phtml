@@ -1,0 +1,35 @@
+<?php
+echo $this->doctype();
+?>
+
+<html lang="en">
+    <?php include_once __DIR__ . '/partials/head.phtml';?>
+    <body class="no-skin">
+    <?php include_once __DIR__ . '/partials/nav.phtml';?>
+        <div class="main-container" id="main-container">
+        	<script type="text/javascript">
+        		try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+        	</script>
+
+
+            <?php include_once __DIR__ . '/partials/sidebar.phtml';?>
+
+        	<div class="main-content">
+        	 <?php include_once __DIR__ . '/partials/breadcrumbs.phtml';?>
+                <div class="page-content">
+                    <div class="page-content-area">
+                        <?php echo $this->content; ?>
+            		</div>
+                </div>
+        	</div>
+
+            <?php include_once __DIR__ . '/partials/footer.phtml';?>
+            <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+        </div><!-- /.main-container -->
+
+        <?php $this->inlinescript()->appendFile($this->basepath('js/wds/admin/core.js'))?>
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>
