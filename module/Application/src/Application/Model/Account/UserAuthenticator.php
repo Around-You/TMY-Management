@@ -27,11 +27,22 @@ class UserAuthenticator extends AbstractModelMapper
      *
      * @param string $identity
      * @param string $credential
-     * @return boolean
+     * @return Result
+     * @throws Exception\RuntimeException
      */
     public function doPasswordAuth($identity, $credential)
     {
-        return $this->setIdentity("");
+        $auth = new AuthenticationService();
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $authAdapter = new AuthDbTableAdapter($dbAdapter, 'user', 'username', 'password');
+        $authAdapter->setIdentity($identity);
+        $authAdapter->setCredential($credential);
+
+        // Attempt authentication, saving the result
+        $result = $auth->authenticate($authAdapter);
+        $storage = $auth->getStorage();
+        $storage->write($authAdapter->getResultRowObject(null, 'password'));
+        return $result;
     }
 
     public function existWeiboAccount($token)

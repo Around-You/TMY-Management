@@ -10,9 +10,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Model\Member;
-use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthDbTableAdapter;
+use Application\Model\Account\UserAuthenticator;
 use Zend\Authentication\Result;
 use Application\Form\LoginForm;
 use SamFramework\Core\App;
@@ -29,7 +27,8 @@ class AccountController extends AbstractActionController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $result = $this->doAuthenticate($form->get('username')->getValue(), $form->get('password')->getValue());
+                $authenticator =  $this->getServiceLocator()->get('Application\Model\Account\UserAuthenticator');
+                $result = $authenticator->doPasswordAuth($form->get('username')->getValue(), $form->get('password')->getValue());
                 switch ($result->getCode()) {
 
                     case Result::SUCCESS:
