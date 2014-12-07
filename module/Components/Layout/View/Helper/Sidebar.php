@@ -26,7 +26,7 @@ class Sidebar extends AbstractHelper
      *
      * @return the $escapeHtml
      */
-    protected function getEscapeHtml()
+    public function getEscapeHtml()
     {
         if (! $this->escapeHtml) {
             $this->escapeHtml = $this->getView()->plugin('escapeHtml');
@@ -94,7 +94,6 @@ class Sidebar extends AbstractHelper
         $this->setCurrentItem($currentItem);
         $content = $this->renderNavList();
 
-
         return $content;
     }
 
@@ -115,20 +114,25 @@ class Sidebar extends AbstractHelper
         // $markup = sprintf($this->getMessageOpenFormat(), ' class="' . implode(' ', $classes) . '"');
     }
 
-    public function renderMenuItem($menuItem)
+    public function renderMenuItem($menuItem, $subMenu = FALSE)
     {
         $currentItem = $this->getCurrentItem();
+        $escapeHtml = $this->getEscapeHtml();
         $liClass = '';
         if ($currentItem == $menuItem['title']) {
             $liClass = 'active';
         }
         $html = '<li class="' . $liClass . '">
-                    <a href="' . $menuItem['url'] . '">
-                        <i class="' . $menuItem['icon'] . '"></i>
-                        <span class="menu-text">
-                            ' . $menuItem['title'] . '
-                        </span>
-                    </a>
+                    <a href="' . $menuItem['url'] . '">';
+        if ($subMenu) {
+            $html .= '<i class="menu-icon fa fa-caret-right"></i>'.$escapeHtml($menuItem['title']);
+        } else {
+            $html .= '<i class="' . $menuItem['icon'] . '"></i>
+        <span class="menu-text">' . $escapeHtml($menuItem['title']) . '</span>';
+        }
+
+        $html .= '</a>
+                    <b class="arrow"></b>
                 </li>';
         return $html;
     }
@@ -138,10 +142,14 @@ class Sidebar extends AbstractHelper
         $currentItem = $this->getCurrentItem();
         $subItems = $menuItem['submenu'];
         $liClass = '';
-        if ($currentItem == $menuItem['name']) {
-            $liClass = 'active';
+        $subNavHtml = '';
+        foreach ($subItems as $subMenuItem) {
+            if ($currentItem == $subMenuItem['title']) {
+                $liClass = 'active open';
+            }
+            $subNavHtml .= $this->renderMenuItem($subMenuItem,true);
         }
-        $html = '<li class="">
+        $html = '<li class="' . $liClass . '">
                     <a href="#" class="dropdown-toggle">
                         <i class=""></i>
                         <span class="menu-text">
@@ -152,9 +160,7 @@ class Sidebar extends AbstractHelper
                     </a>
                     <b class="arrow"></b>
                     <ul class="submenu">';
-        foreach ($subItems as $subMenuItem) {
-            $html .= $this->renderMenuItem($subMenuItem);
-        }
+        $html .= $subNavHtml;
         $html .= '</ul></li>';
         return $html;
     }
