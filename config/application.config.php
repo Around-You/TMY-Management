@@ -5,11 +5,9 @@ return array(
         'Application',
         'ZendDeveloperTools',
         'BjyProfiler',
-//     	'CodeGenerator',
+    	'CodeGenerator',
         'Components',
         'SamFramework',
-        'Mobile',
-//         'Admin',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
