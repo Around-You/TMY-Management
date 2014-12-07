@@ -17,7 +17,7 @@ use Zend\Authentication\Result;
 use Application\Form\LoginForm;
 use SamFramework\Core\App;
 
-class StoreController extends AbstractActionController
+class DashboardController extends AbstractActionController
 {
 
     public function indexAction()

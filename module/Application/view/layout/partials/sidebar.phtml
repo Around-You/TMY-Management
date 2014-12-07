@@ -1,22 +1,32 @@
 <?php
 $menus = array(
-	'商品类别管理' => array(
-	    'title' =>'商品类别管理',
-	    'icon' => 'fa fa-tachometer',
-	    'url' => '/product/category'
+    '首页' => array(
+        'title' => '首页',
+        'url' => '/dashboard'
+    ),
+    '会员管理' => array(
+        'title' => '会员管理',
+        'submenu' => array(
+            array(
+                'title' => '会员列表',
+                'icon' => 'fa fa-tachometer',
+                'url' => '/member/list'
+            ),
+            array(
+                'title' => '新增会员',
+                'icon' => 'fa fa-tachometer',
+                'url' => '/product/category'
+            ),
+        )
     ),
     '商品管理' => array(
-	    'title' =>'商品管理',
-	    'url' => '/product'
+        'title' => '商品管理',
+        'url' => '/product'
     ),
-    '订单' => array(
-	    'title' =>'订单',
-	    'url' => '/product/order'
-    ),
-//     '购买记录' => array(
-// 	    'title' =>'购买记录',
-// 	    'url' => '/admin/product/category'
-//     ),
+    '会员消费' => array(
+        'title' => '会员消费',
+        'url' => '/product/order'
+    )
 );
 
 ?>
@@ -61,16 +71,87 @@ $menus = array(
 	</div><!-- /.sidebar-shortcuts -->
 
     <ul class="nav nav-list">
-    <?php foreach ($menus as $key => $item):?>
-        <li class="<?=($currentItem == $key)?'active':''?>">
-            <a href="<?=$item['url']?>">
-                <i class=""></i>
-                <span class="menu-text">
-                    <?=$item['title']?>
-                </span>
-            </a>
-        </li>
-    <?php endforeach;?>
+    <?=$this->sidebar($menus,$currentItem); ?>
+
+
+    <li class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-desktop"></i>
+							<span class="menu-text"> UI &amp; Elements </span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+							<li class="">
+								<a href="#" class="dropdown-toggle">
+									<i class="menu-icon fa fa-caret-right"></i>
+
+									Layouts
+									<b class="arrow fa fa-angle-down"></b>
+								</a>
+
+							</li>
+
+							<li class="">
+								<a href="typography.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Typography
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="elements.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Elements
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="buttons.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Buttons &amp; Icons
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="treeview.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Treeview
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="jquery-ui.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									jQuery UI
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="">
+								<a href="nestable-list.html">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Nestable Lists
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+
+						</ul>
+					</li>
     </ul>
     <!-- /.nav-list -->
 

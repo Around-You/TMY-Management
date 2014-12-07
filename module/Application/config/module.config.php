@@ -37,9 +37,8 @@ return array(
             'Application\Controller\Product\Category' => 'Application\Controller\Product\CategoryController',
             'Application\Controller\Product\Profile' => 'Application\Controller\Product\ProfileController',
             'Application\Controller\Product\Order' => 'Application\Controller\Product\OrderController',
-            'Application\Controller\Test' => 'Application\Controller\TestController',
-            'Application\Controller\OAuth' => 'Application\Controller\OAuthController',
-            'Application\Controller\Store' => 'Application\Controller\StoreController'
+            'Application\Controller\Dashboard' => 'Application\Controller\DashboardController',
+            'Application\Controller\Member' => 'Application\Controller\MemberController'
         )
     ),
     'view_manager' => array(

@@ -103,6 +103,7 @@ abstract class AbstractGenerator
             array_push($arrNamespace, $this->getClassName() . '.php');
             $this->filePath = implode(DIRECTORY_SEPARATOR, $arrNamespace);
         }
+        print_r($this->filePath);
         return $this->filePath;
     }
 
@@ -144,6 +145,7 @@ abstract class AbstractGenerator
         if (! $this->classGenerator) {
             if (class_exists($this->getFullClassName())) {
                 $classReflection = new ClassReflection($this->getFullClassName());
+                print_r($classReflection->getFileName());exit();
                 $this->setFileName($classReflection->getFileName());
             } else {
                 $classReflection = new ClassReflection($this->getTemplateClassName());

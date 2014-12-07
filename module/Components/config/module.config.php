@@ -10,6 +10,7 @@ return array(
             'FormElementErrors' => 'Components\Form\View\Helper\FormElementErrors',
             'formwysiwyg' => 'Components\Form\View\Helper\FormWysiwyg',
             'flashMessenger' => 'Components\Layout\View\Helper\FlashMessenger',
+            'sidebar' => 'Components\Layout\View\Helper\Sidebar',
         ),
     ),
 
