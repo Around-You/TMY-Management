@@ -45,14 +45,14 @@ class MemberForm extends Form
             'name' => 'phone',
             'type' => 'Text',
             'options' => array(
-                'label' => '手机/电话',
+                'label' => '手机/电话'
             )
         ));
         $this->add(array(
             'name' => 'address',
             'type' => 'Text',
             'options' => array(
-                'label' => '地址'
+                'label' => '联系地址'
             )
         ));
         $this->add(array(
@@ -87,7 +87,46 @@ class MemberForm extends Form
             'name' => 'goods',
             'type' => 'Select',
             'options' => array(
-                'label' => ''
+                'label' => '会员类别'
+            )
+        ));
+        $this->add(array(
+            'name' => 'password',
+            'type' => 'Select',
+            'options' => array(
+                'label' => '密码'
+            )
+        ));
+        $this->add(array(
+            'name' => 'goods',
+            'type' => 'Select',
+            'options' => array(
+                'label' => '确认密码'
+            )
+        ));
+        $this->add(array(
+            'name' => 'goods',
+            'type' => 'Select',
+            'options' => array(
+                'label' => '推荐人'
+            )
+        ));
+        $this->add(array(
+            'name' => 'gender',
+            'type' => 'Radio',
+            'options' => array(
+                'label' => '性别',
+                'value_options' => array(
+                    '男' => '男',
+                    '女' => '女'
+                )
+            )
+        ));
+        $this->add(array(
+            'name' => 'dob',
+            'type' => 'Select',
+            'options' => array(
+                'label' => '生日'
             )
         ));
         $this->add(array(

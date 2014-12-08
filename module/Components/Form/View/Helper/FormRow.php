@@ -85,18 +85,15 @@ class FormRow extends ZVHFormRow
 
             // Multicheckbox elements have to be handled differently as the HTML standard does not allow nested
             // labels. The semantic way is to group them inside a fieldset
-            if ($type === 'multi_checkbox'
-                || $type === 'radio'
-                || $element instanceof MonthSelect
-            ) {
-                $markup = sprintf(
-                    '<fieldset><legend>%s</legend>%s</fieldset>',
-                    $label,
-                    $elementString);
-                if ($this->renderErrors) {
-                    $markup .= $elementErrors;
-                }
-            } else {
+//             if ($type === 'multi_checkbox' || $type === 'radio' || $element instanceof MonthSelect ) {
+//                 $markup = sprintf(
+//                     '<fieldset><legend>%s</legend>%s</fieldset>',
+//                     $label,
+//                     $elementString);
+//                 if ($this->renderErrors) {
+//                     $markup .= $elementErrors;
+//                 }
+//             } else {
                 // Ensure element and label will be separated if element has an `id`-attribute.
                 // If element has label option `always_wrap` it will be nested in any case.
                 if ($element->hasAttribute('id')
@@ -130,7 +127,7 @@ class FormRow extends ZVHFormRow
                 	    $markup = $labelOpen . $elementString . $label . $labelClose;
                 	    break;
                 }
-            }
+//             }
 
 
         } else {

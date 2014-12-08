@@ -8,10 +8,12 @@ return array(
             'formbutton' => 'Components\Form\View\Helper\FormButton',
             'formActions' => 'Components\Form\View\Helper\FormActions',
             'FormElementErrors' => 'Components\Form\View\Helper\FormElementErrors',
+            'formmulticheckbox' => 'Components\Form\View\Helper\FormMultiCheckbox',
+            'formradio' => 'Components\Form\View\Helper\FormRadio',
             'formwysiwyg' => 'Components\Form\View\Helper\FormWysiwyg',
             'flashMessenger' => 'Components\Layout\View\Helper\FlashMessenger',
-            'sidebar' => 'Components\Layout\View\Helper\Sidebar',
-        ),
+            'sidebar' => 'Components\Layout\View\Helper\Sidebar'
+        )
     ),
 
     'form_elements' => array(
@@ -20,12 +22,13 @@ return array(
             'cancelButton' => 'Components\Form\Element\CancelButton',
             'WYSIWYG' => 'Components\Form\Element\WYSIWYG',
             'text' => 'Components\Form\Element\Text',
-            'select' => 'Components\Form\Element\Select'
+            'select' => 'Components\Form\Element\Select',
+            'radio' => 'Components\Form\Element\Radio',
         )
     ),
     'view_manager' => array(
         'template_map' => array(
-            'components/layout/flashmessager' => __DIR__ . '/../view/layout/flashmessager.phtml',
-        ),
-    ),
+            'components/layout/flashmessager' => __DIR__ . '/../view/layout/flashmessager.phtml'
+        )
+    )
 );

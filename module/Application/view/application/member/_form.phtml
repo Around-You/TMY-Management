@@ -1,25 +1,31 @@
 <?php
-$this->headlink()->appendStylesheet( $this->basePath('css/uncompressed/dropzone.css') );
-$this->headlink()->appendStylesheet( $this->basePath('css/uncompressed/dropzone.overlap.css') );
-$this->inlinescript()->appendFile( $this->basePath('js/dropzone.min.js') )
-                     ->appendFile( $this->basePath('js/wds/admin/product.js') );
-
+$this->inlinescript()->appendFile( $this->basePath('js/wds/admin/product.js') );
 
 $form->setAttribute('role', 'form');
 $form->prepare();
 
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
-echo $this->formRow($form->get('code'));
-echo $this->formRow($form->get('name'));
-
 ?>
-<a href="#modal-form" role="button" class="blue" data-toggle="modal"><i class="ace-icon fa fa-plus"></i>新增一个商品类别</a>
+<div class="col-md-6">
 <?php
-echo $this->formRow($form->get('phone'));
-echo $this->formRow($form->get('address'));
+echo $this->formRow($form->get('code'));
+echo $this->formRow($form->get('gender'));
 echo $this->formRow($form->get('id_type'));
+echo $this->formRow($form->get('address'));
+?>
+</div>
+<div class="col-md-6">
+<?php
+echo $this->formRow($form->get('name'));
+echo $this->formRow($form->get('dob'));
 echo $this->formRow($form->get('id_code'));
+echo $this->formRow($form->get('phone'));
+?>
+</div>
+<?php
+
+
 
 
 
