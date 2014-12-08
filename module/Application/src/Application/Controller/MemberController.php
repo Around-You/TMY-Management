@@ -12,6 +12,7 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use SamFramework\Core\App;
 use Zend\View\Model\JsonModel;
+use Application\Form\MemberForm;
 
 class MemberController extends AbstractActionController
 {
@@ -78,9 +79,8 @@ class MemberController extends AbstractActionController
 
     public function addAction()
     {
-        $form = ProductForm::getInstance($this->getServiceLocator());
-        $form->setCategories($this->getCategoryTable()
-            ->fetchAll());
+        $form = MemberForm::getInstance($this->getServiceLocator());
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $product = new Product();

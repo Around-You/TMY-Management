@@ -1,0 +1,70 @@
+<?php
+$this->headlink()->appendStylesheet( $this->basePath('css/uncompressed/dropzone.css') );
+$this->headlink()->appendStylesheet( $this->basePath('css/uncompressed/dropzone.overlap.css') );
+$this->inlinescript()->appendFile( $this->basePath('js/dropzone.min.js') )
+                     ->appendFile( $this->basePath('js/wds/admin/product.js') );
+
+
+$form->setAttribute('role', 'form');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+echo $this->formRow($form->get('code'));
+echo $this->formRow($form->get('name'));
+
+?>
+<a href="#modal-form" role="button" class="blue" data-toggle="modal"><i class="ace-icon fa fa-plus"></i>新增一个商品类别</a>
+<?php
+echo $this->formRow($form->get('phone'));
+echo $this->formRow($form->get('address'));
+echo $this->formRow($form->get('id_type'));
+echo $this->formRow($form->get('id_code'));
+
+
+
+?>
+<?php
+echo $this->formActions($form->get('submit'));
+echo $this->form()->closeTag();
+?>
+
+
+
+
+
+<div id="modal-form" class="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="blue bigger">请输入商品类别</h4>
+			</div>
+			<div class="modal-body">
+			    <form action="/admin/product/category/addByAjax" id="category-form">
+    				<div class="row">
+    					<div class="col-xs-12">
+    						<div class="form-group">
+    							<label for="form-field-username">商品类别</label>
+    							<div>
+    								<input class="input-large" type="text" id="form-field-category" name="title" placeholder="商品类别" value="" />
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-sm" data-dismiss="modal">
+					<i class="ace-icon fa fa-times"></i>
+					取消
+				</button>
+
+				<button class="btn btn-sm btn-primary btn-modal-form-submit" data-submit="category-form">
+					<i class="ace-icon fa fa-check"></i>
+					保存
+				</button>
+			</div>
+		</div>
+	</div>
+</div><!-- PAGE CONTENT ENDS -->
