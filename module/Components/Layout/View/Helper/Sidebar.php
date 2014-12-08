@@ -127,8 +127,10 @@ class Sidebar extends AbstractHelper
         if ($subMenu) {
             $html .= '<i class="menu-icon fa fa-caret-right"></i>'.$escapeHtml($menuItem['title']);
         } else {
-            $html .= '<i class="' . $menuItem['icon'] . '"></i>
-        <span class="menu-text">' . $escapeHtml($menuItem['title']) . '</span>';
+            if (isset($menuItem['icon'])){
+                $html .='<i class="' . $menuItem['icon'] . '"></i>';
+            }
+            $html .= '<span class="menu-text">' . $escapeHtml($menuItem['title']) . '</span>';
         }
 
         $html .= '</a>
