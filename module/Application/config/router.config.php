@@ -21,37 +21,7 @@ return array(
                 'action'        => 'index',
             )
         )
-    ),
-    'product' => array(
-        'type' => 'Segment',
-        'options' => array(
-            'route' => '/product[/][:controller[/][:action[/][:id]]]',
-            'constraints' => array(
-                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                'id' => '[0-9]+'
-            ),
-            'defaults' => array(
-                '__NAMESPACE__' => 'Application\Controller\Product',
-                'controller'    => 'product',
-                'action'        => 'index'
-            )
-        )
-    ),
-    'oauth' => array(
-        'type' => 'Segment',
-        'options' => array(
-            'route' => '/oauth[/:action][/:channel]',
-            'constraints' => array(
-                'channel'   => '[a-zA-Z][a-zA-Z0-9_-]*',
-                'action'    => '[a-zA-Z][a-zA-Z0-9_-]*'
-            ),
-            'defaults' => array(
-                'controller'    => 'oauth',
-                '__NAMESPACE__' => 'Application\Controller'
-            )
-        )
-    ),
+    )
 )
 ;
 

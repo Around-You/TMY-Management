@@ -69,6 +69,10 @@ abstract class AbstractModel implements InputFilterAwareInterface, ArraySerializ
         throw new \Exception("Please set InputFilter");
     }
 
+    /**
+     * Use for get array data before model saving
+     * @see \Zend\Stdlib\ArraySerializableInterface::getArrayCopy()
+     */
     public function getArrayCopy()
     {
         return get_object_vars($this);

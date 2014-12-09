@@ -33,10 +33,8 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Account' => 'Application\Controller\AccountController',
-            'Application\Controller\Product\Product' => 'Application\Controller\Product\ProductController',
-            'Application\Controller\Product\Category' => 'Application\Controller\Product\CategoryController',
-            'Application\Controller\Product\Profile' => 'Application\Controller\Product\ProfileController',
-            'Application\Controller\Product\Order' => 'Application\Controller\Product\OrderController',
+//             'Application\Controller\Product\Product' => 'Application\Controller\Product\ProductController',
+            'Application\Controller\Category' => 'Application\Controller\CategoryController',
             'Application\Controller\Dashboard' => 'Application\Controller\DashboardController',
             'Application\Controller\Member' => 'Application\Controller\MemberController'
         )

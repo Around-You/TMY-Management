@@ -1,5 +1,5 @@
 <?php
-namespace Application\Model\Product;
+namespace Application\Model\Goods;
 
 use SamFramework\Model\AbstractModel;
 use Zend\InputFilter\InputFilter;
@@ -44,10 +44,10 @@ class Category extends AbstractModel
     public function exchangeArray(array $array)
     {
         $this->id = (isset($array['id'])) ? $array['id'] : $this->id;
-        $this->store_id = (isset($array['store_id'])) ? $array['store_id'] : $this->store_id;
+//         $this->store_id = (isset($array['store_id'])) ? $array['store_id'] : $this->store_id;
         $this->title = (isset($array['title'])) ? $array['title'] : $this->title;
         $this->type = (isset($array['type'])) ? $array['type'] : $this->type;
-        $this->parent_id = (isset($array['parent_id'])) ? $array['parent_id'] : $this->parent_id;
+//         $this->parent_id = (isset($array['parent_id'])) ? $array['parent_id'] : $this->parent_id;
     }
 
     public function getArrayCopy()
@@ -55,9 +55,9 @@ class Category extends AbstractModel
         $data = array(
             'id' => $this->id,
             'title' => $this->title,
-            'store_id' => $this->store_id,
+//             'store_id' => $this->store_id,
             'type' => $this->type,
-            'parent_id' => $this->parent_id
+//             'parent_id' => $this->parent_id
         );
         return $data;
     }

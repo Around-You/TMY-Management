@@ -1,29 +1,21 @@
 <?php
-namespace Application\Model\Product;
+namespace Application\Model;
 
 use SamFramework\Model\AbstractModelMapper;
 use Application\Model\Product\Product;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
 
-class ProductTable extends AbstractModelMapper
+class GoodsTable extends AbstractModelMapper
 {
     public $currentStoreId = 0;
 
     protected $tableName = 'product';
 
-    protected $projectImageTable;
 
     protected $modelClassName = 'Application\\Model\\Product\\Product';
 
-    public function getProductImageTable()
-    {
-        if (! $this->projectImageTable) {
-            $this->projectImageTable = $this->getServiceLocator()->get('Application\Model\Product\ProductImageTable');
-        }
 
-        return $this->projectImageTable;
-    }
 
     public function buildSqlSelect(Select $select){
         $select->join('category', 'category.id=category_id', array(
@@ -144,14 +136,6 @@ class ProductTable extends AbstractModelMapper
     }
 
 
-    public function getRecommendedProducts()
-    {
-        $resultSet = $this->getTableGateway()->select(array(
-            'recommend' => 1,
-            'enable' => 1,
-            'store_id' => $this->currentStoreId
-        ));
-        return $resultSet;
-    }
+
 }
 

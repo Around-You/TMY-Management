@@ -1,5 +1,5 @@
 <?php
-namespace Application\Model\Product;
+namespace Application\Model;
 
 use SamFramework\Model\AbstractModel;
 use Zend\InputFilter\InputFilter;
@@ -8,7 +8,7 @@ use Zend\InputFilter\InputFilter;
  * @property string priceString
  *
  */
-class Product extends AbstractModel
+class Goods extends AbstractModel
 {
 
     public $id = 0;

@@ -15,13 +15,24 @@ $menus = array(
             array(
                 'title' => '新增会员',
                 'icon' => 'fa fa-tachometer',
-                'url' => '/product/category'
+                'url' => '/member/add'
             ),
         )
     ),
     '商品管理' => array(
         'title' => '商品管理',
-        'url' => '/product'
+        'submenu' => array(
+            array(
+                'title' => '商品列表',
+                'icon' => 'fa fa-tachometer',
+                'url' => '/goods'
+            ),
+            array(
+                'title' => '商品类别列表',
+                'icon' => 'fa fa-tachometer',
+                'url' => '/category'
+            ),
+        )
     ),
     '会员消费' => array(
         'title' => '会员消费',

@@ -20,6 +20,7 @@ class MemberForm extends Form
 
     public function init()
     {
+        $this->setAttribute('class', 'form-horizontal');
         $this->add(array(
             'name' => 'id',
             'type' => 'Hidden',
@@ -59,7 +60,10 @@ class MemberForm extends Form
             'name' => 'id_type',
             'type' => 'Select',
             'options' => array(
-                'label' => '证件类型'
+                'label' => '证件类型',
+                'value_options' => array(
+                    '身份证' => '身份证'
+                )
             )
         ));
         $this->add(array(
@@ -124,7 +128,7 @@ class MemberForm extends Form
         ));
         $this->add(array(
             'name' => 'dob',
-            'type' => 'Select',
+            'type' => 'Date',
             'options' => array(
                 'label' => '生日'
             )
