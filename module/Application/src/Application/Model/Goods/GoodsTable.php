@@ -82,19 +82,16 @@ class GoodsTable extends AbstractModelMapper
         ));
     }
 
-    public function saveProduct(Product $product)
+    public function saveGoods(Goods $goods)
     {
         $tableGateway = $this->getTableGateway();
-        $product->update_time = date('YmdHis');
-        $product->user_id = $this->currentStoreId;
-        $data = $product->getArrayCopyForSave();
-        $id = (int) $product->id;
+        $goods->update_time = date('YmdHis');
+//         $goods->user_id = $this->currentStoreId;
+        $data = $goods->getArrayCopyForSave();
+        $id = (int) $goods->id;
         if ($id == 0) {
             $tableGateway->insert($data);
-            $product->id = $this->getTableGateway()->getLastInsertValue();
-
-            $productImageTable = $this->getProductImageTable();
-            $productImageTable->updateProductId($product->id, $product->product_images);
+            $goods->id = $this->getTableGateway()->getLastInsertValue();
         } else {
             if ($this->getProduct($id)) {
                 $tableGateway->update($data, array(
@@ -103,7 +100,7 @@ class GoodsTable extends AbstractModelMapper
             }
         }
 
-        return $product;
+        return $goods;
     }
 
     public function getProductsByCategory(Category $category)

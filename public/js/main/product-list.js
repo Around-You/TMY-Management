@@ -11,15 +11,7 @@ var wds_admin_product_list = {
 			lengthChange: false,
 			info: false,
 			ajax: "/goods/getGoodsListData",
-			order: [[ 1, "desc" ]],
-			columnDefs: [
-				{
-					"render": function ( data, type, row ) {
-						return  '<img alt="" src="'+ data +'">';
-					},
-					"targets": 0
-				},
-			],
+			order: [[ 0, "desc" ]],
 			columns: [
 				{ "data": "title" },
 				{ "data": "category" },

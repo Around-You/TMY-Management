@@ -6,6 +6,6 @@ echo $this->pageHeader( $title );
 ?>
 <?=$this->flashMessenger()->render();?>
 <?php
-echo $this->partial( '/admin/product/product/_form.phtml', array(
+echo $this->partial( '/application/goods/_form.phtml', array(
 	'form' => $form
 ));

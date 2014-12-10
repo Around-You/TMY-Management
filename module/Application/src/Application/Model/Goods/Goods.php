@@ -85,8 +85,7 @@ class Goods extends AbstractModel
         $data = array(
             'id' => $this->id,
             'title' => $this->title,
-            'user_id' => $this->user_id,
-            'description' => $this->description,
+//             'description' => $this->description,
             'category_id' => $this->category_id,
             'price' => $this->price,
             'cost' => $this->cost,

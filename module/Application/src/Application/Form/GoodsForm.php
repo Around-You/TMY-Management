@@ -1,5 +1,5 @@
 <?php
-namespace Admin\Form\Product;
+namespace Application\Form;
 
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -9,7 +9,7 @@ class GoodsForm extends Form
 
     public static function getInstance(ServiceLocatorInterface $sl)
     {
-        return $sl->get('FormElementManager')->get('\Admin\Form\Product\ProductForm');
+        return $sl->get('FormElementManager')->get('\Application\Form\GoodsForm');
     }
 
     public function __construct($name = null)
@@ -27,27 +27,15 @@ class GoodsForm extends Form
                 'value' => 0
             )
         ));
-        $this->add(array(
-            'name' => 'product_images',
-            'type' => 'Hidden'
-        ));
+
         $this->add(array(
             'name' => 'title',
             'type' => 'Text',
-            'attributes' => array(
-                'id' => 'product-title',
-            ),
             'options' => array(
                 'label' => '商品名称'
             )
         ));
-        $this->add(array(
-            'name' => 'description',
-            'type' => 'Wysiwyg',
-            'options' => array(
-                'label' => '商品说明'
-            )
-        ));
+
         $this->add(array(
             'name' => 'category_id',
             'type' => 'Select',
@@ -59,16 +47,46 @@ class GoodsForm extends Form
             'name' => 'price',
             'type' => 'Text',
             'options' => array(
-                'label' => '商品价格'
+                'label' => '售价'
             )
         ));
         $this->add(array(
-            'name' => 'unit',
+            'name' => 'cost',
             'type' => 'Text',
             'options' => array(
-                'label' => '价格单位'
+                'label' => '成本价'
             )
         ));
+        $this->add(array(
+            'name' => 'cost',
+            'type' => 'Text',
+            'options' => array(
+                'label' => '成本价'
+            )
+        ));
+        $this->add(array(
+            'name' => 'quantity',
+            'type' => 'Text',
+            'options' => array(
+                'label' => '库存数量'
+            )
+        ));
+        $this->add(array(
+            'name' => 'count ',
+            'type' => 'Text',
+            'options' => array(
+                'label' => '次卡-次数'
+            )
+        ));
+        $this->add(array(
+            'name' => 'cost',
+            'type' => 'Text',
+            'options' => array(
+                'label' => '成本价'
+            )
+        ));
+
+
         $this->add(array(
             'name' => 'submit',
             'type' => 'submitButton',

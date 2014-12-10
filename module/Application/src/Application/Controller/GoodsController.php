@@ -2,15 +2,10 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Application\Model\Product\Product;
-use Admin\Form\Product\ProductForm;
-use Application\Model\Product\ProductImage;
 use Zend\View\Model\JsonModel;
-use Zend\Filter\File\RenameUpload;
-use PHPThumb\GD;
-use Components\Layout\View\Model\FlashMessagerModel;
 use SamFramework\Core\App;
+use Application\Form\GoodsForm;
+use Application\Model\Goods\Goods;
 
 class GoodsController extends AbstractActionController
 {
@@ -73,19 +68,19 @@ class GoodsController extends AbstractActionController
 
     public function addAction()
     {
-        $form = ProductForm::getInstance($this->getServiceLocator());
+        $form = GoodsForm::getInstance($this->getServiceLocator());
         $form->setCategories($this->getCategoryTable()->fetchAll());
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $product = new Product();
-            $form->setInputFilter($product->getInputFilter());
+            $goods = new Goods();
+            $form->setInputFilter($goods->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $product->exchangeArray($form->getData());
-                $productTable = $this->getGoodsTable();
-                $product = $productTable->saveProduct($product);
-                $this->flashMessenger()->addSuccessMessage($product->title . ' 已添加');
-                return $this->redirect()->toUrl('/product/product');
+                $goods->exchangeArray($form->getData());
+                $goodsTable = $this->getGoodsTable();
+                $goods = $goodsTable->saveGoods($goods);
+                $this->flashMessenger()->addSuccessMessage($goods->title . ' 已添加');
+                return $this->redirect()->toUrl('/goods');
             }
         }
 
