@@ -18,8 +18,8 @@ var main_category_list = {
                     "data": null,
                     "orderable": false,
                     "render": function ( data, type, row ) {
-                        var editString = '<a href="/product/category/edit/' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-pencil"></i>编辑</a>';
-                        var deleteString = '<a href="/product/category/delete/' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-remove"></i>删除</a>';
+                        var editString = '<a href="/category/edit/' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-pencil"></i>编辑</a>';
+                        var deleteString = '<a href="/category/delete/' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-remove"></i>删除</a>';
                         return editString + ' ' + deleteString;
                     }
                 }

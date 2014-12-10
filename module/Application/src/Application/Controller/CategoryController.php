@@ -87,7 +87,7 @@ class CategoryController extends AbstractActionController
                 $categoryTable = $this->getCategoryTable();
                 $category = $categoryTable->saveCategory($category);
                 $this->flashMessenger()->addSuccessMessage($category->title . ' 已添加');
-                return $this->redirect()->toUrl('/application/category');
+                return $this->redirect()->toUrl('/category');
             }
         }
 
@@ -100,12 +100,12 @@ class CategoryController extends AbstractActionController
     {
         $id = (int) $this->params('id', 0);
         if (! $id) {
-            return $this->redirect()->toUrl('/admin/product/category/add');
+            return $this->redirect()->toUrl('/category/add');
         }
         try {
             $category = $this->getCategoryTable()->getCategory($id);
         } catch (\Exception $ex) {
-            return $this->redirect()->toUrl('/admin/product/category');
+            return $this->redirect()->toUrl('/category');
         }
 
         $form = CategoryForm::getInstance($this->getServiceLocator());
@@ -118,7 +118,7 @@ class CategoryController extends AbstractActionController
                 $categoryTable = $this->getCategoryTable();
                 $category = $categoryTable->saveCategory($category);
                 $this->flashMessenger()->addSuccessMessage($category->title . ' 已编辑');
-                return $this->redirect()->toUrl('/admin/product/category');
+                return $this->redirect()->toUrl('/category');
             }
         }
         return array(
