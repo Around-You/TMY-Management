@@ -24,7 +24,7 @@ class GoodsController extends AbstractActionController
     public function getGoodsTable()
     {
         if (! $this->goodsTable) {
-            $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Product\ProductTable');
+            $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
 //             $this->goodsTable->currentUserId = App::getUser()->id;
         }
 
@@ -48,10 +48,10 @@ class GoodsController extends AbstractActionController
         return array();
     }
 
-    public function getProcustsListDataAction()
+    public function getGoodsListDataAction()
     {
-        $count = $this->getProductTable()->getFetchAllCounts();
-        $products = $this->getProductTable()->fetchAll($_GET['start'], $_GET['length']);
+        $count = $this->getGoodsTable()->getFetchAllCounts();
+        $products = $this->getGoodsTable()->fetchAll($_GET['start'], $_GET['length']);
         $listData = array(
             'draw' => $_GET['draw'] ++,
             'recordsTotal' => $count,
@@ -61,12 +61,10 @@ class GoodsController extends AbstractActionController
         foreach ($products as $product) {
             $listData['data'][] = array(
                 'DT_RowId' => $product->id,
-                'img' => $product->product_thumbnail,
                 'title' => $product->title,
                 'category' => $product->category_name,
                 'price' => $product->priceString,
-                'unit' => $product->unit,
-                'recommend' => $product->recommend ? '已推荐' : ''
+                'quantity' => $product->quantity,
             );
         }
         $viewModel = new JsonModel($listData);
@@ -84,7 +82,7 @@ class GoodsController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $product->exchangeArray($form->getData());
-                $productTable = $this->getProductTable();
+                $productTable = $this->getGoodsTable();
                 $product = $productTable->saveProduct($product);
                 $this->flashMessenger()->addSuccessMessage($product->title . ' 已添加');
                 return $this->redirect()->toUrl('/product/product');
@@ -103,7 +101,7 @@ class GoodsController extends AbstractActionController
             return $this->redirect()->toUrl('/product/product/add');
         }
         try {
-            $product = $this->getProductTable()->getProduct($id);
+            $product = $this->getGoodsTable()->getProduct($id);
         } catch (\Exception $ex) {
             return $this->redirect()->toUrl('/product/product');
         }
@@ -116,7 +114,7 @@ class GoodsController extends AbstractActionController
             $form->setInputFilter($product->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $productTable = $this->getProductTable();
+                $productTable = $this->getGoodsTable();
                 $product = $productTable->saveProduct($product);
                 $this->flashMessenger()->addSuccessMessage($product->title . ' 已编辑');
                 return $this->redirect()->toUrl('/product/product');

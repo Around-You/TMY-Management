@@ -1,5 +1,5 @@
 <?php
-namespace Application\Model;
+namespace Application\Model\Goods;
 
 use SamFramework\Model\AbstractModelMapper;
 use Application\Model\Product\Product;
@@ -8,53 +8,43 @@ use Zend\Db\Sql\Expression;
 
 class GoodsTable extends AbstractModelMapper
 {
+
     public $currentStoreId = 0;
 
-    protected $tableName = 'product';
+    protected $tableName = 'goods';
 
+    protected $modelClassName = 'Application\\Model\\Goods\\Goods';
 
-    protected $modelClassName = 'Application\\Model\\Product\\Product';
-
-
-
-    public function buildSqlSelect(Select $select){
+    public function buildSqlSelect(Select $select)
+    {
         $select->join('category', 'category.id=category_id', array(
             'category_name' => 'title'
         ));
-        $select->join('product_image', new Expression("product.id=product_id and is_default=1"), array(
-            'product_thumbnail' => 'thumbnail_uri'
-        ), Select::JOIN_LEFT);
-        $select->where('product.id!=0');
-        if($this->currentStoreId){
-            $select->where('product.store_id='.$this->currentStoreId);
-        }
+        // if($this->currentStoreId){
+        // $select->where('product.store_id='.$this->currentStoreId);
+        // }
     }
 
     public function getFetchAllCounts()
     {
         $select = $this->getTableGateway()->getSql()->select();
         $this->buildSqlSelect($select);
-        $select->columns(array('id'));
+        $select->columns(array(
+            new Expression('count(goods.id) as rownum')
+        ));
         $statement = $this->getTableGateway()->getSql()->prepareStatementForSqlObject($select);
-        $results = $statement->execute();
-        return $results->count();
+        $row = $statement->execute()->current();
+        return $row['rownum'];
     }
 
     public function fetchAll($offset = 0, $limit = 10)
     {
-        $offset = (int)$offset;
-        $limit = (int)$limit;
+        $offset = (int) $offset;
+        $limit = (int) $limit;
 
         $table = $this;
         $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table)
         {
-            $select->columns(array(
-                'id',
-                'title',
-                'price',
-                'unit',
-                'recommend'
-            ));
             $table->buildSqlSelect($select);
             $select->offset($offset)
                 ->limit($limit);
@@ -134,8 +124,5 @@ class GoodsTable extends AbstractModelMapper
         });
         return $resultSet;
     }
-
-
-
 }
 

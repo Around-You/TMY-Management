@@ -1,8 +1,9 @@
 <?php
-namespace Application\Model;
+namespace Application\Model\Goods;
 
 use SamFramework\Model\AbstractModel;
 use Zend\InputFilter\InputFilter;
+
 /**
  *
  * @property string priceString
@@ -15,7 +16,7 @@ class Goods extends AbstractModel
 
     public $title = '';
 
-    public $description = '';
+//     public $description = '';
 
     public $user_id = 0;
 
@@ -29,20 +30,15 @@ class Goods extends AbstractModel
 
     public $price = '';
 
-    public $unit = '';
+    public $cost = '';
 
-    public $product_images = '';
+    public $quantity = '';
 
-    public $recommend = 0;
+    public $date_range = '';
 
-    public $product_thumbnail = '';
+    public $count = '';
 
-    public $countOfOrders = 0;
-
-
-
-
-    protected $exclude = array( 'product_images');
+    protected $exclude = array();
 
     public function getInputFilter()
     {
@@ -72,18 +68,16 @@ class Goods extends AbstractModel
     {
         $this->id = (isset($array['id'])) ? $array['id'] : $this->id;
         $this->title = (isset($array['title'])) ? $array['title'] : $this->title;
-        $this->description = (isset($array['description'])) ? $array['description'] : $this->description;
-        $this->user_id = (isset($array['user_id'])) ? $array['user_id'] : $this->user_id;
+//         $this->description = (isset($array['description'])) ? $array['description'] : $this->description;
         $this->category_id = (isset($array['category_id'])) ? $array['category_id'] : $this->category_id;
         $this->category_name = (isset($array['category_name'])) ? $array['category_name'] : $this->category_name;
-        $this->product_thumbnail = (isset($array['product_thumbnail'])) ? $array['product_thumbnail'] : $this->product_thumbnail;
         $this->create_time = (isset($array['create_time'])) ? $array['create_time'] : $this->create_time;
         $this->update_time = (isset($array['update_time'])) ? $array['update_time'] : $this->update_time;
-        $this->product_images = (isset($array['product_images'])) ? $array['product_images'] : $this->product_images;
         $this->price = (isset($array['price'])) ? $array['price'] : $this->price;
-        $this->unit = (isset($array['unit'])) ? $array['unit'] : $this->unit;
-        $this->recommend = (isset($array['recommend'])) ? $array['recommend'] : $this->recommend;
-        $this->countOfOrders = (isset($array['countOfOrders'])) ? $array['countOfOrders'] : $this->countOfOrders;
+        $this->cost = (isset($array['cost'])) ? $array['cost'] : $this->cost;
+        $this->quantity = (isset($array['quantity'])) ? $array['quantity'] : $this->quantity;
+        $this->date_range  = (isset($array['date_range '])) ? $array['date_range '] : $this->date_range ;
+        $this->count  = (isset($array['count '])) ? $array['count '] : $this->count ;
     }
 
     public function getArrayCopy()
@@ -94,20 +88,20 @@ class Goods extends AbstractModel
             'user_id' => $this->user_id,
             'description' => $this->description,
             'category_id' => $this->category_id,
-            'update_time' => $this->update_time,
-            'product_images' => $this->product_images,
             'price' => $this->price,
-            'unit' => $this->unit,
-            'recommend' => $this->recommend,
+            'cost' => $this->cost,
+            'quantity' => $this->quantity,
+            'date_range' => $this->date_range,
+            'count' => $this->count,
+
+            'update_time' => $this->update_time,
         );
         return $data;
     }
 
     public function getPriceString()
     {
-        return $this->price . ' / ' . $this->unit;
+        return '¥ '.round($this->price,2);
     }
-
-
 }
 

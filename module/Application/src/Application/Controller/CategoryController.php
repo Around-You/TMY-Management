@@ -13,17 +13,15 @@ class CategoryController extends AbstractActionController
 
     protected $categoryTable;
 
-
     public function getCategoryTable()
     {
         if (! $this->categoryTable) {
             $this->categoryTable = $this->getServiceLocator()->get('Application\Model\Goods\CategoryTable');
-//             $this->categoryTable->currentUserId = App::getUser()->id;
+            // $this->categoryTable->currentUserId = App::getUser()->id;
         }
 
         return $this->categoryTable;
     }
-
 
     public function indexAction()
     {
@@ -45,15 +43,15 @@ class CategoryController extends AbstractActionController
             $listData['data'][] = array(
                 'DT_RowId' => $category->id,
                 'title' => $category->title,
-                'type' => $category->type,
+                'type' => $category->type
             );
         }
         $viewModel = new JsonModel($listData);
         return $viewModel;
     }
+
     public function addByAjaxAction()
     {
-
         $form = CategoryForm::getInstance($this->getServiceLocator());
         $request = $this->getRequest();
         $id = 0;
@@ -70,9 +68,10 @@ class CategoryController extends AbstractActionController
             }
         }
         return new JsonModel(array(
-        	'id' => $id
+            'id' => $id
         ));
     }
+
     public function addAction()
     {
         $form = CategoryForm::getInstance($this->getServiceLocator());
@@ -99,12 +98,10 @@ class CategoryController extends AbstractActionController
     public function editAction()
     {
         $id = (int) $this->params('id', 0);
-        if (! $id) {
-            return $this->redirect()->toUrl('/category/add');
-        }
         try {
             $category = $this->getCategoryTable()->getCategory($id);
         } catch (\Exception $ex) {
+            $this->flashMessenger()->addErrorMessage('该商品类型不存在，请确认后重新操作');
             return $this->redirect()->toUrl('/category');
         }
 
@@ -128,13 +125,16 @@ class CategoryController extends AbstractActionController
 
     public function deleteAction()
     {
-        print_r(realpath('.'));
-        exit();
+        $id = (int) $this->params('id', 0);
+        $categoryTable = $this->getCategoryTable();
+        try {
+            $category = $categoryTable->getCategory($id);
+            $categoryTable->deleteCategory($id);
+            $this->flashMessenger()->addSuccessMessage($category->title . ' 已删除');
+            return $this->redirect()->toUrl('/category');
+        } catch (\Exception $ex) {
+            $this->flashMessenger()->addErrorMessage('该商品类型不存在，请确认后重新操作');
+            return $this->redirect()->toUrl('/category');
+        }
     }
-
-
-
-
-
-
 }

@@ -35,11 +35,7 @@ class CategoryTable extends AbstractModelMapper
         $table = $this;
         $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table)
         {
-            $select->columns(array(
-                'id',
-                'title',
-                'type'
-            ));
+
             $table->buildSqlSelect($select);
             $select->offset($offset)
                 ->limit($limit);
