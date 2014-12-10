@@ -1,5 +1,5 @@
 <?php
-namespace Application\Controller\Product;
+namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -28,14 +28,14 @@ class GoodsController extends AbstractActionController
 //             $this->goodsTable->currentUserId = App::getUser()->id;
         }
 
-        return $this->projectTable;
+        return $this->goodsTable;
     }
 
 
     public function getCategoryTable()
     {
         if (! $this->categoryTable) {
-            $this->categoryTable = $this->getServiceLocator()->get('Application\Model\Product\CategoryTable');
+            $this->categoryTable = $this->getServiceLocator()->get('Application\Model\Goods\CategoryTable');
             $this->categoryTable->currentUserId = App::getUser()->id;
         }
 

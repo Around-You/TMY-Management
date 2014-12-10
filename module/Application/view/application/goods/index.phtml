@@ -1,26 +1,36 @@
 <?php
-$title = '商品类别管理';
+$title = '商品管理';
 $this->layout()->currentItem = $title;
 $this->headTitle($title);
 $this->inlinescript()->appendFile( $this->basePath('js/jquery.dataTables.min.js'))
                      ->appendFile( $this->basePath('js/jquery.dataTables.bootstrap.js'))
-                     ->appendFile( $this->basePath('js/wds/admin/category-list.js'));
+                     ->appendFile( $this->basePath('js/wds/admin/product-list.js'));
 ?>
+<style>
+<!--
+.qrcode-in-model{
+	width: 130px;
+	margin: auto;
+}
+
+-->
+</style>
 <div class="page-header">
 <h1>
     <?= $this->escapeHtml($title); ?>
-    <small><a href="/admin/product/category/add"><i class="ace-icon glyphicon glyphicon-plus"></i>新增商品类别</a></small>
+    <small><a href="/product/product/add"><i class="ace-icon glyphicon glyphicon-plus"></i>新增商品</a></small>
 </h1>
 </div>
 <div class="row">
     <div class="col-xs-12">
-         <?=$this->flashMessenger()->render();?>
-         <div class="row">
+        <?=$this->flashMessenger()->render();?>
+        <div class="row">
             <div class="col-xs-12">
-                <table id="category-table" class="table table-striped table-bordered table-hover">
+                <table id="product-table" class="table table-striped table-bordered table-hover">
                     <thead>
                     	<tr>
-                            <th>类别名称</th>
+                            <th>&nbsp;</th>
+                            <th>商品名称</th>
                             <th>&nbsp;</th>
                     	</tr>
                     </thead>
