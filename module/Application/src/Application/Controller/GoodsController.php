@@ -57,9 +57,10 @@ class GoodsController extends AbstractActionController
             $listData['data'][] = array(
                 'DT_RowId' => $product->id,
                 'title' => $product->title,
+                'type' => $product->type,
                 'category' => $product->category_name,
                 'price' => $product->priceString,
-                'quantity' => $product->quantity,
+                'desc' => $product->descString,
             );
         }
         $viewModel = new JsonModel($listData);

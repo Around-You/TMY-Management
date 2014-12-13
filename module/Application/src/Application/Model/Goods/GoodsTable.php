@@ -17,6 +17,7 @@ class GoodsTable extends AbstractModelMapper
 
     public function buildSqlSelect(Select $select)
     {
+
         $select->join('category', 'category.id=category_id', array(
             'category_name' => 'title'
         ));

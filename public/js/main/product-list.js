@@ -14,9 +14,10 @@ var wds_admin_product_list = {
 			order: [[ 0, "desc" ]],
 			columns: [
 				{ "data": "title" },
+				{ "data": "type" },
 				{ "data": "category" },
 				{ "data": "price" },
-				{ "data": "quantity" },
+				{ "data": "desc" },
                 { 
                     "data": null,
                     "orderable": false,

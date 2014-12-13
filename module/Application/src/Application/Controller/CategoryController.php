@@ -41,8 +41,7 @@ class CategoryController extends AbstractActionController
         foreach ($categories as $category) {
             $listData['data'][] = array(
                 'DT_RowId' => $category->id,
-                'title' => $category->title,
-                'type' => $category->type
+                'title' => $category->title
             );
         }
         $viewModel = new JsonModel($listData);

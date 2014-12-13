@@ -13,7 +13,6 @@ var main_category_list = {
 			ajax: "/category/getCategoriesListData",
 			columns: [
 				{ "data": "title" },
-				{ "data": "type" },
                 { 
                     "data": null,
                     "orderable": false,
