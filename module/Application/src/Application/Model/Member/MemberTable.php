@@ -9,6 +9,8 @@ use Zend\Db\Sql\Expression;
 class MemberTable extends AbstractModelMapper
 {
     public $currentStoreId = 0;
+    public $currentUserId = 0;
+
 
     protected $tableName = 'member';
 
@@ -73,14 +75,16 @@ class MemberTable extends AbstractModelMapper
     {
         $tableGateway = $this->getTableGateway();
         $member->update_time = date('YmdHis');
-        $member->user_id = $this->currentStoreId;
-        $data = $member->getArrayCopyForSave();
         $id = (int) $member->id;
         if ($id == 0) {
+            $member->created_by_user = $this->currentUserId;
+            $member->created_at_store = $this->currentStoreId;
+            $data = $member->getArrayCopyForSave();
             $tableGateway->insert($data);
             $member->id = $this->getTableGateway()->getLastInsertValue();
 
         } else {
+        $data = $member->getArrayCopyForSave();
             if ($this->getMember($id)) {
                 $tableGateway->update($data, array(
                     'id' => $id

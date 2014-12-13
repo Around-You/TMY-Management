@@ -43,7 +43,7 @@ class GoodsController extends AbstractActionController
     public function getGoodsListDataAction()
     {
         $count = $this->getGoodsTable()->getFetchAllCounts();
-        $products = $this->getGoodsTable()->fetchAll(array(1=>1), $_GET['start'], $_GET['length']);
+        $products = $this->getGoodsTable()->fetchAll(array(), $_GET['start'], $_GET['length']);
         $listData = array(
             'draw' => $_GET['draw'] ++,
             'recordsTotal' => $count,

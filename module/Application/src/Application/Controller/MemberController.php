@@ -27,6 +27,8 @@ class MemberController extends AbstractActionController
     {
         if (! $this->memberTable) {
             $this->memberTable = $this->getServiceLocator()->get('Application\Model\Member\MemberTable');
+            $this->memberTable->currentUserId = App::getUser()->id;
+            $this->memberTable->currentStoreId = App::getUser()->store_id;
         }
         return $this->memberTable;
     }
@@ -35,6 +37,7 @@ class MemberController extends AbstractActionController
     {
         if (! $this->goodsTable) {
             $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
+
         }
         return $this->goodsTable;
     }
@@ -49,16 +52,15 @@ class MemberController extends AbstractActionController
             )
         ));
         $returnArray = array();
-        foreach ($resultSet as $good){
-//             print_r($good);
-            $returnArray[$good->id] = $good->title . ' - ' .$good->priceString;
+        foreach ($resultSet as $good) {
+            $returnArray[$good->id] = $good->title . ' - ' . $good->priceString;
         }
         return $returnArray;
     }
 
     public function indexAction()
     {
-//         $this->redirect()->toUrl('member/list');
+        return array();
     }
 
     public function getMemberListDataAction()
@@ -99,8 +101,10 @@ class MemberController extends AbstractActionController
                 $member->exchangeArray($form->getData());
                 $memberTable = $this->getMemberTable();
                 $member = $memberTable->saveMember($member);
-                $this->flashMessenger()->addSuccessMessage($member->title . ' 已添加');
+                $this->flashMessenger()->addSuccessMessage($member->name . ' 已添加');
                 return $this->redirect()->toUrl('/member');
+            }else{
+                $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
         }
 

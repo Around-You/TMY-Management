@@ -84,13 +84,13 @@ class MemberForm extends Form
                 'label' => '监护人姓名'
             )
         ));
-        $this->add(array(
-            'name' => 'prepaid',
-            'type' => 'Text',
-            'options' => array(
-                'label' => '预存金额'
-            )
-        ));
+//         $this->add(array(
+//             'name' => 'prepaid',
+//             'type' => 'Text',
+//             'options' => array(
+//                 'label' => '预存金额'
+//             )
+//         ));
         $this->add(array(
             'name' => 'point',
             'type' => 'Text',
@@ -108,20 +108,20 @@ class MemberForm extends Form
                 'label' => '初始卡类别'
             )
         ));
-        $this->add(array(
-            'name' => 'password',
-            'type' => 'Select',
-            'options' => array(
-                'label' => '密码'
-            )
-        ));
-        $this->add(array(
-            'name' => 'confirm-password',
-            'type' => 'Select',
-            'options' => array(
-                'label' => '确认密码'
-            )
-        ));
+//         $this->add(array(
+//             'name' => 'password',
+//             'type' => 'Select',
+//             'options' => array(
+//                 'label' => '密码'
+//             )
+//         ));
+//         $this->add(array(
+//             'name' => 'confirm-password',
+//             'type' => 'Select',
+//             'options' => array(
+//                 'label' => '确认密码'
+//             )
+//         ));
 //         $this->add(array(
 //             'name' => 'goods',
 //             'type' => 'Select',
@@ -154,23 +154,17 @@ class MemberForm extends Form
                 'label' => '保存'
             )
         ));
-        $this->add(array(
-            'name' => 'cancel',
-            'type' => 'cancelButton',
-            'options' => array(
-                'label' => '重设'
-            )
-        ));
+//         $this->add(array(
+//             'name' => 'cancel',
+//             'type' => 'cancelButton',
+//             'options' => array(
+//                 'label' => '重设'
+//             )
+//         ));
     }
 
     public function setMemberGoods($memberGoods){
         $this->get('goods')->setValueOptions($memberGoods);
     }
 
-    protected function getServiceLocator()
-    {
-        return $this->getFormFactory()
-            ->getFormElementManager()
-            ->getServiceLocator();
-    }
 }

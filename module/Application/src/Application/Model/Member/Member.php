@@ -30,18 +30,18 @@ class Member extends AbstractModel
 
     public $perpaid = '';
 
-    public $create_at_store = 0;
+    public $created_at_store = 0;
 
-    public $create_by_user = 0;
+    public $created_by_user = 0;
 
-    public $create_time = '';
+    public $created_time = '';
 
     public $update_time = '';
 
 
 
 
-    protected $exclude = array( 'product_images');
+    protected $exclude = array( 'created_time');
 
     public function getInputFilter()
     {
@@ -78,10 +78,10 @@ class Member extends AbstractModel
         $this->id_code = (isset($array['id_code'])) ? $array['id_code'] : $this->id_code;
         $this->point = (isset($array['point'])) ? $array['point'] : $this->point;
         $this->parent_name = (isset($array['parent_name'])) ? $array['parent_name'] : $this->parent_name;
-        $this->perpaid = (isset($array['perpaid'])) ? $array['perpaid'] : $this->perpaid;
-        $this->create_at_store = (isset($array['create_at_store'])) ? $array['create_at_store'] : $this->create_at_store;
-        $this->create_by_user = (isset($array['create_by_user'])) ? $array['create_by_user'] : $this->create_by_user;
-        $this->create_time = (isset($array['create_time'])) ? $array['create_time'] : $this->create_time;
+//         $this->perpaid = (isset($array['perpaid'])) ? $array['perpaid'] : $this->perpaid;
+        $this->created_at_store = (isset($array['created_at_store'])) ? $array['created_at_store'] : $this->created_at_store;
+        $this->created_by_user = (isset($array['created_by_user'])) ? $array['created_by_user'] : $this->created_by_user;
+        $this->created_time = (isset($array['created_time'])) ? $array['created_time'] : $this->created_time;
         $this->update_time = (isset($array['update_time'])) ? $array['update_time'] : $this->update_time;
     }
 
@@ -95,14 +95,13 @@ class Member extends AbstractModel
             'address' => $this->address,
             'id_type' => $this->id_type,
             'id_code' => $this->id_code,
-            'update_time' => $this->update_time,
             'point' => $this->point,
             'parent_name' => $this->parent_name,
-            'perpaid' => $this->perpaid,
-            'create_at_store' => $this->create_at_store,
-            'create_by_user' => $this->create_by_user,
-            'create_at_store' => $this->create_at_store,
-            'create_by_user' => $this->create_by_user,
+//             'perpaid' => $this->perpaid,
+            'created_at_store' => $this->created_at_store,
+            'created_by_user' => $this->created_by_user,
+            'created_time' => $this->created_time,
+            'update_time' => $this->update_time,
         );
         return $data;
     }

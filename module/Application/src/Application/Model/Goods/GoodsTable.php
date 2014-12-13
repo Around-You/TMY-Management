@@ -20,9 +20,6 @@ class GoodsTable extends AbstractModelMapper
             'category_name' => 'title'
         ));
         $select->where($where);
-        // if($this->currentStoreId){
-        // $select->where('product.store_id='.$this->currentStoreId);
-        // }
     }
 
     public function getFetchAllCounts()
