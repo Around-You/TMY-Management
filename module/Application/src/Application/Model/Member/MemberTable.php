@@ -40,13 +40,6 @@ class MemberTable extends AbstractModelMapper
         $table = $this;
         $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table)
         {
-//             $select->columns(array(
-//                 'id',
-//                 'title',
-//                 'price',
-//                 'unit',
-//                 'recommend'
-//             ));
             $table->buildSqlSelect($select);
             $select->offset($offset)
                 ->limit($limit);
@@ -54,7 +47,7 @@ class MemberTable extends AbstractModelMapper
         return $resultSet;
     }
 
-    public function getProduct($id)
+    public function getMember($id)
     {
         $tableGateway = $this->getTableGateway();
         $id = (int) $id;
@@ -66,14 +59,6 @@ class MemberTable extends AbstractModelMapper
             throw new \Exception("Could not find row $id");
         }
 
-        // Get Product Images
-        $productImageTable = $this->getProductImageTable();
-        $rowset = $productImageTable->getProductImagesByProductId($id);
-        $arrProductImages = array();
-        foreach ($rowset as $productImage) {
-            $arrProductImages[] = $productImage;
-        }
-        $row->product_images = $arrProductImages;
         return $row;
     }
 
@@ -84,28 +69,26 @@ class MemberTable extends AbstractModelMapper
         ));
     }
 
-    public function saveProduct(Product $product)
+    public function saveMember(Member $member)
     {
         $tableGateway = $this->getTableGateway();
-        $product->update_time = date('YmdHis');
-        $product->user_id = $this->currentStoreId;
-        $data = $product->getArrayCopyForSave();
-        $id = (int) $product->id;
+        $member->update_time = date('YmdHis');
+        $member->user_id = $this->currentStoreId;
+        $data = $member->getArrayCopyForSave();
+        $id = (int) $member->id;
         if ($id == 0) {
             $tableGateway->insert($data);
-            $product->id = $this->getTableGateway()->getLastInsertValue();
+            $member->id = $this->getTableGateway()->getLastInsertValue();
 
-            $productImageTable = $this->getProductImageTable();
-            $productImageTable->updateProductId($product->id, $product->product_images);
         } else {
-            if ($this->getProduct($id)) {
+            if ($this->getMember($id)) {
                 $tableGateway->update($data, array(
                     'id' => $id
                 ));
             }
         }
 
-        return $product;
+        return $member;
     }
 
     public function getProductsByCategory(Category $category)

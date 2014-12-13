@@ -11,6 +11,9 @@ use Zend\InputFilter\InputFilter;
  */
 class Goods extends AbstractModel
 {
+    const GOODS_TYPE_COUNT = '次卡';
+    const GOODS_TYPE_TIME = '时间卡';
+    const GOODS_TYPE_NORMAL = '商品';
 
     public $id = 0;
 

@@ -12,20 +12,17 @@ class GoodsController extends AbstractActionController
 
     protected $goodsTable;
 
-
-
     protected $categoryTable;
 
     public function getGoodsTable()
     {
         if (! $this->goodsTable) {
             $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
-//             $this->goodsTable->currentUserId = App::getUser()->id;
+            // $this->goodsTable->currentUserId = App::getUser()->id;
         }
 
         return $this->goodsTable;
     }
-
 
     public function getCategoryTable()
     {
@@ -46,7 +43,7 @@ class GoodsController extends AbstractActionController
     public function getGoodsListDataAction()
     {
         $count = $this->getGoodsTable()->getFetchAllCounts();
-        $products = $this->getGoodsTable()->fetchAll($_GET['start'], $_GET['length']);
+        $products = $this->getGoodsTable()->fetchAll(array(1=>1), $_GET['start'], $_GET['length']);
         $listData = array(
             'draw' => $_GET['draw'] ++,
             'recordsTotal' => $count,
@@ -60,7 +57,7 @@ class GoodsController extends AbstractActionController
                 'type' => $product->type,
                 'category' => $product->category_name,
                 'price' => $product->priceString,
-                'desc' => $product->descString,
+                'desc' => $product->descString
             );
         }
         $viewModel = new JsonModel($listData);
@@ -70,7 +67,8 @@ class GoodsController extends AbstractActionController
     public function addAction()
     {
         $form = GoodsForm::getInstance($this->getServiceLocator());
-        $form->setCategories($this->getCategoryTable()->fetchAll());
+        $form->setCategories($this->getCategoryTable()
+            ->fetchAll());
         $request = $this->getRequest();
         if ($request->isPost()) {
             $goods = new Goods();
@@ -104,7 +102,8 @@ class GoodsController extends AbstractActionController
 
         $form = ProductForm::getInstance($this->getServiceLocator());
         $form->bind($product);
-        $form->setCategories($this->getCategoryTable()->fetchAll());
+        $form->setCategories($this->getCategoryTable()
+            ->fetchAll());
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setInputFilter($product->getInputFilter());
@@ -126,6 +125,4 @@ class GoodsController extends AbstractActionController
         print_r(realpath('.'));
         exit();
     }
-
-
 }

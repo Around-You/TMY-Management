@@ -13,43 +13,52 @@ use Zend\Mvc\Controller\AbstractActionController;
 use SamFramework\Core\App;
 use Zend\View\Model\JsonModel;
 use Application\Form\MemberForm;
+use Application\Model\Goods\Goods;
+use Application\Model\Member\Member;
 
 class MemberController extends AbstractActionController
 {
 
     protected $memberTable;
 
-    protected $categoryTable;
+    protected $goodsTable;
 
     public function getMemberTable()
     {
         if (! $this->memberTable) {
             $this->memberTable = $this->getServiceLocator()->get('Application\Model\Member\MemberTable');
-            $this->memberTable->currentUserId = App::getUser()->id;
         }
-
         return $this->memberTable;
     }
 
-    public function getCategoryTable()
+    public function getGoodsTable()
     {
-        if (! $this->categoryTable) {
-            $this->categoryTable = $this->getServiceLocator()->get('Application\Model\Product\CategoryTable');
-            $this->categoryTable->currentUserId = App::getUser()->id;
+        if (! $this->goodsTable) {
+            $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
         }
+        return $this->goodsTable;
+    }
 
-        return $this->categoryTable;
+    public function getGoodsUseForMember()
+    {
+        $table = $this->getGoodsTable();
+        $resultSet = $table->fetchAll(array(
+            'type' => array(
+                Goods::GOODS_TYPE_COUNT,
+                Goods::GOODS_TYPE_TIME
+            )
+        ));
+        $returnArray = array();
+        foreach ($resultSet as $good){
+//             print_r($good);
+            $returnArray[$good->id] = $good->title . ' - ' .$good->priceString;
+        }
+        return $returnArray;
     }
 
     public function indexAction()
     {
-        $this->redirect()->toUrl('member/list');
-    }
-
-    public function listAction()
-    {
-        $user = App::getUser();
-        return array();
+//         $this->redirect()->toUrl('member/list');
     }
 
     public function getMemberListDataAction()
@@ -80,18 +89,18 @@ class MemberController extends AbstractActionController
     public function addAction()
     {
         $form = MemberForm::getInstance($this->getServiceLocator());
-
+        $form->setMemberGoods($this->getGoodsUseForMember());
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $product = new Product();
-            $form->setInputFilter($product->getInputFilter());
+            $member = new Member();
+            $form->setInputFilter($member->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $product->exchangeArray($form->getData());
-                $productTable = $this->getMemberTable();
-                $product = $productTable->saveProduct($product);
-                $this->flashMessenger()->addSuccessMessage($product->title . ' 已添加');
-                return $this->redirect()->toUrl('/product/product');
+                $member->exchangeArray($form->getData());
+                $memberTable = $this->getMemberTable();
+                $member = $memberTable->saveMember($member);
+                $this->flashMessenger()->addSuccessMessage($member->title . ' 已添加');
+                return $this->redirect()->toUrl('/member');
             }
         }
 
@@ -114,7 +123,7 @@ class MemberController extends AbstractActionController
 
         $form = ProductForm::getInstance($this->getServiceLocator());
         $form->bind($product);
-        $form->setCategories($this->getCategoryTable()
+        $form->setCategories($this->getGoodsTable()
             ->fetchAll());
         $request = $this->getRequest();
         if ($request->isPost()) {

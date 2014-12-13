@@ -2,7 +2,6 @@
 namespace Application\Model\Goods;
 
 use SamFramework\Model\AbstractModelMapper;
-use Application\Model\Product\Product;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
 
@@ -15,12 +14,12 @@ class GoodsTable extends AbstractModelMapper
 
     protected $modelClassName = 'Application\\Model\\Goods\\Goods';
 
-    public function buildSqlSelect(Select $select)
+    public function buildSqlSelect(Select $select, $where = array())
     {
-
         $select->join('category', 'category.id=category_id', array(
             'category_name' => 'title'
         ));
+        $select->where($where);
         // if($this->currentStoreId){
         // $select->where('product.store_id='.$this->currentStoreId);
         // }
@@ -28,25 +27,29 @@ class GoodsTable extends AbstractModelMapper
 
     public function getFetchAllCounts()
     {
-        $select = $this->getTableGateway()->getSql()->select();
+        $select = $this->getTableGateway()
+            ->getSql()
+            ->select();
         $this->buildSqlSelect($select);
         $select->columns(array(
             new Expression('count(goods.id) as rownum')
         ));
-        $statement = $this->getTableGateway()->getSql()->prepareStatementForSqlObject($select);
+        $statement = $this->getTableGateway()
+            ->getSql()
+            ->prepareStatementForSqlObject($select);
         $row = $statement->execute()->current();
         return $row['rownum'];
     }
 
-    public function fetchAll($offset = 0, $limit = 10)
+    public function fetchAll($where = array(), $offset = 0, $limit = 99999)
     {
         $offset = (int) $offset;
         $limit = (int) $limit;
 
         $table = $this;
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table)
+        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where)
         {
-            $table->buildSqlSelect($select);
+            $table->buildSqlSelect($select, $where);
             $select->offset($offset)
                 ->limit($limit);
         });
@@ -87,7 +90,7 @@ class GoodsTable extends AbstractModelMapper
     {
         $tableGateway = $this->getTableGateway();
         $goods->update_time = date('YmdHis');
-//         $goods->user_id = $this->currentStoreId;
+        // $goods->user_id = $this->currentStoreId;
         $data = $goods->getArrayCopyForSave();
         $id = (int) $goods->id;
         if ($id == 0) {

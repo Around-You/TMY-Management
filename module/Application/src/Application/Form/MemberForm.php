@@ -6,7 +6,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class MemberForm extends Form
 {
-
+    /**
+     *
+     * @param ServiceLocatorInterface $sl
+     * @return Application\Form\MemberForm
+     */
     public static function getInstance(ServiceLocatorInterface $sl)
     {
         return $sl->get('FormElementManager')->get('\Application\Form\MemberForm');
@@ -101,7 +105,7 @@ class MemberForm extends Form
             'name' => 'goods',
             'type' => 'Select',
             'options' => array(
-                'label' => '会员类别'
+                'label' => '初始卡类别'
             )
         ));
         $this->add(array(
@@ -112,19 +116,19 @@ class MemberForm extends Form
             )
         ));
         $this->add(array(
-            'name' => 'goods',
+            'name' => 'confirm-password',
             'type' => 'Select',
             'options' => array(
                 'label' => '确认密码'
             )
         ));
-        $this->add(array(
-            'name' => 'goods',
-            'type' => 'Select',
-            'options' => array(
-                'label' => '推荐人'
-            )
-        ));
+//         $this->add(array(
+//             'name' => 'goods',
+//             'type' => 'Select',
+//             'options' => array(
+//                 'label' => '推荐人'
+//             )
+//         ));
         $this->add(array(
             'name' => 'gender',
             'type' => 'Radio',
@@ -157,6 +161,10 @@ class MemberForm extends Form
                 'label' => '重设'
             )
         ));
+    }
+
+    public function setMemberGoods($memberGoods){
+        $this->get('goods')->setValueOptions($memberGoods);
     }
 
     protected function getServiceLocator()
