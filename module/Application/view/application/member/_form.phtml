@@ -1,5 +1,5 @@
 <?php
-$this->inlinescript()->appendFile( $this->basePath('js/wds/admin/product.js') );
+
 
 $form->setAttribute('role', 'form');
 $form->prepare();
@@ -12,6 +12,7 @@ echo $this->formHidden($form->get('id'));
 echo $this->formRow($form->get('code'));
 echo $this->formRow($form->get('gender'));
 echo $this->formRow($form->get('id_type'));
+echo $this->formRow($form->get('point'));
 echo $this->formRow($form->get('address'));
 ?>
 </div>
@@ -21,6 +22,7 @@ echo $this->formRow($form->get('name'));
 echo $this->formRow($form->get('dob'));
 echo $this->formRow($form->get('id_code'));
 echo $this->formRow($form->get('phone'));
+echo $this->formRow($form->get('parent_name'));
 ?>
 </div>
 <div class="form-group">

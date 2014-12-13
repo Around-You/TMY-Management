@@ -88,6 +88,16 @@ class MemberForm extends Form
             )
         ));
         $this->add(array(
+            'name' => 'point',
+            'type' => 'Text',
+            'options' => array(
+                'label' => '初始积分',
+            ),
+            'attributes' => array(
+                'value' => 0
+            )
+        ));
+        $this->add(array(
             'name' => 'goods',
             'type' => 'Select',
             'options' => array(
@@ -128,7 +138,7 @@ class MemberForm extends Form
         ));
         $this->add(array(
             'name' => 'dob',
-            'type' => 'Date',
+            'type' => 'DatePicker',
             'options' => array(
                 'label' => '生日'
             )

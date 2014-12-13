@@ -7,10 +7,12 @@ return array(
             'formRow' => 'Components\Form\View\Helper\FormRow',
             'formbutton' => 'Components\Form\View\Helper\FormButton',
             'formActions' => 'Components\Form\View\Helper\FormActions',
-            'FormElementErrors' => 'Components\Form\View\Helper\FormElementErrors',
+            'formelement' => 'Components\Form\View\Helper\FormElement',
+            'formelementerrors'     => 'Components\Form\View\Helper\FormElementErrors',
             'formmulticheckbox' => 'Components\Form\View\Helper\FormMultiCheckbox',
             'formradio' => 'Components\Form\View\Helper\FormRadio',
             'formwysiwyg' => 'Components\Form\View\Helper\FormWysiwyg',
+            'formdatepicker' => 'Components\Form\View\Helper\FormDatePicker',
             'flashMessenger' => 'Components\Layout\View\Helper\FlashMessenger',
             'sidebar' => 'Components\Layout\View\Helper\Sidebar'
         )
@@ -24,6 +26,7 @@ return array(
             'text' => 'Components\Form\Element\Text',
             'select' => 'Components\Form\Element\Select',
             'radio' => 'Components\Form\Element\Radio',
+            'datepicker' => 'Components\Form\Element\DatePicker',
         )
     ),
     'view_manager' => array(

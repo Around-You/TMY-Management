@@ -5,7 +5,6 @@ namespace Components\Form\View\Helper;
 use Zend\Form\View\Helper\AbstractHelper;
 use Zend\Form\View\Helper\FormInput;
 use Zend\Form\ElementInterface;
-use Zend\Form\View\Helper\FormElement;
 
 class FormActions extends AbstractHelper
 {
