@@ -10,7 +10,7 @@ $menus = array(
             array(
                 'title' => '会员列表',
                 'icon' => 'fa fa-tachometer',
-                'url' => '/member/list'
+                'url' => '/member'
             ),
             array(
                 'title' => '新增会员',
@@ -36,7 +36,23 @@ $menus = array(
     ),
     '会员消费' => array(
         'title' => '会员消费',
-        'url' => '/product/order'
+        'submenu' => array(
+            array(
+                'title' => '快速消费',
+                'icon' => 'fa fa-tachometer',
+                'url' => '/goods'
+            ),
+            array(
+                'title' => '会员扣次',
+                'icon' => 'fa fa-tachometer',
+                'url' => '/category'
+            ),
+            array(
+                'title' => '会员充值',
+                'icon' => 'fa fa-tachometer',
+                'url' => '/category'
+            ),
+        )
     )
 );
 

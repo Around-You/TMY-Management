@@ -66,22 +66,21 @@ class MemberController extends AbstractActionController
     public function getMemberListDataAction()
     {
         $count = $this->getMemberTable()->getFetchAllCounts();
-        $products = $this->getMemberTable()->fetchAll($_GET['start'], $_GET['length']);
+        $members = $this->getMemberTable()->fetchAll($_GET['start'], $_GET['length']);
         $listData = array(
             'draw' => $_GET['draw'] ++,
             'recordsTotal' => $count,
             'recordsFiltered' => $count,
             'data' => array()
         );
-        foreach ($products as $product) {
+        foreach ($members as $member) {
             $listData['data'][] = array(
-                'DT_RowId' => $product->id,
-                'img' => $product->product_thumbnail,
-                'title' => $product->title,
-                'category' => $product->category_name,
-                'price' => $product->priceString,
-                'unit' => $product->unit,
-                'recommend' => $product->recommend ? '已推荐' : ''
+                'DT_RowId' => $member->id,
+                'name' => $member->name,
+                'code' => $member->code,
+                'phone' => $member->phone,
+                'parent_name' => $member->parent_name,
+                'point' => $member->point
             );
         }
         $viewModel = new JsonModel($listData);

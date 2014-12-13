@@ -11,7 +11,23 @@ var tmy_product_list = {
 			lengthChange: false,
 			info: false,
 			ajax: "/member/getMemberListData",
-			order: [[ 1, "desc" ]]
+			order: [[ 1, "desc" ]],
+			columns: [
+				{ "data": "code" },
+				{ "data": "name" },
+				{ "data": "phone" },
+				{ "data": "parent_name" },
+				{ "data": "point" },
+                { 
+                    "data": null,
+                    "orderable": false,
+                    "render": function ( data, type, row ) {
+                        var editString = '<a href="/member/edit/' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-pencil"></i>编辑</a>';
+                        var deleteString = '<a href="/member/delete/' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-remove"></i>删除</a>';
+                        return editString + ' ' + deleteString;
+                    }
+                }
+			]
 		} );
 	},
 
