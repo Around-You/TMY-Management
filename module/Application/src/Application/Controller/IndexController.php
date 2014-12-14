@@ -17,7 +17,11 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
         $this->layout('layout/layout/withoutSideBar');
-        return array();
+        if(App::isGuest()){
+            $this->redirect()->toUrl('/account/login');
+        }else{
+            $this->redirect()->toUrl('/dashboard');
+        }
     }
 
 }
