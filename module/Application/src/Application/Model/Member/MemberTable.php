@@ -64,7 +64,22 @@ class MemberTable extends AbstractModelMapper
         return $row;
     }
 
-    public function deleteProduct($id)
+    public function getMemberByCode($code)
+    {
+        $tableGateway = $this->getTableGateway();
+        $id = (int) $id;
+        $rowset = $tableGateway->select(array(
+            'code' => $code
+        ));
+        $row = $rowset->current();
+        if (! $row) {
+            throw new \Exception("Could not find row $id");
+        }
+
+        return $row;
+    }
+
+    public function deleteMember($id)
     {
         $this->tableGateway->delete(array(
             'id' => (int) $id
@@ -95,34 +110,6 @@ class MemberTable extends AbstractModelMapper
         return $member;
     }
 
-    public function getProductsByCategory(Category $category)
-    {
-        $table = $this;
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($category, $table)
-        {
-            $select->columns(array(
-                'id',
-                'title',
-                'price',
-                'unit',
-                'recommend'
-            ));
-            $table->buildSqlSelect($select);
-            $select->where("category_id={$category->id}");
-            $select->where("enable=1");
-        });
-        return $resultSet;
-    }
 
-
-    public function getRecommendedProducts()
-    {
-        $resultSet = $this->getTableGateway()->select(array(
-            'recommend' => 1,
-            'enable' => 1,
-            'store_id' => $this->currentStoreId
-        ));
-        return $resultSet;
-    }
 }
 

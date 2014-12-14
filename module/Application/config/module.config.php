@@ -36,7 +36,8 @@ return array(
             'Application\Controller\Goods' => 'Application\Controller\GoodsController',
             'Application\Controller\Category' => 'Application\Controller\CategoryController',
             'Application\Controller\Dashboard' => 'Application\Controller\DashboardController',
-            'Application\Controller\Member' => 'Application\Controller\MemberController'
+            'Application\Controller\Member' => 'Application\Controller\MemberController',
+            'Application\Controller\Sale' => 'Application\Controller\SaleController'
         )
     ),
     'view_manager' => array(
