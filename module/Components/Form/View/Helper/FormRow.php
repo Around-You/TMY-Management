@@ -97,7 +97,7 @@ class FormRow extends ZVHFormRow
 
             switch ($this->labelPosition) {
                 case self::LABEL_PREPEND:
-                    $markup = '<div class="' . $warpClass . '">' . $labelOpen . $label . $labelClose . ' <div class="col-sm-10">' . $elementString . ($this->renderErrors ? $elementErrors : '') . "</div>" . "</div>";
+                    $markup = '<div class="' . $warpClass . '">' . $labelOpen . $label . $labelClose . ' <div class="col-sm-9">' . $elementString . ($this->renderErrors ? $elementErrors : '') . "</div>" . "</div>";
                     break;
                 case self::LABEL_APPEND:
                 default:
@@ -128,7 +128,7 @@ class FormRow extends ZVHFormRow
      */
     public function getLabelAttributes()
     {
-        $labelClass = 'col-sm-2 control-label no-padding-right';
+        $labelClass = 'col-sm-3 control-label no-padding-right';
         $classAttributes = isset($this->labelAttributes['class']) ? $this->labelAttributes['class'] . ' ' : '';
         $this->labelAttributes['class'] = $classAttributes . $labelClass;
 

@@ -33,21 +33,6 @@ class CategoryForm extends Form
             )
         ));
         $this->add(array(
-            'name' => 'type',
-            'type' => 'Select',
-            'options' => array(
-                'label' => '商品类别类型',
-                'value_options' => array(
-                    '年卡' => '年卡',
-                    '季卡' => '季卡',
-                    '月卡' => '月卡',
-                    '次卡' => '次卡',
-                    '普通商品'=>'普通商品'
-
-                )
-            )
-        ));
-        $this->add(array(
             'name' => 'submit',
             'type' => 'submitButton',
             'options' => array(

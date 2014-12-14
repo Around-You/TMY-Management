@@ -8,10 +8,14 @@ $form->prepare();
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
 echo $this->formRow($form->get('title'));
+echo $this->formRow($form->get('code'));
 echo $this->formRow($form->get('category_id'));
 echo $this->formRow($form->get('price'));
 echo $this->formRow($form->get('cost'));
+echo $this->formRow($form->get('type'));
 echo $this->formRow($form->get('quantity'));
+echo $this->formRow($form->get('count'));
+echo $this->formRow($form->get('date_range'));
 // echo $this->formRow($form->get('unit'));
 // echo $this->formRow($form->get('description'));
 

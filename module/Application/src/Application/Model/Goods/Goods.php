@@ -19,6 +19,8 @@ class Goods extends AbstractModel
 
     public $title = '';
 
+    public $code = '';
+
     // public $description = '';
     public $user_id = 0;
 
@@ -72,6 +74,7 @@ class Goods extends AbstractModel
     {
         $this->id = (isset($array['id'])) ? $array['id'] : $this->id;
         $this->title = (isset($array['title'])) ? $array['title'] : $this->title;
+        $this->code = (isset($array['code'])) ? $array['code'] : $this->code;
         // $this->description = (isset($array['description'])) ? $array['description'] : $this->description;
         $this->category_id = (isset($array['category_id'])) ? $array['category_id'] : $this->category_id;
         $this->category_name = (isset($array['category_name'])) ? $array['category_name'] : $this->category_name;
@@ -90,6 +93,7 @@ class Goods extends AbstractModel
         $data = array(
             'id' => $this->id,
             'title' => $this->title,
+            'code' => $this->code,
             // 'description' => $this->description,
             'category_id' => $this->category_id,
             'price' => $this->price,
