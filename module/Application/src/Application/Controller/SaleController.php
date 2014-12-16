@@ -37,7 +37,6 @@ class SaleController extends AbstractActionController
     {
         if (! $this->goodsTable) {
             $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
-
         }
         return $this->goodsTable;
     }
@@ -46,10 +45,12 @@ class SaleController extends AbstractActionController
     {
         return array();
     }
+
     public function quickAction()
     {
         return array();
     }
+
     public function saleAction()
     {
         return array();
@@ -59,16 +60,19 @@ class SaleController extends AbstractActionController
     {
         $table = $this->getMemberTable();
         $memberCode = $_GET['member_code'];
-        $member = $table->getMemberByCode($memberCode);
-        $viewModel = new JsonModel($member);
+        try {
+            $member = $table->getMemberByCode($memberCode);
+            $returnJson = array(
+                'name' => $member->name,
+                'point' => $member->point
+            );
+        } catch (\Exception $e) {
+            $returnJson = array();
+        }
+        $viewModel = new JsonModel($returnJson);
         return $viewModel;
     }
 
-
-
     public function getGoodsDataAction()
-    {
-
-    }
-
+    {}
 }

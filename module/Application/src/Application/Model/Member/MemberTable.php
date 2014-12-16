@@ -64,16 +64,21 @@ class MemberTable extends AbstractModelMapper
         return $row;
     }
 
+    /**
+     *
+     * @param string $code
+     * @throws \Exception
+     * @return Member
+     */
     public function getMemberByCode($code)
     {
         $tableGateway = $this->getTableGateway();
-        $id = (int) $id;
         $rowset = $tableGateway->select(array(
             'code' => $code
         ));
         $row = $rowset->current();
         if (! $row) {
-            throw new \Exception("Could not find row $id");
+            throw new \Exception("Could not find row $code");
         }
 
         return $row;
