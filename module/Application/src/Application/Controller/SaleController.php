@@ -42,22 +42,6 @@ class SaleController extends AbstractActionController
         return $this->goodsTable;
     }
 
-    public function getGoodsUseForMember()
-    {
-        $table = $this->getGoodsTable();
-        $resultSet = $table->fetchAll(array(
-            'type' => array(
-                Goods::GOODS_TYPE_COUNT,
-                Goods::GOODS_TYPE_TIME
-            )
-        ));
-        $returnArray = array();
-        foreach ($resultSet as $good) {
-            $returnArray[$good->id] = $good->title . ' - ' . $good->priceString;
-        }
-        return $returnArray;
-    }
-
     public function indexAction()
     {
         return array();
@@ -80,30 +64,7 @@ class SaleController extends AbstractActionController
         return $viewModel;
     }
 
-    public function addAction()
-    {
-        $form = MemberForm::getInstance($this->getServiceLocator());
-        $form->setMemberGoods($this->getGoodsUseForMember());
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $member = new Member();
-            $form->setInputFilter($member->getInputFilter());
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                $member->exchangeArray($form->getData());
-                $memberTable = $this->getMemberTable();
-                $member = $memberTable->saveMember($member);
-                $this->flashMessenger()->addSuccessMessage($member->name . ' 已添加');
-                return $this->redirect()->toUrl('/member');
-            }else{
-                $this->flashMessenger()->addErrorMessage($form->getMessages());
-            }
-        }
 
-        return array(
-            'form' => $form
-        );
-    }
 
     public function getGoodsDataAction()
     {
