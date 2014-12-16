@@ -60,7 +60,8 @@ class GoodsForm extends Form
                 'value_options' => array(
                     '时间卡' => '时间卡',
                     '次卡' => '次卡',
-                    '普通商品' => '普通商品'
+                    '普通商品' => '普通商品',
+                    '礼品' => '礼品'
                 )
             )
         ));
