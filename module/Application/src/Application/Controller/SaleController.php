@@ -15,6 +15,7 @@ use Zend\View\Model\JsonModel;
 use Application\Form\MemberForm;
 use Application\Model\Goods\Goods;
 use Application\Model\Member\Member;
+use Application\Model\Json\JsonResult;
 
 class SaleController extends AbstractActionController
 {
@@ -62,14 +63,11 @@ class SaleController extends AbstractActionController
         $memberCode = $_GET['member_code'];
         try {
             $member = $table->getMemberByCode($memberCode);
-            $returnJson = array(
-                'name' => $member->name,
-                'point' => $member->point
-            );
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, $member);
         } catch (\Exception $e) {
-            $returnJson = array();
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
         }
-        $viewModel = new JsonModel($returnJson);
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
     }
 
