@@ -31,7 +31,7 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale.js'));
                         		<label class="col-sm-2 control-label no-padding-right" for="form-field-1">商品条码</label>
 
                         		<div class="col-sm-10">
-                        			<input type="text" id="form-field-1" placeholder="商品条码" class="col-sm-10">
+                        			<input type="text" id="goods-code" placeholder="商品条码" class="col-sm-10">
                         		</div>
                         	</div>
                         </form>
@@ -48,7 +48,7 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale.js'));
     				<ul class="list-inline member-info-list"></ul>
     			</div>
                 <div>
-            		<table class="table table-striped table-bordered">
+            		<table class="table table-striped table-bordered" id="goods-tbl" data-rownum="0" data-total="0">
             			<thead>
             				<tr>
             					<th class="center">#</th>
@@ -61,26 +61,24 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale.js'));
             			</thead>
 
             			<tbody>
-            				<tr>
-            					<td class="center">1</td>
-
-            					<td>
-            						<a href="#">google.com</a>
-            					</td>
-            					<td class="hidden-xs">
-            						1 year domain registration
-            					</td>
-            					<td class="hidden-480"> --- </td>
-            					<td>$10</td>
-            					<td>$10</td>
-            				</tr>
-
-
             			</tbody>
             		</table>
                 </div>
+                <div class="hr hr8 hr-double hr-dotted"></div>
+
+				<div class="row">
+					<div class="col-sm-5 pull-right">
+						<h4 class="pull-right">
+							合计:
+							<span class="red">￥<span id="total-price">0.00</span></span>
+						</h4>
+					</div>
+					<div class="col-sm-7 pull-left"></div>
+				</div>
             </div>
         </div>
     </div>
 </div>
+<div class="hidden" id="goods-row-template">
 
+</div>

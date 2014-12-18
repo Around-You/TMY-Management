@@ -44,7 +44,7 @@ class Goods extends AbstractModel
 
     public $type = '';
 
-    protected $exclude = array();
+    protected $exclude = array("priceString");
 
     public function getInputFilter()
     {
@@ -97,6 +97,7 @@ class Goods extends AbstractModel
             // 'description' => $this->description,
             'category_id' => $this->category_id,
             'price' => $this->price,
+            'priceString' => $this->getPriceString(),
             'cost' => $this->cost,
             'quantity' => $this->quantity,
             'date_range' => $this->date_range,

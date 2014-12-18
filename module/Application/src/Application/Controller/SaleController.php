@@ -72,5 +72,16 @@ class SaleController extends AbstractActionController
     }
 
     public function getGoodsDataAction()
-    {}
+    {
+        $table = $this->getGoodsTable();
+        $code = $_GET['goods_code'];
+        try {
+            $goods = $table->getGoodsByCode($code);
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, $goods);
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
 }

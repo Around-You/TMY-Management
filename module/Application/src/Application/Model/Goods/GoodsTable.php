@@ -76,6 +76,26 @@ class GoodsTable extends AbstractModelMapper
         return $row;
     }
 
+    /**
+     *
+     * @param string $code
+     * @throws \Exception
+     * @return Goods
+     */
+    public function getGoodsByCode($code)
+    {
+        $tableGateway = $this->getTableGateway();
+        $rowset = $tableGateway->select(array(
+            'code' => $code
+        ));
+        $row = $rowset->current();
+        if (! $row) {
+            throw new \Exception("Could not find row $code");
+        }
+
+        return $row;
+    }
+
     public function deleteProduct($id)
     {
         $this->tableGateway->delete(array(
