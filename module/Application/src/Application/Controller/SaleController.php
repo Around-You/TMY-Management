@@ -12,10 +12,11 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use SamFramework\Core\App;
 use Zend\View\Model\JsonModel;
-use Application\Form\MemberForm;
+use Application\Model\Json\JsonResult;
 use Application\Model\Goods\Goods;
 use Application\Model\Member\Member;
-use Application\Model\Json\JsonResult;
+use Application\Model\Goods\SellLog;
+use Application\Model\Goods\MemberGoods;
 
 class SaleController extends AbstractActionController
 {
@@ -24,12 +25,14 @@ class SaleController extends AbstractActionController
 
     protected $goodsTable;
 
+    protected $sellLogTable;
+
+    protected $memberGoodsTable;
+
     public function getMemberTable()
     {
         if (! $this->memberTable) {
             $this->memberTable = $this->getServiceLocator()->get('Application\Model\Member\MemberTable');
-            $this->memberTable->currentUserId = App::getUser()->id;
-            $this->memberTable->currentStoreId = App::getUser()->store_id;
         }
         return $this->memberTable;
     }
@@ -40,6 +43,23 @@ class SaleController extends AbstractActionController
             $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
         }
         return $this->goodsTable;
+    }
+
+    public function getSellLogTable()
+    {
+        if (! $this->sellLogTable) {
+            $this->sellLogTable = $this->getServiceLocator()->get('Application\Model\Goods\SellLogTable');
+        }
+        return $this->sellLogTable;
+    }
+
+
+    public function getMemberGoodsTable()
+    {
+        if (! $this->memberGoodsTable) {
+            $this->memberGoodsTable = $this->getServiceLocator()->get('Application\Model\Goods\MemberGoodsTable');
+        }
+        return $this->memberGoodsTable;
     }
 
     public function indexAction()
@@ -83,5 +103,47 @@ class SaleController extends AbstractActionController
         }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
+    }
+
+    public function buyGoodsAction()
+    {
+        $member = '';
+        $goodsCodeArr = array();
+        if (isset($_GET['member_code'])) {
+            $member = $this->getMemberTable()->getMemberByCode($_GET['member_code']);
+        }
+        if (isset($_GET['goods_code_arr'])) {
+            $goodsCodeArr = $_GET['goods_code_arr'];
+            foreach ($goodsCodeArr as $goodsCode){
+                $goods = $this->getGoodsTable()->getGoodsByCode($goodsCode);
+                $this->addSellLog($goods, $member);
+                if($goods->isVirtual()){
+                    $this->addToMemberGoods($goods, $member);
+                }
+            }
+        }else {
+            throw new \Exception('no goods code');
+        }
+    }
+
+    public function addSellLog(Goods $goods, Member $member = ''){
+        $log = new SellLog();
+        if($member){
+            $log->member_id = $member->id;
+        }
+        $log->goods_id = $goods->id;
+        $log->user_id = App::getUser()->id;
+        $this->getSellLogTable()->saveSellLog($log);
+    }
+
+    public function addToMemberGoods(Goods $goods, Member $member)
+    {
+        $memberGoods = new MemberGoods();
+        $memberGoods->goods_id = $goods->id;
+        $memberGoods->start_date = time();
+        $memberGoods->end_date = '';
+        $memberGoods->count = $goods->count;
+        $memberGoods->member_id = $member->id;
+        $this->getMemberGoodsTable()->save($memberGoods);
     }
 }

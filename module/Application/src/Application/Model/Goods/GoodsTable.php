@@ -124,23 +124,11 @@ class GoodsTable extends AbstractModelMapper
         return $goods;
     }
 
-    public function getProductsByCategory(Category $category)
+    public function buyGoods($goodsArr, $memberCode='')
     {
-        $table = $this;
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($category, $table)
-        {
-            $select->columns(array(
-                'id',
-                'title',
-                'price',
-                'unit',
-                'recommend'
-            ));
-            $table->buildSqlSelect($select);
-            $select->where("category_id={$category->id}");
-            $select->where("enable=1");
-        });
-        return $resultSet;
+
     }
+
+
 }
 

@@ -11,8 +11,11 @@ use Zend\InputFilter\InputFilter;
  */
 class Goods extends AbstractModel
 {
+
     const GOODS_TYPE_COUNT = '次卡';
+
     const GOODS_TYPE_TIME = '时间卡';
+
     const GOODS_TYPE_NORMAL = '商品';
 
     public $id = 0;
@@ -44,7 +47,9 @@ class Goods extends AbstractModel
 
     public $type = '';
 
-    protected $exclude = array("priceString");
+    protected $exclude = array(
+        "priceString"
+    );
 
     public function getInputFilter()
     {
@@ -130,6 +135,19 @@ class Goods extends AbstractModel
     public function getPriceString()
     {
         return '¥ ' . round($this->price, 2);
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isVirtual()
+    {
+        if ($this->type == "次卡" || $this->type == "时间卡") {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
