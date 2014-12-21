@@ -18,10 +18,16 @@ class MemberGoodsTable extends AbstractModelMapper
 
     public function buildSqlSelect(Select $select, $where = array())
     {
-//         $select->join('category', 'category.id=category_id', array(
-//             'category_name' => 'title'
-//         ));
+        $select->join('goods', 'goods.id=goods_id', array(
+            'goods_title' => 'title',
+            'goods_type' => 'type'
+        ));
+        $select->join('member', 'member.id=member_id', array(
+            'memeber_name' => 'name',
+            'memeber_code' => 'code'
+        ));
         $select->where($where);
+
     }
 
     public function getFetchAllCounts()
@@ -72,6 +78,5 @@ class MemberGoodsTable extends AbstractModelMapper
         }
         return $item;
     }
-
 }
 

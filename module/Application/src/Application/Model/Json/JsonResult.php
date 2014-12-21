@@ -2,6 +2,7 @@
 namespace Application\Model\Json;
 
 use Zend\Stdlib\ArraySerializableInterface;
+use Zend\Db\ResultSet\ResultSet;
 
 class JsonResult implements ArraySerializableInterface
 {
@@ -11,6 +12,7 @@ class JsonResult implements ArraySerializableInterface
     const JSON_RESULT_FAILED = 0;
 
     public $status;
+    public $error;
 
     /**
      *
@@ -37,7 +39,11 @@ class JsonResult implements ArraySerializableInterface
             $this->data = $data->getArrayCopy();
         } elseif (is_array($data)) {
             $this->data = $data;
-        } else {
+        } elseif ($data instanceof ResultSet){
+            foreach ($data as $row){
+                $this->data[] = $row->getArrayCopy();
+            }
+        }else {
             throw new \Exception('输入数据类型不是ArraySerializableInterface或者Array');
         }
     }
@@ -56,11 +62,26 @@ class JsonResult implements ArraySerializableInterface
         return $result;
     }
 
+    /**
+     *
+     * @param string $status
+     * @param ArraySerializableInterface|Array $data
+     * @return \Application\src\Application\Model\Json\JsonResult
+     */
+    public static function buildFailedResult(\Exception $e)
+    {
+        $result = new JsonResult();
+        $result->status = self::JSON_RESULT_FAILED;
+        $result->error = $e->getMessage();
+        return $result;
+    }
+
     public function getArrayCopy()
     {
         $data = array(
             'status' => $this->status,
-            'data' => $this->data
+            'data' => $this->data,
+            'error' => $this->error
         );
         return $data;
     }

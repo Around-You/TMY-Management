@@ -1,8 +1,8 @@
 <?php
-$title = '快速消费';
+$title = '会员扣次';
 $this->layout()->currentItem = $title;
 $this->headTitle($title);
-$this->inlinescript()->appendFile( $this->basePath('js/main/sale/sale.js'));
+$this->inlinescript()->appendFile( $this->basePath('js/main/sale/use.js'));
 ?>
 
 <div class="page-header">
@@ -17,7 +17,7 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale/sale.js'));
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
                 <div class="row">
-                    <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <form class="form-horizontal" role="form">
                         	<!-- #section:elements.form -->
                         	<div class="form-group">
@@ -27,21 +27,9 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale/sale.js'));
                         			<input type="text" id="member-code" placeholder="会员卡号" class="col-sm-10">
                         		</div>
                         	</div>
-                        	<div class="form-group">
-                        		<label class="col-sm-2 control-label no-padding-right" for="form-field-1">商品条码</label>
-
-                        		<div class="col-sm-10">
-                        			<input type="text" id="goods-code" placeholder="商品条码" class="col-sm-10">
-                        		</div>
-                        	</div>
                         </form>
                     </div>
-                    <div class="col-sm-3">
-                        <button class="btn btn-app btn-yellow btn-sm" id="buy-button">
-							<i class="ace-icon fa fa-shopping-cart bigger-160"></i>
-							购买
-						</button>
-                    </div>
+
                 </div>
     			<div class="well">
     				<h4 class="green smaller lighter">会员信息</h4>
@@ -52,29 +40,16 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale/sale.js'));
             			<thead>
             				<tr>
             					<th class="center">#</th>
-            					<th>商品</th>
-            					<th class="hidden-xs">说明</th>
-            					<th class="hidden-480">折扣</th>
-            					<th>单价</th>
+            					<th>商品名称</th>
+            					<th>说明</th>
             					<th></th>
             				</tr>
             			</thead>
-
             			<tbody>
             			</tbody>
             		</table>
                 </div>
-                <div class="hr hr8 hr-double hr-dotted"></div>
 
-				<div class="row">
-					<div class="col-sm-5 pull-right">
-						<h4 class="pull-right">
-							合计:
-							<span class="red">￥<span id="total-price">0.00</span></span>
-						</h4>
-					</div>
-					<div class="col-sm-7 pull-left"></div>
-				</div>
             </div>
         </div>
     </div>

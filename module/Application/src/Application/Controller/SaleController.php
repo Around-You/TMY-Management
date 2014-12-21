@@ -61,10 +61,6 @@ class SaleController extends AbstractActionController
         return $this->memberGoodsTable;
     }
 
-    public function indexAction()
-    {
-        return array();
-    }
 
     public function quickAction()
     {
@@ -94,7 +90,7 @@ class SaleController extends AbstractActionController
         return array();
     }
 
-    public function saleAction()
+    public function useAction()
     {
         return array();
     }
@@ -127,8 +123,21 @@ class SaleController extends AbstractActionController
         return $viewModel;
     }
 
-    public function buyGoodsAction()
-    {}
+    public function getMemberGoodsDataAction()
+    {
+        $table = $this->getMemberGoodsTable();
+        $memberCode = $_GET['member_code'];
+        try {
+            $memberGoods = $table->fetchAll(array('member.code'=>$memberCode));
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, $memberGoods);
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildFailedResult($e);
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
+
 
     public function addSellLog(Goods $goods, Member $member = null)
     {
@@ -144,9 +153,7 @@ class SaleController extends AbstractActionController
     public function addToMemberGoods(Goods $goods, Member $member)
     {
         $memberGoods = new MemberGoods();
-        $memberGoods->goods_id = $goods->id;
-        $memberGoods->setDateRange($goods, time());
-        $memberGoods->count = $goods->count;
+        $memberGoods->setGoods($goods, time());
         $memberGoods->member_id = $member->id;
         $this->getMemberGoodsTable()->save($memberGoods);
     }
