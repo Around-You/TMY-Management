@@ -56,5 +56,28 @@ class MemberGoods extends AbstractModel
         );
         return $data;
     }
+
+    public function setDateRange(Goods $goods, $startDate)
+    {
+        $this->start_date = strtotime('midnight',$startDate);
+        $this->end_date = '';
+        switch ($goods->date_range){
+        	case "1年":
+        	    $this->end_date = strtotime('+1 year', $this->start_date);
+        	    break;
+        	case "月卡":
+        	case "1个月":
+        	    $this->end_date = strtotime('+1 month', $this->start_date);
+        	    break;
+        	case "3个月":
+        	    $this->end_date = strtotime('+3 month', $this->start_date);
+        	    break;
+        	case "6个月":
+        	    $this->end_date = strtotime('+6 month', $this->start_date);
+        	    break;
+
+        }
+    }
+
 }
 

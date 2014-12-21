@@ -13,6 +13,9 @@ var main_sale = {
 	    $('#goods-tbl').on('click', '.remove-goods-btn', function(){
 	        me.removeGoods(this);
 	    });
+	    $("#buy-button").on('click', function(){
+	    	me.buyGoods();
+	    })
 	},
 	getMember: function(memberCode){
 	    $.get('/sale/getMemberData',{member_code: memberCode}, function(result){
@@ -20,6 +23,7 @@ var main_sale = {
 	            var html = '<li><i class="ace-icon fa fa-caret-right blue"></i>姓名: ' + result.data.name + '</li>';
 	            html += '<li><i class="ace-icon fa fa-caret-right blue"></i>积分: ' + result.data.point + '</li>';
 	            $('.member-info-list').html(html);
+	            $('.member-info-list').data('code',memberCode);
 	        }else{
 	            
 	        }
@@ -32,7 +36,7 @@ var main_sale = {
 	        	var goods = result.data;
 	        	var rownum = $("#goods-tbl").data("rownum") + 1;
 	        	var total = Math.round($("#goods-tbl").data("total") + parseFloat(goods.price), 2);
-	        	var row = '<tr data-price="' + goods.price + '"><td class="center">' + rownum + '</td>';
+	        	var row = '<tr data-price="' + goods.price + '" data-code="' + goods.code + '"><td class="center">' + rownum + '</td>';
 	        	row += '<td>' + goods.title + '</td>';
 	        	row += '<td class="hidden-xs">' + '--' + '</td>';
 	        	row += '<td class="hidden-480">'+ '--' + '</td>';
@@ -61,6 +65,16 @@ var main_sale = {
         	console.log(i);
         	$("#goods-tbl tr:nth-child(" + i + ") td:nth-child(1)").text(i);
         }
+	},
+	buyGoods: function(){
+		var memberCode = $('.member-info-list').data('code');
+		var goodsCodeArr = new Array();
+		$("#goods-tbl tbody tr").each(function(){
+			goodsCodeArr.push($(this).data('code'));
+		})
+		$("#member_code").val(memberCode);
+		$("#goods_code_arr").val(goodsCodeArr);
+		$("#buyGoodsForm").submit();
 	}
 };
 

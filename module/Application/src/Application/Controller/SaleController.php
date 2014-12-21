@@ -53,7 +53,6 @@ class SaleController extends AbstractActionController
         return $this->sellLogTable;
     }
 
-
     public function getMemberGoodsTable()
     {
         if (! $this->memberGoodsTable) {
@@ -69,6 +68,29 @@ class SaleController extends AbstractActionController
 
     public function quickAction()
     {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $member = null;
+            $memberCode = $this->params()->fromPost('member_code');
+            $goodsCodeArr = $this->params()->fromPost('goods_code_arr', '');
+            $goodsCodeArr = explode(',', $goodsCodeArr);
+            if ($memberCode) {
+                $member = $this->getMemberTable()->getMemberByCode($memberCode);
+            }
+            if (! empty($goodsCodeArr)) {
+                foreach ($goodsCodeArr as $goodsCode) {
+                    $goods = $this->getGoodsTable()->getGoodsByCode($goodsCode);
+                    $this->addSellLog($goods, $member);
+                    if ($goods->isVirtual()) {
+                        $this->addToMemberGoods($goods, $member);
+                    }
+                }
+                $this->flashMessenger()->addSuccessMessage('购买完成');
+            } else {
+                throw new \Exception('no goods code');
+            }
+        }
         return array();
     }
 
@@ -106,29 +128,12 @@ class SaleController extends AbstractActionController
     }
 
     public function buyGoodsAction()
-    {
-        $member = '';
-        $goodsCodeArr = array();
-        if (isset($_GET['member_code'])) {
-            $member = $this->getMemberTable()->getMemberByCode($_GET['member_code']);
-        }
-        if (isset($_GET['goods_code_arr'])) {
-            $goodsCodeArr = $_GET['goods_code_arr'];
-            foreach ($goodsCodeArr as $goodsCode){
-                $goods = $this->getGoodsTable()->getGoodsByCode($goodsCode);
-                $this->addSellLog($goods, $member);
-                if($goods->isVirtual()){
-                    $this->addToMemberGoods($goods, $member);
-                }
-            }
-        }else {
-            throw new \Exception('no goods code');
-        }
-    }
+    {}
 
-    public function addSellLog(Goods $goods, Member $member = ''){
+    public function addSellLog(Goods $goods, Member $member = null)
+    {
         $log = new SellLog();
-        if($member){
+        if ($member) {
             $log->member_id = $member->id;
         }
         $log->goods_id = $goods->id;
@@ -140,8 +145,7 @@ class SaleController extends AbstractActionController
     {
         $memberGoods = new MemberGoods();
         $memberGoods->goods_id = $goods->id;
-        $memberGoods->start_date = time();
-        $memberGoods->end_date = '';
+        $memberGoods->setDateRange($goods, time());
         $memberGoods->count = $goods->count;
         $memberGoods->member_id = $member->id;
         $this->getMemberGoodsTable()->save($memberGoods);
