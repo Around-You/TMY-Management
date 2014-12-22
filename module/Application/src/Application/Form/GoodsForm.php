@@ -96,6 +96,7 @@ class GoodsForm extends Form
         $this->add(array(
             'name' => 'count',
             'type' => 'Text',
+
             'options' => array(
                 'label' => '次卡-次数'
             )

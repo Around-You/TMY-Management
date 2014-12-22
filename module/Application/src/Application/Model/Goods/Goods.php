@@ -7,6 +7,7 @@ use Zend\InputFilter\InputFilter;
 /**
  *
  * @property string priceString
+ * @property string descString
  *
  */
 class Goods extends AbstractModel
@@ -24,7 +25,8 @@ class Goods extends AbstractModel
 
     public $code = '';
 
-    // public $description = '';
+    public $description = '';
+
     public $user_id = 0;
 
     public $category_id = '';
@@ -35,20 +37,23 @@ class Goods extends AbstractModel
 
     public $update_time = '';
 
-    public $price = '';
+    public $price = 0;
 
-    public $cost = '';
+    public $cost = 0;
 
-    public $quantity = '';
+    public $quantity = 0;
 
     public $date_range = '';
 
-    public $count = '';
+    public $count = 0;
 
     public $type = '';
 
     protected $exclude = array(
-        "priceString"
+        "priceString",
+        'descString',
+        'category_name',
+        'desc'
     );
 
     public function getInputFilter()
@@ -80,7 +85,7 @@ class Goods extends AbstractModel
         $this->id = (isset($array['id'])) ? $array['id'] : $this->id;
         $this->title = (isset($array['title'])) ? $array['title'] : $this->title;
         $this->code = (isset($array['code'])) ? $array['code'] : $this->code;
-        // $this->description = (isset($array['description'])) ? $array['description'] : $this->description;
+        $this->description = (isset($array['description'])) ? $array['description'] : $this->description;
         $this->category_id = (isset($array['category_id'])) ? $array['category_id'] : $this->category_id;
         $this->category_name = (isset($array['category_name'])) ? $array['category_name'] : $this->category_name;
         $this->create_time = (isset($array['create_time'])) ? $array['create_time'] : $this->create_time;
@@ -99,8 +104,9 @@ class Goods extends AbstractModel
             'id' => $this->id,
             'title' => $this->title,
             'code' => $this->code,
-            // 'description' => $this->description,
+            'description' => $this->description,
             'category_id' => $this->category_id,
+            'category_name' => $this->category_name,
             'price' => $this->price,
             'priceString' => $this->getPriceString(),
             'cost' => $this->cost,
@@ -109,6 +115,7 @@ class Goods extends AbstractModel
             'count' => $this->count,
             'type' => $this->type,
 
+            'desc' => $this->descString,
             'update_time' => $this->update_time
         );
         return $data;
@@ -118,13 +125,13 @@ class Goods extends AbstractModel
     {
         $string = '';
         switch ($this->type) {
-            case "次卡":
+            case self::GOODS_TYPE_COUNT:
                 $string = $this->count . '次';
                 break;
-            case "时间卡":
+            case self::GOODS_TYPE_TIME:
                 $string = $this->date_range;
                 break;
-            case "商品":
+            case self::GOODS_TYPE_NORMAL:
                 $string = '库存: ' . $this->quantity . '件';
                 break;
             default:

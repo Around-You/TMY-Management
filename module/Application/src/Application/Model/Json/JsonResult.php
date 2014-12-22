@@ -41,7 +41,11 @@ class JsonResult implements ArraySerializableInterface
             $this->data = $data;
         } elseif ($data instanceof ResultSet){
             foreach ($data as $row){
-                $this->data[] = $row->getArrayCopy();
+                $rowArr = $row->getArrayCopy();
+                if(isset($rowArr['id'])){
+                    $rowArr['DT_RowId'] = $rowArr['id'];
+                }
+                $this->data[] = $rowArr;
             }
         }else {
             throw new \Exception('输入数据类型不是ArraySerializableInterface或者Array');

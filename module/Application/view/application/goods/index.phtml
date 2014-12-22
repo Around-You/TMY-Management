@@ -4,7 +4,7 @@ $this->layout()->currentItem = $title;
 $this->headTitle($title);
 $this->inlinescript()->appendFile( $this->basePath('js/jquery.dataTables.min.js'))
                      ->appendFile( $this->basePath('js/jquery.dataTables.bootstrap.js'))
-                     ->appendFile( $this->basePath('js/main/product-list.js'));
+                     ->appendFile( $this->basePath('js/main/goods/goods-list.js'));
 ?>
 <style>
 <!--
@@ -29,6 +29,7 @@ $this->inlinescript()->appendFile( $this->basePath('js/jquery.dataTables.min.js'
                 <table id="product-table" class="table table-striped table-bordered table-hover">
                     <thead>
                     	<tr>
+                            <th>商品代码</th>
                             <th>商品名称</th>
                             <th>类型</th>
                             <th>类别</th>

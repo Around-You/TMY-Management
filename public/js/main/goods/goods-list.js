@@ -1,4 +1,4 @@
-var wds_admin_product_list = {
+var main_goods_list = {
 	init : function() {
 		this.initTable();
 	},
@@ -13,10 +13,11 @@ var wds_admin_product_list = {
 			ajax: "/goods/getGoodsListData",
 			order: [[ 0, "desc" ]],
 			columns: [
+				{ "data": "code" },
 				{ "data": "title" },
 				{ "data": "type" },
-				{ "data": "category" },
-				{ "data": "price" },
+				{ "data": "category_name" },
+				{ "data": "priceString" },
 				{ "data": "desc" },
                 { 
                     "data": null,
@@ -29,11 +30,9 @@ var wds_admin_product_list = {
                 }
 			]
 		} );
-	},
-
-
+	}
 };
 
 $(function() {
-	wds_admin_product_list.init();
+	main_goods_list.init();
 });

@@ -6,6 +6,7 @@ use Zend\View\Model\JsonModel;
 use SamFramework\Core\App;
 use Application\Form\GoodsForm;
 use Application\Model\Goods\Goods;
+use Application\Model\Json\DataTableResult;
 
 class GoodsController extends AbstractActionController
 {
@@ -42,25 +43,15 @@ class GoodsController extends AbstractActionController
 
     public function getGoodsListDataAction()
     {
-        $count = $this->getGoodsTable()->getFetchAllCounts();
-        $products = $this->getGoodsTable()->fetchAll(array(), $_GET['start'], $_GET['length']);
-        $listData = array(
-            'draw' => $_GET['draw'] ++,
-            'recordsTotal' => $count,
-            'recordsFiltered' => $count,
-            'data' => array()
-        );
-        foreach ($products as $product) {
-            $listData['data'][] = array(
-                'DT_RowId' => $product->id,
-                'title' => $product->title,
-                'type' => $product->type,
-                'category' => $product->category_name,
-                'price' => $product->priceString,
-                'desc' => $product->descString
-            );
+        try {
+            $count = $this->getGoodsTable()->getFetchAllCounts();
+            $products = $this->getGoodsTable()->fetchAll(array(), $_GET['start'], $_GET['length']);
+
+            $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
+        } catch (\Exception $e) {
+            $returnJson = DataTableResult::buildResult();
         }
-        $viewModel = new JsonModel($listData);
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
     }
 
@@ -69,13 +60,14 @@ class GoodsController extends AbstractActionController
         $form = GoodsForm::getInstance($this->getServiceLocator());
         $form->setCategories($this->getCategoryTable()
             ->fetchAll());
+
+        $goods = new Goods();
+        $form->bind($goods);
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $goods = new Goods();
             $form->setInputFilter($goods->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $goods->exchangeArray($form->getData());
                 $goodsTable = $this->getGoodsTable();
                 $goods = $goodsTable->saveGoods($goods);
                 $this->flashMessenger()->addSuccessMessage($goods->title . ' 已添加');
