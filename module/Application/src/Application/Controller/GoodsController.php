@@ -69,7 +69,7 @@ class GoodsController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $goodsTable = $this->getGoodsTable();
-                $goods = $goodsTable->saveGoods($goods);
+                $goods = $goodsTable->save($goods);
                 $this->flashMessenger()->addSuccessMessage($goods->title . ' 已添加');
                 return $this->redirect()->toUrl('/goods');
             }
@@ -83,33 +83,32 @@ class GoodsController extends AbstractActionController
     public function editAction()
     {
         $id = (int) $this->params('id', 0);
-        if (! $id) {
-            return $this->redirect()->toUrl('/product/product/add');
-        }
         try {
-            $product = $this->getGoodsTable()->getProduct($id);
+            $goods = $this->getGoodsTable()->getOneById($id);
+            $form = GoodsForm::getInstance($this->getServiceLocator());
+            $form->bind($goods);
+            $form->setCategories($this->getCategoryTable()
+                ->fetchAll());
+            $request = $this->getRequest();
+            if ($request->isPost()) {
+                $form->setInputFilter($goods->getInputFilter());
+                $form->setData($request->getPost());
+                if ($form->isValid()) {
+                    $productTable = $this->getGoodsTable();
+                    $goods = $productTable->save($goods);
+                    $this->flashMessenger()->addSuccessMessage($goods->title . ' 已编辑');
+                    return $this->redirect()->toUrl('/goods');
+                }
+            }
+            return array(
+                'form' => $form
+            );
         } catch (\Exception $ex) {
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
             return $this->redirect()->toUrl('/product/product');
         }
 
-        $form = ProductForm::getInstance($this->getServiceLocator());
-        $form->bind($product);
-        $form->setCategories($this->getCategoryTable()
-            ->fetchAll());
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $form->setInputFilter($product->getInputFilter());
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                $productTable = $this->getGoodsTable();
-                $product = $productTable->saveProduct($product);
-                $this->flashMessenger()->addSuccessMessage($product->title . ' 已编辑');
-                return $this->redirect()->toUrl('/product/product');
-            }
-        }
-        return array(
-            'form' => $form
-        );
+
     }
 
     public function deleteAction()

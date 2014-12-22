@@ -17,7 +17,7 @@ class Goods extends AbstractModel
 
     const GOODS_TYPE_TIME = '时间卡';
 
-    const GOODS_TYPE_NORMAL = '商品';
+    const GOODS_TYPE_NORMAL = '普通商品';
 
     public $id = 0;
 

@@ -53,7 +53,7 @@ class GoodsTable extends AbstractModelMapper
         return $resultSet;
     }
 
-    public function getProduct($id)
+    public function getOneById($id)
     {
         $tableGateway = $this->getTableGateway();
         $id = (int) $id;
@@ -65,14 +65,6 @@ class GoodsTable extends AbstractModelMapper
             throw new \Exception("Could not find row $id");
         }
 
-        // Get Product Images
-        $productImageTable = $this->getProductImageTable();
-        $rowset = $productImageTable->getProductImagesByProductId($id);
-        $arrProductImages = array();
-        foreach ($rowset as $productImage) {
-            $arrProductImages[] = $productImage;
-        }
-        $row->product_images = $arrProductImages;
         return $row;
     }
 
@@ -103,7 +95,7 @@ class GoodsTable extends AbstractModelMapper
         ));
     }
 
-    public function saveGoods(Goods $goods)
+    public function save(Goods $goods)
     {
         $tableGateway = $this->getTableGateway();
         $goods->update_time = date('YmdHis');
@@ -114,7 +106,7 @@ class GoodsTable extends AbstractModelMapper
             $tableGateway->insert($data);
             $goods->id = $this->getTableGateway()->getLastInsertValue();
         } else {
-            if ($this->getProduct($id)) {
+            if ($this->getOneById($id)) {
                 $tableGateway->update($data, array(
                     'id' => $id
                 ));
@@ -124,11 +116,7 @@ class GoodsTable extends AbstractModelMapper
         return $goods;
     }
 
-    public function buyGoods($goodsArr, $memberCode='')
-    {
-
-    }
-
-
+    public function buyGoods($goodsArr, $memberCode = '')
+    {}
 }
 
