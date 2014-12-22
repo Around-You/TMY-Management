@@ -8,7 +8,15 @@ var main_sale_use = {
 	        me.getMember($(this).val());
 	        me.getMemberGoods($(this).val());
 	    });
-
+//		$("#goods-tbl").on(ace.click_event,'.use-goods-btn', function() {
+//			bootbox.prompt("确认", function(result) {
+//				if (result === null) {
+//					
+//				} else {
+//					
+//				}
+//			});
+//		});
 
 	},
 	getMember: function(memberCode){
@@ -34,22 +42,18 @@ var main_sale_use = {
 	        		var row = '<tr data-code="' + item.goods_id + '"><td class="center">' + rownum + '</td>';
 		        	row += '<td>' + item.goods_title + '</td>';
 		        	row += '<td>'+ item.description + '</td>';
-		        	row += '<td><a href="javascript:void(0)" class="remove-goods-btn"> <i class="ace-icon glyphicon glyphicon-remove"></i>扣次</a></td>';
+		        	row += '<td><a href="javascript:void(0)" class="use-goods-btn green" data-toggle="modal" data-target="#modal-confirm"> <i class="ace-icon glyphicon glyphicon-check green"></i>扣次</a></td>';
 		        	row += '</tr>';
 		            $('#goods-tbl tbody').append(row);
 	        		rownum++;
 	        	}
-	        	
-	        	
-	        	
-	        	
-
 	        }else{
-	            
 	        }
-	       
 	    });
 	},
+	doCardUse: function(){
+
+	}
 
 };
 
