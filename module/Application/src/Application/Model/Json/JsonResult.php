@@ -72,6 +72,20 @@ class JsonResult implements ArraySerializableInterface
      * @param ArraySerializableInterface|Array $data
      * @return \Application\src\Application\Model\Json\JsonResult
      */
+    public static function buildSuccessResult($data = array())
+    {
+        $result = new JsonResult();
+        $result->status = self::JSON_RESULT_SUCCESSFUL;
+        $result->setData($data);
+        return $result;
+    }
+
+    /**
+     *
+     * @param string $status
+     * @param ArraySerializableInterface|Array $data
+     * @return \Application\src\Application\Model\Json\JsonResult
+     */
     public static function buildFailedResult(\Exception $e)
     {
         $result = new JsonResult();

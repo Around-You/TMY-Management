@@ -1,33 +1,27 @@
 <?php
-namespace Application\Model\Goods;
+namespace Application\Model\Logs;
 
 use SamFramework\Model\AbstractModelMapper;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
 
-class MemberGoodsTable extends AbstractModelMapper
+class SellLogTable extends AbstractModelMapper
 {
 
     public $currentStoreId = 0;
 
     public $currentUserId = 0;
 
-    protected $tableName = 'member_has_goods';
+    protected $tableName = 'sell_log';
 
-    protected $modelClassName = 'Application\\Model\\Goods\\MemberGoods';
+    protected $modelClassName = 'Application\\Model\\Logs\\SellLog';
 
     public function buildSqlSelect(Select $select, $where = array())
     {
-        $select->join('goods', 'goods.id=goods_id', array(
-            'goods_title' => 'title',
-            'goods_type' => 'type'
-        ));
-        $select->join('member', 'member.id=member_id', array(
-            'memeber_name' => 'name',
-            'memeber_code' => 'code'
-        ));
+//         $select->join('category', 'category.id=category_id', array(
+//             'category_name' => 'title'
+//         ));
         $select->where($where);
-
     }
 
     public function getFetchAllCounts()
@@ -61,28 +55,7 @@ class MemberGoodsTable extends AbstractModelMapper
         return $resultSet;
     }
 
-    /**
-     *
-     * @param unknown $id
-     * @throws \Exception
-     * @return MemberGoods
-     */
-    public function getOneById($id)
-    {
-        $tableGateway = $this->getTableGateway();
-        $id = (int) $id;
-        $rowset = $tableGateway->select(array(
-            'id' => $id
-        ));
-        $row = $rowset->current();
-        if (! $row) {
-            throw new \Exception("Could not find row $id");
-        }
-
-        return $row;
-    }
-
-    public function save(MemberGoods $item)
+    public function saveSellLog(SellLog $item)
     {
         $tableGateway = $this->getTableGateway();
         $data = $item->getArrayCopyForSave();
@@ -99,5 +72,6 @@ class MemberGoodsTable extends AbstractModelMapper
         }
         return $item;
     }
+
 }
 

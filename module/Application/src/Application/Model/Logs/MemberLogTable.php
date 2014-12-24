@@ -1,20 +1,20 @@
 <?php
-namespace Application\Model\Goods;
+namespace Application\Model\Logs;
 
 use SamFramework\Model\AbstractModelMapper;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
 
-class SellLogTable extends AbstractModelMapper
+class MemberLogTable extends AbstractModelMapper
 {
 
     public $currentStoreId = 0;
 
     public $currentUserId = 0;
 
-    protected $tableName = 'sell_log';
+    protected $tableName = 'member_action_log';
 
-    protected $modelClassName = 'Application\\Model\\Goods\\SellLog';
+    protected $modelClassName = 'Application\\Model\\Logs\\MemberLog';
 
     public function buildSqlSelect(Select $select, $where = array())
     {
@@ -55,7 +55,7 @@ class SellLogTable extends AbstractModelMapper
         return $resultSet;
     }
 
-    public function saveSellLog(SellLog $item)
+    public function save(MemberLog $item)
     {
         $tableGateway = $this->getTableGateway();
         $data = $item->getArrayCopyForSave();
@@ -64,11 +64,11 @@ class SellLogTable extends AbstractModelMapper
             $tableGateway->insert($data);
             $item->id = $this->getTableGateway()->getLastInsertValue();
         } else {
-            if ($this->getProduct($id)) {
-                $tableGateway->update($data, array(
-                    'id' => $id
-                ));
-            }
+//             if ($this->getProduct($id)) {
+//                 $tableGateway->update($data, array(
+//                     'id' => $id
+//                 ));
+//             }
         }
         return $item;
     }

@@ -15,8 +15,9 @@ use Zend\View\Model\JsonModel;
 use Application\Model\Json\JsonResult;
 use Application\Model\Goods\Goods;
 use Application\Model\Member\Member;
-use Application\Model\Goods\SellLog;
+use Application\Model\Logs\SellLog;
 use Application\Model\Goods\MemberGoods;
+use Application\Model\Logs\MemberLog;
 
 class SaleController extends AbstractActionController
 {
@@ -26,6 +27,8 @@ class SaleController extends AbstractActionController
     protected $goodsTable;
 
     protected $sellLogTable;
+
+    protected $memberLogTable;
 
     protected $memberGoodsTable;
 
@@ -48,9 +51,18 @@ class SaleController extends AbstractActionController
     public function getSellLogTable()
     {
         if (! $this->sellLogTable) {
-            $this->sellLogTable = $this->getServiceLocator()->get('Application\Model\Goods\SellLogTable');
+            $this->sellLogTable = $this->getServiceLocator()->get('Application\Model\Logs\SellLogTable');
         }
         return $this->sellLogTable;
+    }
+
+
+    public function getMemberLogTable()
+    {
+        if (! $this->memberLogTable) {
+            $this->memberLogTable = $this->getServiceLocator()->get('Application\Model\Logs\MemberLogTable');
+        }
+        return $this->memberLogTable;
     }
 
     public function getMemberGoodsTable()
@@ -92,6 +104,30 @@ class SaleController extends AbstractActionController
 
     public function useAction()
     {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $id = $this->params()->fromPost('id');
+
+            if ($id>0) {
+                //  update MemberGoods
+                $memberGoods = $this->getMemberGoodsTable()->getOneById($id);
+                if($memberGoods->count>0){
+                    $memberGoods->count--;
+                }
+                $this->getMemberGoodsTable()->save($memberGoods);
+                // add action log
+                $action = new MemberLog();
+                $action->goods_id = $memberGoods->goods_id;
+                $action->member_id = $memberGoods->member_id;
+                $action->user_id = App::getUser()->id;
+                $action->action = '扣次/使用';
+                $this->getMemberLogTable()->save($action);
+                $this->flashMessenger()->addSuccessMessage('扣次/使用完成');
+            } else {
+                throw new \Exception('ID不正确');
+            }
+        }
         return array();
     }
 
@@ -133,6 +169,12 @@ class SaleController extends AbstractActionController
         } catch (\Exception $e) {
             $returnJson = JsonResult::buildFailedResult($e);
         }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
+    public function doUseGoodsAction(){
+        $returnJson = JsonResult::buildSuccessResult(array('url'=>'/sale/use'));
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
     }

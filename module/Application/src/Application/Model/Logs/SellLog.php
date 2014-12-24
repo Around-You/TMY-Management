@@ -1,5 +1,5 @@
 <?php
-namespace Application\Model\Goods;
+namespace Application\Model\Logs;
 
 use SamFramework\Model\AbstractModel;
 
