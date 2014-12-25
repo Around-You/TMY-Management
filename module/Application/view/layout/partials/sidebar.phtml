@@ -17,6 +17,11 @@ $menus = array(
                 'icon' => 'fa fa-tachometer',
                 'url' => '/member/add'
             ),
+            array(
+                'title' => '会员扣次',
+                'icon' => 'fa fa-tachometer',
+                'url' => '/sale/use'
+            ),
         )
     ),
     '商品管理' => array(
@@ -28,7 +33,7 @@ $menus = array(
                 'url' => '/goods'
             ),
             array(
-                'title' => '商品类别列表',
+                'title' => '商品类别',
                 'icon' => 'fa fa-tachometer',
                 'url' => '/category'
             ),
@@ -43,14 +48,19 @@ $menus = array(
                 'url' => '/sale/quick'
             ),
             array(
-                'title' => '会员扣次',
+                'title' => '充值续费',
                 'icon' => 'fa fa-tachometer',
-                'url' => '/sale/use'
+                'url' => '#'
             ),
+        )
+    ),
+    '店铺管理' => array(
+        'title' => '店铺管理',
+        'submenu' => array(
             array(
-                'title' => '会员充值',
+                'title' => '店铺流水',
                 'icon' => 'fa fa-tachometer',
-                'url' => '/category'
+                'url' => '/sale/quick'
             ),
         )
     )

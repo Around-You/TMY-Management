@@ -1,4 +1,6 @@
-<?php use SamFramework\Core\App;?>
+<?php use SamFramework\Core\App;
+var_dump(App::getUser());
+?>
 <div class="navbar navbar-default" id="navbar">
 	<script type="text/javascript">
 		try{ace.settings.check('navbar' , 'fixed')}catch(e){}
@@ -45,7 +47,7 @@
             <?php else :?>
 				<li class="light-blue hidden-480">
     				<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-    				    <span class="user-info"> <small>Welcome,</small> Jason </span> <i class="icon-caret-down"></i>
+    				    <span class="user-info"> <small>Welcome,</small> <?=App::getUser()->realname?> </span> <i class="icon-caret-down"></i>
     				</a>
     				<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
     <!-- 					<li> -->
