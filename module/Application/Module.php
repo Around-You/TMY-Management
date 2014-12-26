@@ -113,7 +113,7 @@ class Module
         switch ($exception->getCode())
         {
         	case 403:
-        	    $response->getHeaders()->addHeaderLine('Location', '/layout/account/login');
+        	    $response->getHeaders()->addHeaderLine('Location', '/account/login');
         	    $response->setStatusCode(302);
         	    break;
         }

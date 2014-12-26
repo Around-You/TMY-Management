@@ -8,36 +8,38 @@ use Zend\Db\Sql\Expression;
 
 class MemberTable extends AbstractModelMapper
 {
-    public $currentStoreId = 0;
-    public $currentUserId = 0;
 
+    public $currentStoreId = 0;
+
+    public $currentUserId = 0;
 
     protected $tableName = 'member';
 
-
     protected $modelClassName = 'Application\\Model\\Member\\Member';
 
-
-
-    public function buildSqlSelect(Select $select){
-
-
-    }
+    public function buildSqlSelect(Select $select)
+    {}
 
     public function getFetchAllCounts()
     {
-        $select = $this->getTableGateway()->getSql()->select();
+        $select = $this->getTableGateway()
+            ->getSql()
+            ->select();
         $this->buildSqlSelect($select);
-        $select->columns(array('id'));
-        $statement = $this->getTableGateway()->getSql()->prepareStatementForSqlObject($select);
+        $select->columns(array(
+            'id'
+        ));
+        $statement = $this->getTableGateway()
+            ->getSql()
+            ->prepareStatementForSqlObject($select);
         $results = $statement->execute();
         return $results->count();
     }
 
     public function fetchAll($offset = 0, $limit = 10)
     {
-        $offset = (int)$offset;
-        $limit = (int)$limit;
+        $offset = (int) $offset;
+        $limit = (int) $limit;
 
         $table = $this;
         $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table)
@@ -49,7 +51,7 @@ class MemberTable extends AbstractModelMapper
         return $resultSet;
     }
 
-    public function getMember($id)
+    public function getOneById($id)
     {
         $tableGateway = $this->getTableGateway();
         $id = (int) $id;
@@ -86,9 +88,13 @@ class MemberTable extends AbstractModelMapper
 
     public function deleteMember($id)
     {
-        $this->tableGateway->delete(array(
-            'id' => (int) $id
+        $tableGateway = $this->getTableGateway();
+        $model = $this->getOneById($id);
+        $model->enable = 0;
+        $tableGateway->update($model->getArrayCopyForSave(), array(
+            'id' => $id
         ));
+        return $model;
     }
 
     public function saveMember(Member $member)
@@ -102,10 +108,9 @@ class MemberTable extends AbstractModelMapper
             $data = $member->getArrayCopyForSave();
             $tableGateway->insert($data);
             $member->id = $this->getTableGateway()->getLastInsertValue();
-
         } else {
-        $data = $member->getArrayCopyForSave();
-            if ($this->getMember($id)) {
+            $data = $member->getArrayCopyForSave();
+            if ($this->getOneById($id)) {
                 $tableGateway->update($data, array(
                     'id' => $id
                 ));
@@ -114,7 +119,5 @@ class MemberTable extends AbstractModelMapper
 
         return $member;
     }
-
-
 }
 

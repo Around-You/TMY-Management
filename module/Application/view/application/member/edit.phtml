@@ -1,0 +1,11 @@
+<?php
+$title = '编辑会员';
+$this->layout()->currentItem = '会员管理';
+$this->headTitle($title);
+echo $this->pageHeader( $title );
+?>
+<?=$this->flashMessenger()->render();?>
+<?php
+echo $this->partial( '/application/member/_form.phtml', array(
+	'form' => $form
+));

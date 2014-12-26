@@ -13,7 +13,12 @@ var tmy_product_list = {
 			ajax: "/member/getMemberListData",
 			order: [[ 1, "desc" ]],
 			columns: [
-				{ "data": "code" },
+				{ 
+				    data: "code",
+				    render: function ( data, type, row ){
+				        return '<a href="/member/edit/' + row.DT_RowId + '">' + data + '</a>';
+				    }
+				},
 				{ "data": "name" },
 				{ "data": "phone" },
 				{ "data": "parent_name" },

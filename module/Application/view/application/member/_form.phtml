@@ -14,7 +14,9 @@ echo $this->formRow($form->get('gender'));
 echo $this->formRow($form->get('id_type'));
 echo $this->formRow($form->get('point'));
 echo $this->formRow($form->get('address'));
-echo $this->formRow($form->get('goods'));
+if ( $form->get('id')->getValue() == 0 ){
+    echo $this->formRow($form->get('goods'));
+}
 ?>
 </div>
 <div class="col-md-6">

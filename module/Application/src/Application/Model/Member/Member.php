@@ -38,6 +38,11 @@ class Member extends AbstractModel
 
     public $update_time = '';
 
+    public $enable = 1;
+
+    public $goods = 0;
+
+
 
 
 
@@ -83,6 +88,7 @@ class Member extends AbstractModel
         $this->created_by_user = (isset($array['created_by_user'])) ? $array['created_by_user'] : $this->created_by_user;
         $this->created_time = (isset($array['created_time'])) ? $array['created_time'] : $this->created_time;
         $this->update_time = (isset($array['update_time'])) ? $array['update_time'] : $this->update_time;
+        $this->enable = (isset($array['enable'])) ? $array['enable'] : $this->enable;
     }
 
     public function getArrayCopy()
@@ -102,6 +108,7 @@ class Member extends AbstractModel
             'created_by_user' => $this->created_by_user,
             'created_time' => $this->created_time,
             'update_time' => $this->update_time,
+            'enable'=> $this->enable
         );
         return $data;
     }

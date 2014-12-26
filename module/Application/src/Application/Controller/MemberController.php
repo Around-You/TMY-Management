@@ -37,7 +37,6 @@ class MemberController extends AbstractActionController
     {
         if (! $this->goodsTable) {
             $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
-
         }
         return $this->goodsTable;
     }
@@ -102,7 +101,7 @@ class MemberController extends AbstractActionController
                 $member = $memberTable->saveMember($member);
                 $this->flashMessenger()->addSuccessMessage($member->name . ' 已添加');
                 return $this->redirect()->toUrl('/member');
-            }else{
+            } else {
                 $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
         }
@@ -115,29 +114,26 @@ class MemberController extends AbstractActionController
     public function editAction()
     {
         $id = (int) $this->params('id', 0);
-        if (! $id) {
-            return $this->redirect()->toUrl('/product/product/add');
-        }
+
         try {
-            $product = $this->getMemberTable()->getProduct($id);
+            $member = $this->getMemberTable()->getOneById($id);
         } catch (\Exception $ex) {
-            return $this->redirect()->toUrl('/product/product');
+            return $this->redirect()->toUrl('/member');
         }
 
-        $form = ProductForm::getInstance($this->getServiceLocator());
-        $form->bind($product);
-        $form->setCategories($this->getGoodsTable()
-            ->fetchAll());
+        $form = MemberForm::getInstance($this->getServiceLocator());
+        $form->bind($member);
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $form->setInputFilter($product->getInputFilter());
+            $form->setInputFilter($member->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $productTable = $this->getMemberTable();
-                $product = $productTable->saveProduct($product);
-                $this->flashMessenger()->addSuccessMessage($product->title . ' 已编辑');
-                return $this->redirect()->toUrl('/product/product');
+                $memberTable = $this->getMemberTable();
+                $member = $memberTable->saveMember($member);
+                $this->flashMessenger()->addSuccessMessage($member->title . ' 已编辑');
+                return $this->redirect()->toUrl('/member');
             }
+            var_dump($form->getMessages());
         }
         return array(
             'form' => $form
@@ -146,19 +142,10 @@ class MemberController extends AbstractActionController
 
     public function deleteAction()
     {
-        print_r(realpath('.'));
-        exit();
-    }
-
-    public function recommendAction()
-    {
         $table = $this->getMemberTable();
-        $id = (int) $this->params()->fromPost('id');
-        $product = $table->getProduct($id);
-        $product->recommend = (int) $this->params()->fromPost('recommend');
-
-        $table->saveProduct($product);
-        $this->flashmessenger()->addSuccessMessage($product->title . ($product->recommend == 1 ? ' 已推荐' : ' 已取消推荐'));
-        return new FlashMessagerModel();
+        $id = (int) $this->params('id', 0);
+        $member = $table->deleteMember($id);
+        $this->flashMessenger()->addSuccessMessage($member->name . ' 已删除');
+        return $this->redirect()->toUrl('/member');
     }
 }
