@@ -15,6 +15,7 @@ use Zend\View\Model\JsonModel;
 use Application\Form\MemberForm;
 use Application\Model\Goods\Goods;
 use Application\Model\Member\Member;
+use Application\Model\Goods\MemberGoods;
 
 class MemberController extends AbstractActionController
 {
@@ -22,6 +23,8 @@ class MemberController extends AbstractActionController
     protected $memberTable;
 
     protected $goodsTable;
+
+    protected $memberGoodsTable;
 
     public function getMemberTable()
     {
@@ -39,6 +42,14 @@ class MemberController extends AbstractActionController
             $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
         }
         return $this->goodsTable;
+    }
+
+    public function getMemberGoodsTable()
+    {
+        if (! $this->memberGoodsTable) {
+            $this->memberGoodsTable = $this->getServiceLocator()->get('Application\Model\Goods\MemberGoodsTable');
+        }
+        return $this->memberGoodsTable;
     }
 
     public function getGoodsUseForMember()
@@ -99,6 +110,14 @@ class MemberController extends AbstractActionController
                 $member->exchangeArray($form->getData());
                 $memberTable = $this->getMemberTable();
                 $member = $memberTable->saveMember($member);
+
+                if ($member->goods > 0) {
+                    $goods = $this->getGoodsTable()->getOneById($member->goods);
+                    $memberGoods = new MemberGoods();
+                    $memberGoods->setGoods($goods);
+                    $memberGoods->member_id = $member->id;
+                    $this->getMemberGoodsTable()->save($memberGoods);
+                }
                 $this->flashMessenger()->addSuccessMessage($member->name . ' 已添加');
                 return $this->redirect()->toUrl('/member');
             } else {
@@ -135,7 +154,6 @@ class MemberController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage('会员 ' . $member->name . ' 已编辑');
                 return $this->redirect()->toUrl('/member');
             }
-            var_dump($form->getMessages());
         }
         return array(
             'form' => $form

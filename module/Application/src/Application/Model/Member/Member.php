@@ -68,6 +68,19 @@ class Member extends AbstractModel
                 )
             ));
 
+            $inputFilter->add(array(
+                'name' => 'dob',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                )
+            ));
+
             $this->inputFilter = $inputFilter;
         }
 
@@ -87,6 +100,7 @@ class Member extends AbstractModel
         $this->parent_name = (isset($array['parent_name'])) ? $array['parent_name'] : $this->parent_name;
         $this->gender  = (isset($array['gender'])) ? $array['gender'] : $this->gender ;
         $this->dob  = (isset($array['dob'])) ? $array['dob'] : $this->dob ;
+        $this->goods  = (isset($array['goods'])) ? $array['goods'] : $this->goods ;
         $this->created_at_store = (isset($array['created_at_store'])) ? $array['created_at_store'] : $this->created_at_store;
         $this->created_by_user = (isset($array['created_by_user'])) ? $array['created_by_user'] : $this->created_by_user;
         $this->created_time = (isset($array['created_time'])) ? $array['created_time'] : $this->created_time;

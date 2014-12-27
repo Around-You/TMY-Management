@@ -104,25 +104,27 @@ class MemberGoods extends AbstractModel
         return $description;
     }
 
-    public function setGoods(Goods $goods, $startDate)
+    public function setGoods(Goods $goods, $startDate = NULL)
     {
+        if ($startDate == NULL) {
+            $startDate = time();
+        }
         $this->goods_id = $goods->id;
         if ($goods->type == '次卡') {
             $this->count = $goods->count;
         } else {
             $this->start_date = strtotime('midnight', $startDate);
             switch ($goods->date_range) {
-                case "1年":
+                case "年卡":
                     $this->end_date = strtotime('+1 year', $this->start_date);
                     break;
                 case "月卡":
-                case "1个月":
                     $this->end_date = strtotime('+1 month', $this->start_date);
                     break;
-                case "3个月":
+                case "季卡":
                     $this->end_date = strtotime('+3 month', $this->start_date);
                     break;
-                case "6个月":
+                case "半年卡":
                     $this->end_date = strtotime('+6 month', $this->start_date);
                     break;
             }

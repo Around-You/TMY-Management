@@ -15,7 +15,7 @@ class GoodsForm extends Form
     public function __construct($name = null)
     {
         // we want to ignore the name passed
-        parent::__construct('product_form');
+        parent::__construct('goods_form');
     }
 
     public function init()
