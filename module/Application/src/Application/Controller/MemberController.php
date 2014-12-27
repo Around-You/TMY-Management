@@ -125,12 +125,14 @@ class MemberController extends AbstractActionController
         $form->bind($member);
         $request = $this->getRequest();
         if ($request->isPost()) {
+            $data = $request->getPost();
+            $data['goods'] = 0;
             $form->setInputFilter($member->getInputFilter());
-            $form->setData($request->getPost());
+            $form->setData($data);
             if ($form->isValid()) {
                 $memberTable = $this->getMemberTable();
                 $member = $memberTable->saveMember($member);
-                $this->flashMessenger()->addSuccessMessage($member->title . ' 已编辑');
+                $this->flashMessenger()->addSuccessMessage('会员 ' . $member->name . ' 已编辑');
                 return $this->redirect()->toUrl('/member');
             }
             var_dump($form->getMessages());
@@ -145,7 +147,7 @@ class MemberController extends AbstractActionController
         $table = $this->getMemberTable();
         $id = (int) $this->params('id', 0);
         $member = $table->deleteMember($id);
-        $this->flashMessenger()->addSuccessMessage($member->name . ' 已删除');
+        $this->flashMessenger()->addSuccessMessage($member->name . ' 已失效');
         return $this->redirect()->toUrl('/member');
     }
 }

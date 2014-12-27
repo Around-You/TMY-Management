@@ -18,7 +18,9 @@ class MemberTable extends AbstractModelMapper
     protected $modelClassName = 'Application\\Model\\Member\\Member';
 
     public function buildSqlSelect(Select $select)
-    {}
+    {
+//     	$select->where();
+    }
 
     public function getFetchAllCounts()
     {
@@ -97,6 +99,11 @@ class MemberTable extends AbstractModelMapper
         return $model;
     }
 
+    /**
+     *
+     * @param Member $member
+     * @return Member
+     */
     public function saveMember(Member $member)
     {
         $tableGateway = $this->getTableGateway();

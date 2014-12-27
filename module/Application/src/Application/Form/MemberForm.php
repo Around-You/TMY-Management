@@ -84,13 +84,7 @@ class MemberForm extends Form
                 'label' => '监护人姓名'
             )
         ));
-//         $this->add(array(
-//             'name' => 'prepaid',
-//             'type' => 'Text',
-//             'options' => array(
-//                 'label' => '预存金额'
-//             )
-//         ));
+
         $this->add(array(
             'name' => 'point',
             'type' => 'Text',
@@ -105,30 +99,13 @@ class MemberForm extends Form
             'name' => 'goods',
             'type' => 'Select',
             'options' => array(
-                'label' => '初始卡类别'
+                'label' => '初始卡类别',
+                'value_options' => array(
+                    0 => '请选择初始卡类别'
+                )
             )
         ));
-//         $this->add(array(
-//             'name' => 'password',
-//             'type' => 'Select',
-//             'options' => array(
-//                 'label' => '密码'
-//             )
-//         ));
-//         $this->add(array(
-//             'name' => 'confirm-password',
-//             'type' => 'Select',
-//             'options' => array(
-//                 'label' => '确认密码'
-//             )
-//         ));
-//         $this->add(array(
-//             'name' => 'goods',
-//             'type' => 'Select',
-//             'options' => array(
-//                 'label' => '推荐人'
-//             )
-//         ));
+
         $this->add(array(
             'name' => 'gender',
             'type' => 'Radio',

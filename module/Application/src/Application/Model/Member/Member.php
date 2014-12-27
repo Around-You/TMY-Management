@@ -28,7 +28,9 @@ class Member extends AbstractModel
 
     public $parent_name = '';
 
-    public $perpaid = '';
+    public $gender = '';
+
+    public $dob= null;
 
     public $created_at_store = 0;
 
@@ -83,7 +85,8 @@ class Member extends AbstractModel
         $this->id_code = (isset($array['id_code'])) ? $array['id_code'] : $this->id_code;
         $this->point = (isset($array['point'])) ? $array['point'] : $this->point;
         $this->parent_name = (isset($array['parent_name'])) ? $array['parent_name'] : $this->parent_name;
-//         $this->perpaid = (isset($array['perpaid'])) ? $array['perpaid'] : $this->perpaid;
+        $this->gender  = (isset($array['gender'])) ? $array['gender'] : $this->gender ;
+        $this->dob  = (isset($array['dob'])) ? $array['dob'] : $this->dob ;
         $this->created_at_store = (isset($array['created_at_store'])) ? $array['created_at_store'] : $this->created_at_store;
         $this->created_by_user = (isset($array['created_by_user'])) ? $array['created_by_user'] : $this->created_by_user;
         $this->created_time = (isset($array['created_time'])) ? $array['created_time'] : $this->created_time;
@@ -103,7 +106,8 @@ class Member extends AbstractModel
             'id_code' => $this->id_code,
             'point' => $this->point,
             'parent_name' => $this->parent_name,
-//             'perpaid' => $this->perpaid,
+            'gender' => $this->gender,
+            'dob' => $this->dob,
             'created_at_store' => $this->created_at_store,
             'created_by_user' => $this->created_by_user,
             'created_time' => $this->created_time,
