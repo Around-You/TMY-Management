@@ -73,5 +73,25 @@ class MemberLogTable extends AbstractModelMapper
         return $item;
     }
 
+    /**
+     *
+     * @param unknown $id
+     * @throws \Exception
+     * @return MemberLog
+     */
+    public function getOneById($id)
+    {
+        $tableGateway = $this->getTableGateway();
+        $id = (int) $id;
+        $rowset = $tableGateway->select(array(
+            'id' => $id
+        ));
+        $row = $rowset->current();
+        if (! $row) {
+            throw new \Exception("Could not find row $id");
+        }
+
+        return $row;
+    }
 }
 

@@ -54,9 +54,9 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale/use.js'));
         </div>
     </div>
 </div>
-<form id="buyGoodsForm" method="post">
-<input type="hidden" id="member_code" name="member_code">
-<input type="hidden" id="goods_code_arr" name="goods_code_arr">
+<form id="useGoodsForm" method="post">
+<input type="hidden" id="showpopup" name="showpopup" value="<?=$ticketUrl?>">
+<input type="hidden" id="member_goods_code" name="member_goods_code">
 </form>
 
 <div id="modal-confirm" class="modal" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

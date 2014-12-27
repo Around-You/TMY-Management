@@ -56,7 +56,6 @@ class SaleController extends AbstractActionController
         return $this->sellLogTable;
     }
 
-
     public function getMemberLogTable()
     {
         if (! $this->memberLogTable) {
@@ -72,7 +71,6 @@ class SaleController extends AbstractActionController
         }
         return $this->memberGoodsTable;
     }
-
 
     public function quickAction()
     {
@@ -107,14 +105,12 @@ class SaleController extends AbstractActionController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $id = $this->params()->fromPost('id');
+            $id = $this->params()->fromPost('member_goods_code');
 
-            if ($id>0) {
-                //  update MemberGoods
+            if ($id > 0) {
+                // update MemberGoods
                 $memberGoods = $this->getMemberGoodsTable()->getOneById($id);
-                if($memberGoods->count>0){
-                    $memberGoods->count--;
-                }
+                $memberGoods->useGoods();
                 $this->getMemberGoodsTable()->save($memberGoods);
                 // add action log
                 $action = new MemberLog();
@@ -124,11 +120,32 @@ class SaleController extends AbstractActionController
                 $action->action = '扣次/使用';
                 $this->getMemberLogTable()->save($action);
                 $this->flashMessenger()->addSuccessMessage('扣次/使用完成');
+                return array(
+                    'ticketUrl' => '/sale/printUseConfirmTicket/' . $action->id
+                );
             } else {
                 throw new \Exception('ID不正确');
             }
         }
-        return array();
+        return array(
+            'ticketUrl' => ''
+        );
+    }
+
+    public function printUseConfirmTicketAction()
+    {
+        $memberLogId = $this->params('id', 0);
+        $memberLog = $this->getMemberLogTable()->getOneById($memberLogId);
+        $member = $this->getMemberTable()->getOneById($memberLog->member_id);
+        $usedGoods = $this->getGoodsTable()->getOneById($memberLog->goods_id);
+        $memberGoods = $this->getMemberGoodsTable()->fetchAll(array(
+                'member.id' => $memberLog->member_id
+            ));;
+        return array(
+        	'member'=>$member,
+            'usedGoods' => $usedGoods,
+            'memberGoodsList'=>$memberGoods
+        );
     }
 
     public function getMemberDataAction()
@@ -164,7 +181,9 @@ class SaleController extends AbstractActionController
         $table = $this->getMemberGoodsTable();
         $memberCode = $_GET['member_code'];
         try {
-            $memberGoods = $table->fetchAll(array('member.code'=>$memberCode));
+            $memberGoods = $table->fetchAll(array(
+                'member.code' => $memberCode
+            ));
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, $memberGoods);
         } catch (\Exception $e) {
             $returnJson = JsonResult::buildFailedResult($e);
@@ -173,13 +192,14 @@ class SaleController extends AbstractActionController
         return $viewModel;
     }
 
-    public function doUseGoodsAction(){
-        $returnJson = JsonResult::buildSuccessResult(array('url'=>'/sale/use'));
+    public function doUseGoodsAction()
+    {
+        $returnJson = JsonResult::buildSuccessResult(array(
+            'url' => '/sale/use'
+        ));
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
     }
-
-
 
     public function addSellLog(Goods $goods, Member $member = null)
     {

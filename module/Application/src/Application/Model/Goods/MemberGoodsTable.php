@@ -91,7 +91,7 @@ class MemberGoodsTable extends AbstractModelMapper
             $tableGateway->insert($data);
             $item->id = $this->getTableGateway()->getLastInsertValue();
         } else {
-            if ($this->getProduct($id)) {
+            if ($this->getOneById($id)) {
                 $tableGateway->update($data, array(
                     'id' => $id
                 ));

@@ -1,0 +1,64 @@
+<?php
+$this->layout('layout/layout/none');
+?>
+
+<table>
+  <tr align="center">
+    <td colspan="2">天津未来广场店</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">消费结账单</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">会员：<?=$member->name?>(<?=$member->code?>)</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">--------------结账项目----------------</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">名称：<?=$usedGoods->title?></td>
+  </tr>
+
+  <tr align="center">
+    <td colspan="2">------------------------------------------</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">--------------剩余项目----------------</td>
+  </tr>
+  <tr align="center">
+    <td>名称</td>
+    <td>剩余</td>
+  </tr>
+  <?php foreach ($memberGoodsList as $memberGoodsItem):?>
+  <tr align="center">
+    <td><?=$memberGoodsItem->goods_title?></td>
+    <td><?=$memberGoodsItem->description?></td>
+  </tr>
+  <?php endforeach;?>
+  <tr align="center">
+    <td colspan="2">------------------------------------------</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">顾客签名：__________</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">时间：<?=date('Y-m-d H:i:s')?></td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">谢谢惠顾，欢迎您下次光临</td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">电话：022-58525665</td>
+  </tr>
+</table>
+
+

@@ -95,10 +95,10 @@ class MemberGoods extends AbstractModel
         $description = '';
         switch ($this->goods_type) {
             case '时间卡':
-                $description = '起止时间为 ' . $this->start_date . ' 至 ' . $this->end_date;
+                $description = date('Y-m-d', strtotime($this->start_date)) . ' 至 ' . date('Y-m-d', strtotime($this->end_date));
                 break;
             case '次卡':
-                $description = '剩余次数为 ' . $this->count;
+                $description = '剩余 ' . $this->count . '次';
                 break;
         }
         return $description;
@@ -130,6 +130,13 @@ class MemberGoods extends AbstractModel
             }
             $this->start_date = date('Y-m-d H:i:s', $this->start_date);
             $this->end_date = date('Y-m-d H:i:s', $this->end_date);
+        }
+    }
+
+    public function useGoods()
+    {
+        if ($this->count > 0) {
+            $this->count --;
         }
     }
 }

@@ -1,6 +1,7 @@
 var main_sale_use = {
 	init : function() {
 	    this.bindEvent();
+	    this.showPopup();
 	},
 	bindEvent: function(){
 	    var me = this;
@@ -10,22 +11,20 @@ var main_sale_use = {
 	    });
 		$("#goods-tbl").on(ace.click_event,'.use-goods-btn', function() {
 			var tr = $(this).closest('tr');
-			var showText = '是否对' + $(tr).data('title') + '进行操作？';
+			var showText = '是否对' + $(tr).data('title') + '进行 扣次/使用 操作？';
 			$(".modal-body .col-xs-12").text(showText);
-			$("#modal-confirm").data('id', $(tr).data('id'));
-			$("#modal-confirm").modal({
-				show: true
-			});
+			$("#member_goods_code").val($(tr).data('id'));
+			$("#modal-confirm").modal();
 		});
 		$("#btn-use-submit").on(ace.click_event, function() {
-			var id = $("#modal-confirm").data('id');
-			$.post('/sale/doUseGoods', {id: id}, function(result){
-				 if(result.status){
-					 window.open(result.data.url, '_blank', 'toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=400, height=400');
-				 }
-			});
+			$("#useGoodsForm").submit();
 		});
 
+	},
+	showPopup: function(){
+		if($('#showpopup').val()!=''){
+			window.open($('#showpopup').val(), '_blank', 'toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=250, height=400');
+		}
 	},
 	getMember: function(memberCode){
 	    $.get('/sale/getMemberData',{member_code: memberCode}, function(result){
@@ -58,11 +57,7 @@ var main_sale_use = {
 	        }else{
 	        }
 	    });
-	},
-	doCardUse: function(){
-
 	}
-
 };
 
 $(function() {
