@@ -156,5 +156,12 @@ class Goods extends AbstractModel
             return false;
         }
     }
+
+    public function doBuyGoods()
+    {
+        if ($this->type == "次卡" || $this->type == "时间卡") {} else {
+            $this->quantity --;
+        }
+    }
 }
 

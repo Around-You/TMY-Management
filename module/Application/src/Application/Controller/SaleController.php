@@ -91,6 +91,8 @@ class SaleController extends AbstractActionController
                     if ($goods->isVirtual()) {
                         $this->addToMemberGoods($goods, $member);
                     }
+                    $goods->doBuyGoods();
+                    $this->getGoodsTable()->save($goods);
                 }
                 $this->flashMessenger()->addSuccessMessage('购买完成');
             } else {
@@ -209,6 +211,8 @@ class SaleController extends AbstractActionController
         }
         $log->goods_id = $goods->id;
         $log->user_id = App::getUser()->id;
+        $log->price = $goods->price;
+        $log->quantity = 1;
         $this->getSellLogTable()->saveSellLog($log);
     }
 

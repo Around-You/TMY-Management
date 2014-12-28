@@ -18,9 +18,16 @@ class SellLogTable extends AbstractModelMapper
 
     public function buildSqlSelect(Select $select, $where = array())
     {
-//         $select->join('category', 'category.id=category_id', array(
-//             'category_name' => 'title'
-//         ));
+        $select->join('member', 'member.id=member_id', array(
+            'member_name' => 'name',
+            'member_code' => 'code'
+        ), $select::JOIN_LEFT);
+        $select->join('goods', 'goods.id=goods_id', array(
+            'goods_title' => 'title'
+        ));
+        $select->join('user', 'user.id=user_id', array(
+            'user_name' => 'realname'
+        ));
         $select->where($where);
     }
 
