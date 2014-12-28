@@ -22,12 +22,12 @@ class GoodsTable extends AbstractModelMapper
         $select->where($where);
     }
 
-    public function getFetchAllCounts()
+    public function getFetchAllCounts($where = array())
     {
         $select = $this->getTableGateway()
             ->getSql()
             ->select();
-        $this->buildSqlSelect($select);
+        $this->buildSqlSelect($select, $where);
         $select->columns(array(
             new Expression('count(goods.id) as rownum')
         ));
@@ -88,11 +88,20 @@ class GoodsTable extends AbstractModelMapper
         return $row;
     }
 
-    public function deleteProduct($id)
+    /**
+     *
+     * @param unknown $id
+     * @return Goods
+     */
+    public function deleteById($id)
     {
-        $this->tableGateway->delete(array(
-            'id' => (int) $id
+        $tableGateway = $this->getTableGateway();
+        $model = $this->getOneById($id);
+        $model->enable = 0;
+        $tableGateway->update($model->getArrayCopyForSave(), array(
+            'id' => $id
         ));
+        return $model;
     }
 
     public function save(Goods $goods)

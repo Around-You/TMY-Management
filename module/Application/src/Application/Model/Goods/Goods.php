@@ -49,6 +49,8 @@ class Goods extends AbstractModel
 
     public $type = '';
 
+    public $enable = 1;
+
     protected $exclude = array(
         "priceString",
         'descString',
@@ -96,6 +98,7 @@ class Goods extends AbstractModel
         $this->date_range = (isset($array['date_range'])) ? $array['date_range'] : $this->date_range;
         $this->count = (isset($array['count'])) ? $array['count'] : $this->count;
         $this->type = (isset($array['type'])) ? $array['type'] : $this->type;
+        $this->enable = (isset($array['enable'])) ? $array['enable'] : $this->enable;
     }
 
     public function getArrayCopy()
@@ -114,6 +117,7 @@ class Goods extends AbstractModel
             'date_range' => $this->date_range,
             'count' => $this->count,
             'type' => $this->type,
+            'enable' => $this->enable,
 
             'desc' => $this->descString,
             'update_time' => $this->update_time

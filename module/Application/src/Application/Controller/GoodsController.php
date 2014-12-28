@@ -45,7 +45,9 @@ class GoodsController extends AbstractActionController
     {
         try {
             $count = $this->getGoodsTable()->getFetchAllCounts();
-            $products = $this->getGoodsTable()->fetchAll(array(), $_GET['start'], $_GET['length']);
+            $products = $this->getGoodsTable()->fetchAll(array(
+                'goods.enable' => 1
+            ), $_GET['start'], $_GET['length']);
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
         } catch (\Exception $e) {
@@ -107,13 +109,13 @@ class GoodsController extends AbstractActionController
             $this->flashMessenger()->addErrorMessage($ex->getMessage());
             return $this->redirect()->toUrl('/product/product');
         }
-
-
     }
 
     public function deleteAction()
     {
-        print_r(realpath('.'));
-        exit();
+        $id = (int) $this->params('id', 0);
+        $goods = $this->getGoodsTable()->deleteById($id);
+        $this->flashMessenger()->addSuccessMessage($goods->title . ' 已禁用');
+        return $this->redirect()->toUrl('/goods');
     }
 }

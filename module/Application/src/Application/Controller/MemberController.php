@@ -16,6 +16,7 @@ use Application\Form\MemberForm;
 use Application\Model\Goods\Goods;
 use Application\Model\Member\Member;
 use Application\Model\Goods\MemberGoods;
+use Application\Model\Json\DataTableResult;
 
 class MemberController extends AbstractActionController
 {
@@ -75,25 +76,20 @@ class MemberController extends AbstractActionController
 
     public function getMemberListDataAction()
     {
-        $count = $this->getMemberTable()->getFetchAllCounts();
-        $members = $this->getMemberTable()->fetchAll($_GET['start'], $_GET['length']);
-        $listData = array(
-            'draw' => $_GET['draw'] ++,
-            'recordsTotal' => $count,
-            'recordsFiltered' => $count,
-            'data' => array()
-        );
-        foreach ($members as $member) {
-            $listData['data'][] = array(
-                'DT_RowId' => $member->id,
-                'name' => $member->name,
-                'code' => $member->code,
-                'phone' => $member->phone,
-                'parent_name' => $member->parent_name,
-                'point' => $member->point
-            );
+        try {
+            $count = $this->getMemberTable()->getFetchAllCounts(array(
+                'member.enable' => 1
+            ));
+            $products = $this->getMemberTable()->fetchAll(array(
+                'member.enable' => 1
+            ), $_GET['start'], $_GET['length']);
+
+            $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
+        } catch (\Exception $e) {
+            var_dump($e);
+            $returnJson = DataTableResult::buildResult();
         }
-        $viewModel = new JsonModel($listData);
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
     }
 
@@ -164,8 +160,8 @@ class MemberController extends AbstractActionController
     {
         $table = $this->getMemberTable();
         $id = (int) $this->params('id', 0);
-        $member = $table->deleteMember($id);
-        $this->flashMessenger()->addSuccessMessage($member->name . ' 已失效');
+        $member = $table->deleteById($id);
+        $this->flashMessenger()->addSuccessMessage($member->name . ' 已禁用');
         return $this->redirect()->toUrl('/member');
     }
 }

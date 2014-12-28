@@ -2,7 +2,6 @@
 namespace Application\Model\Member;
 
 use SamFramework\Model\AbstractModelMapper;
-use Application\Model\Product\Product;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
 
@@ -17,36 +16,36 @@ class MemberTable extends AbstractModelMapper
 
     protected $modelClassName = 'Application\\Model\\Member\\Member';
 
-    public function buildSqlSelect(Select $select)
+    public function buildSqlSelect(Select $select, $where)
     {
-//     	$select->where();
+        $select->where($where);
     }
 
-    public function getFetchAllCounts()
+    public function getFetchAllCounts($where = array())
     {
-        $select = $this->getTableGateway()
+  $select = $this->getTableGateway()
             ->getSql()
             ->select();
-        $this->buildSqlSelect($select);
+        $this->buildSqlSelect($select, $where);
         $select->columns(array(
-            'id'
+            new Expression('count(id) as rownum')
         ));
         $statement = $this->getTableGateway()
             ->getSql()
             ->prepareStatementForSqlObject($select);
-        $results = $statement->execute();
-        return $results->count();
+        $row = $statement->execute()->current();
+        return $row['rownum'];
     }
 
-    public function fetchAll($offset = 0, $limit = 10)
+    public function fetchAll($where = array(), $offset = 0, $limit = 99999)
     {
         $offset = (int) $offset;
         $limit = (int) $limit;
 
         $table = $this;
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table)
+        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where)
         {
-            $table->buildSqlSelect($select);
+            $table->buildSqlSelect($select, $where);
             $select->offset($offset)
                 ->limit($limit);
         });
@@ -88,7 +87,7 @@ class MemberTable extends AbstractModelMapper
         return $row;
     }
 
-    public function deleteMember($id)
+    public function deleteById($id)
     {
         $tableGateway = $this->getTableGateway();
         $model = $this->getOneById($id);
