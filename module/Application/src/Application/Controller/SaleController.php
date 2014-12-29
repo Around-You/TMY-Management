@@ -32,6 +32,8 @@ class SaleController extends AbstractActionController
 
     protected $memberGoodsTable;
 
+    protected $dailyReportTalbe;
+
     public function getMemberTable()
     {
         if (! $this->memberTable) {
@@ -72,6 +74,14 @@ class SaleController extends AbstractActionController
         return $this->memberGoodsTable;
     }
 
+    public function getDailyReportTable()
+    {
+        if (! $this->dailyReportTalbe) {
+            $this->dailyReportTalbe = $this->getServiceLocator()->get('Application\Model\Report\DailyReportTable');
+        }
+        return $this->dailyReportTalbe;
+    }
+
     public function quickAction()
     {
         $request = $this->getRequest();
@@ -91,6 +101,7 @@ class SaleController extends AbstractActionController
                     if ($goods->isVirtual()) {
                         $this->addToMemberGoods($goods, $member);
                     }
+                    $this->getDailyReportTable()->addSaleCount();
                     $goods->doBuyGoods();
                     $this->getGoodsTable()->save($goods);
                 }
@@ -121,6 +132,9 @@ class SaleController extends AbstractActionController
                 $action->user_id = App::getUser()->id;
                 $action->action = '扣次/使用';
                 $this->getMemberLogTable()->save($action);
+                // add daily report
+                $this->getDailyReportTable()->addMemberCount();
+
                 $this->flashMessenger()->addSuccessMessage('扣次/使用完成');
                 return array(
                     'ticketUrl' => '/sale/printUseConfirmTicket/' . $action->id

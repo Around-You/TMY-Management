@@ -10,22 +10,23 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Model\Member;
-use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthDbTableAdapter;
-use Zend\Authentication\Result;
-use Application\Form\LoginForm;
-use SamFramework\Core\App;
 
 class DashboardController extends AbstractActionController
 {
 
-    public function indexAction()
-    {
+    protected $dailyReportTalbe;
 
+    public function getDailyReportTable()
+    {
+        if (! $this->dailyReportTalbe) {
+            $this->dailyReportTalbe = $this->getServiceLocator()->get('Application\Model\Report\DailyReportTable');
+        }
+        return $this->dailyReportTalbe;
     }
 
-
-
-
+    public function indexAction()
+    {
+    	$today = $this->getDailyReportTable()->getOneByDate();
+    	return array('today'=>$today);
+    }
 }

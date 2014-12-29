@@ -1,9 +1,5 @@
 <?php
 $menus = array(
-    '首页' => array(
-        'title' => '首页',
-        'url' => '/dashboard'
-    ),
     '会员管理' => array(
         'title' => '会员管理',
         'submenu' => array(
@@ -76,22 +72,22 @@ $menus = array(
 
 	<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 		<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-			<button class="btn btn-success">
-				<i class="ace-icon fa fa-signal"></i>
-			</button>
+			<a class="btn btn-info" href="/dashboard" title="首页">
+				<i class="ace-icon fa fa-home"></i>
+			</a>
 
-			<button class="btn btn-info">
-				<i class="ace-icon fa fa-pencil"></i>
-			</button>
+			<a class="btn btn-warning" href="/member/add" title="新增会员">
+				<i class="ace-icon fa fa-plus-square"></i>
+			</a>
 
 			<!-- #section:basics/sidebar.layout.shortcuts -->
-			<button class="btn btn-warning">
-				<i class="ace-icon fa fa-users"></i>
-			</button>
+			<a class="btn btn-success" href="/sale/use" title="会员扣次">
+				<i class="ace-icon fa fa-user"></i>
+			</a>
 
-			<button class="btn btn-danger">
-				<i class="ace-icon fa fa-cogs"></i>
-			</button>
+			<a class="btn btn-purple" href="/sale/quick" title="快速消费">
+				<i class="ace-icon fa fa-shopping-cart"></i>
+			</a>
 
 			<!-- /section:basics/sidebar.layout.shortcuts -->
 		</div>
