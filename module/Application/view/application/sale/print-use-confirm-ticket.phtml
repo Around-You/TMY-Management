@@ -1,7 +1,13 @@
 <?php
 $this->layout('layout/layout/none');
 ?>
-
+<style>
+<!--
+body{
+	font-size: 8px;
+}
+-->
+</style>
 <table>
   <tr align="center">
     <td colspan="2">天津未来广场店</td>
@@ -16,20 +22,20 @@ $this->layout('layout/layout/none');
     <td colspan="2">&nbsp;</td>
   </tr>
   <tr align="center">
-    <td colspan="2">--------------结账项目----------------</td>
+    <td colspan="2">----------结账项目------------</td>
   </tr>
   <tr align="center">
     <td colspan="2">名称：<?=$usedGoods->title?></td>
   </tr>
 
   <tr align="center">
-    <td colspan="2">------------------------------------------</td>
+    <td colspan="2">----------------------------------</td>
   </tr>
   <tr align="center">
     <td colspan="2">&nbsp;</td>
   </tr>
   <tr align="center">
-    <td colspan="2">--------------剩余项目----------------</td>
+    <td colspan="2">----------剩余项目------------</td>
   </tr>
   <tr align="center">
     <td>名称</td>
@@ -42,7 +48,7 @@ $this->layout('layout/layout/none');
   </tr>
   <?php endforeach;?>
   <tr align="center">
-    <td colspan="2">------------------------------------------</td>
+    <td colspan="2">----------------------------------</td>
   </tr>
   <tr align="center">
     <td colspan="2">&nbsp;</td>
@@ -60,5 +66,9 @@ $this->layout('layout/layout/none');
     <td colspan="2">电话：022-58525665</td>
   </tr>
 </table>
-
+<script type="text/javascript">
+<!--
+window.print();
+//-->
+</script>
 
