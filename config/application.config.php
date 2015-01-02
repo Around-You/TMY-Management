@@ -6,7 +6,6 @@ return array(
         'ZendDeveloperTools',
         'BjyProfiler',
     	'CodeGenerator',
-        'Components',
         'SamFramework',
     ),
 
