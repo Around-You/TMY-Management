@@ -17,7 +17,7 @@ use Zend\View\Helper\BasePath;
  * array(
  * 'title' => '类别名称',
  * 'key' => 'title',
- * 'type' => 'editLink' // link|editLink
+ * 'linkTarget' => 'editLink' // link|editLink
  * )
  * ),
  * 'getListDataUrl' => '/category/getCategoriesListData',
@@ -142,8 +142,8 @@ $('#{$this->defaultTableName}').dataTable( {
 	columns: [
 JS;
         foreach ($this->getOptions()['cols'] as $col) {
-            if (isset($col['type'])) {
-                switch ($col['type']) {
+            if (isset($col['linkTarget'])) {
+                switch ($col['linkTarget']) {
                     case 'editLink':
                         echo '{
                         data: "' . $col['key'] . '",
@@ -151,15 +151,21 @@ JS;
     				        return "<a href=\"' . $this->getOptions()['operatingCol']['editUrl'] . '" + row.DT_RowId + "\">" + data + "</a>";
     				    } },';
                         break;
-                    case 'link':
+                    case 'none':
+                    case false:
+                        echo '{ data: "' . $col['key'] . '" },';
+                        break;
+                    default:
+                        $linkUrl = $col['linkTarget'];
+                        $linkParme = '';
+                        if (isset($col['linkDataCol'])) {
+                            $linkParme = '" + row.' . $col['linkDataCol'] . ' + "';
+                        }
                         echo '{
                         data: "' . $col['key'] . '",
                         render: function ( data, type, row ){
-    				        return "<a href=\"' . $col['link']['url'] . '" + row.DT_RowId + "\">" + data + "</a>";
+    				        return "<a href=\"' . $linkUrl . $linkParme . '\">" + data + "</a>";
     				    } },';
-                        break;
-                    default:
-                        echo '{ data: "' . $col['key'] . '" },';
                 }
             } else {
                 echo '{ data: "' . $col['key'] . '" },';
@@ -177,7 +183,6 @@ JS;
             }
         }
 JS;
-
         }
         echo ']});';
         $inlineScriptHelper->captureEnd();

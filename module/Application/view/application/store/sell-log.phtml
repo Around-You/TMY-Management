@@ -7,15 +7,20 @@ $tableOptions = array(
         array(
             'title' => '会员卡号',
             'key' => 'member_code',
-//             'type' => 'editLink'
+            'linkTarget' => '/member/edit/',
+            'linkDataCol' => 'member_id'
         ),
         array(
             'title' => '会员名称',
-            'key' => 'member_name'
+            'key' => 'member_name',
+            'linkTarget' => '/member/edit/',
+            'linkDataCol' => 'member_id'
         ),
         array(
             'title' => '商品名称',
-            'key' => 'goods_title'
+            'key' => 'goods_title',
+            'linkTarget' => '/goods/edit/',
+            'linkDataCol' => 'goods_id'
         ),
         array(
             'title' => '单价',
