@@ -19,7 +19,8 @@ return array(
             'formwysiwyg' => 'SamFramework\Form\View\Helper\FormWysiwyg',
             'formdatepicker' => 'SamFramework\Form\View\Helper\FormDatePicker',
             'flashMessenger' => 'SamFramework\Layout\View\Helper\FlashMessenger',
-            'sidebar' => 'SamFramework\Layout\View\Helper\Sidebar'
+            'sidebar' => 'SamFramework\Layout\View\Helper\Sidebar',
+            'dataTable' => 'SamFramework\Layout\View\Helper\DataTable'
         )
     ),
 
