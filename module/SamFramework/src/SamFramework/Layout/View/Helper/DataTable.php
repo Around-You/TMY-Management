@@ -16,13 +16,15 @@ use Zend\View\Helper\BasePath;
  * 'cols' => array(
  * array(
  * 'title' => '类别名称',
- * 'key' => 'title'
+ * 'key' => 'title',
+ * 'type' => 'editLink' // link|editLink
  * )
  * ),
  * 'getListDataUrl' => '/category/getCategoriesListData',
+ * 'operatingCol' => array(
  * 'editUrl' => '/category/edit/',
  * 'deleteUrl' => '/category/delete/',
- * )
+ * ))
  */
 class DataTable extends AbstractHelper
 {
@@ -112,7 +114,9 @@ class DataTable extends AbstractHelper
         foreach ($options['cols'] as $col) {
             $html .= '<th>' . $col['title'] . '</th>';
         }
-        $html .= '<th></th>';
+        if (isset($options['operatingCol']) && $options['operatingCol'] !== false) {
+            $html .= '<th></th>';
+        }
         $html .= '</tr></thead>';
         $html .= '</table>';
         return $html;
@@ -144,7 +148,14 @@ JS;
                         echo '{
                         data: "' . $col['key'] . '",
                         render: function ( data, type, row ){
-    				        return "<a href=\"' . $this->getOptions()['editUrl'] . '" + row.DT_RowId + "\">" + data + "</a>";
+    				        return "<a href=\"' . $this->getOptions()['operatingCol']['editUrl'] . '" + row.DT_RowId + "\">" + data + "</a>";
+    				    } },';
+                        break;
+                    case 'link':
+                        echo '{
+                        data: "' . $col['key'] . '",
+                        render: function ( data, type, row ){
+    				        return "<a href=\"' . $col['link']['url'] . '" + row.DT_RowId + "\">" + data + "</a>";
     				    } },';
                         break;
                     default:
@@ -154,19 +165,21 @@ JS;
                 echo '{ data: "' . $col['key'] . '" },';
             }
         }
-        echo <<<JS
+        if (isset($this->getOptions()['operatingCol']) && $this->getOptions()['operatingCol'] !== false) {
+            echo <<<JS
         {
             data: null,
             orderable: false,
             render: function ( data, type, row ) {
-                var editString = '<a href="{$this->getOptions()['editUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-pencil"></i>编辑</a>';
-                var deleteString = '<a href="{$this->getOptions()['deleteUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-remove"></i>删除</a>';
+                var editString = '<a href="{$this->getOptions()['operatingCol']['editUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-pencil"></i>编辑</a>';
+                var deleteString = '<a href="{$this->getOptions()['operatingCol']['deleteUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-remove"></i>删除</a>';
                 return editString + ' ' + deleteString;
             }
         }
-	]
-} );
 JS;
+
+        }
+        echo ']});';
         $inlineScriptHelper->captureEnd();
     }
 }

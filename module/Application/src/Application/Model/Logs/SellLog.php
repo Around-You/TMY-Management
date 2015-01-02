@@ -5,7 +5,7 @@ use SamFramework\Model\AbstractModel;
 
 /**
  *
- * @property string priceString
+ * @property string total_price
  *
  */
 class SellLog extends AbstractModel
@@ -43,7 +43,8 @@ class SellLog extends AbstractModel
         'member_name',
         'member_code',
         'goods_title',
-        'user_name'
+        'user_name',
+        'total_price'
     );
 
     public function exchangeArray(array $array)
@@ -76,9 +77,15 @@ class SellLog extends AbstractModel
             'member_name' => $this->member_name,
             'member_code' => $this->member_code,
             'goods_title' => $this->goods_title,
-            'user_name' => $this->user_name
+            'user_name' => $this->user_name,
+            'total_price' => $this->getTotalPrice()
         );
         return $data;
+    }
+
+    public function getTotalPrice()
+    {
+        return money_format('%.2n', $this->price * $this->quantity);
     }
 }
 
