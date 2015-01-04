@@ -23,12 +23,12 @@ class MemberTable extends AbstractModelMapper
 
     public function getFetchAllCounts($where = array())
     {
-  $select = $this->getTableGateway()
+        $select = $this->getTableGateway()
             ->getSql()
             ->select();
         $this->buildSqlSelect($select, $where);
         $select->columns(array(
-            new Expression('count(id) as rownum')
+            new Expression('count(' . $this->tableName . '.id) as rownum')
         ));
         $statement = $this->getTableGateway()
             ->getSql()

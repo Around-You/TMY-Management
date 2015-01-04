@@ -3,6 +3,7 @@ namespace Application\Model\Goods;
 
 use SamFramework\Model\AbstractModelMapper;
 use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Expression;
 
 class CategoryTable extends AbstractModelMapper
 {
@@ -13,36 +14,40 @@ class CategoryTable extends AbstractModelMapper
 
     protected $modelClassName = 'Application\\Model\\Goods\\Category';
 
-    public function buildSqlSelect(Select $select){
-//         $select->where('store_id='.$this->currentStoreId);
+    public function buildSqlSelect(Select $select, $where){
+        $select->where($where);
     }
 
-    public function getFetchAllCounts()
+    public function getFetchAllCounts($where = array())
     {
-        $select = $this->getTableGateway()->getSql()->select();
-        $this->buildSqlSelect($select);
-        $select->columns(array('id'));
-        $statement = $this->getTableGateway()->getSql()->prepareStatementForSqlObject($select);
-        $results = $statement->execute();
-        return $results->count();
+        $select = $this->getTableGateway()
+            ->getSql()
+            ->select();
+        $this->buildSqlSelect($select,$where);
+        $select->columns(array(
+            new Expression('count(' . $this->tableName . '.id) as rownum')
+        ));
+        $statement = $this->getTableGateway()
+            ->getSql()
+            ->prepareStatementForSqlObject($select);
+        $row = $statement->execute()->current();
+        return $row['rownum'];
     }
 
-    public function fetchAll($offset = 0, $limit = 1000)
+    public function fetchAll($where = array(), $offset = 0, $limit = 99999)
     {
-        $offset = (int)$offset;
-        $limit = (int)$limit;
+        $offset = (int) $offset;
+        $limit = (int) $limit;
 
         $table = $this;
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table)
+        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where)
         {
-
-            $table->buildSqlSelect($select);
+            $table->buildSqlSelect($select, $where);
             $select->offset($offset)
                 ->limit($limit);
         });
         return $resultSet;
     }
-
 
     public function getCategory($id)
     {

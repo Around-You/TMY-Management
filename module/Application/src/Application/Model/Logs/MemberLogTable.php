@@ -16,20 +16,17 @@ class MemberLogTable extends AbstractModelMapper
 
     protected $modelClassName = 'Application\\Model\\Logs\\MemberLog';
 
-    public function buildSqlSelect(Select $select, $where = array())
+    public function buildSqlSelect(Select $select, $where)
     {
-//         $select->join('category', 'category.id=category_id', array(
-//             'category_name' => 'title'
-//         ));
         $select->where($where);
     }
 
-    public function getFetchAllCounts()
+    public function getFetchAllCounts($where = array())
     {
         $select = $this->getTableGateway()
             ->getSql()
             ->select();
-        $this->buildSqlSelect($select);
+        $this->buildSqlSelect($select, $where);
         $select->columns(array(
             new Expression('count(' . $this->tableName . '.id) as rownum')
         ));
@@ -64,11 +61,11 @@ class MemberLogTable extends AbstractModelMapper
             $tableGateway->insert($data);
             $item->id = $this->getTableGateway()->getLastInsertValue();
         } else {
-//             if ($this->getProduct($id)) {
-//                 $tableGateway->update($data, array(
-//                     'id' => $id
-//                 ));
-//             }
+            // if ($this->getProduct($id)) {
+            // $tableGateway->update($data, array(
+            // 'id' => $id
+            // ));
+            // }
         }
         return $item;
     }

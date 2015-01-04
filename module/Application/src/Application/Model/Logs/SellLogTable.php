@@ -16,7 +16,7 @@ class SellLogTable extends AbstractModelMapper
 
     protected $modelClassName = 'Application\\Model\\Logs\\SellLog';
 
-    public function buildSqlSelect(Select $select, $where = array())
+    public function buildSqlSelect(Select $select, $where)
     {
         $select->join('member', 'member.id=member_id', array(
             'member_name' => 'name',
@@ -31,12 +31,12 @@ class SellLogTable extends AbstractModelMapper
         $select->where($where);
     }
 
-    public function getFetchAllCounts()
+    public function getFetchAllCounts($where = array())
     {
         $select = $this->getTableGateway()
             ->getSql()
             ->select();
-        $this->buildSqlSelect($select);
+        $this->buildSqlSelect($select,$where);
         $select->columns(array(
             new Expression('count(' . $this->tableName . '.id) as rownum')
         ));

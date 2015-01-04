@@ -14,7 +14,7 @@ class GoodsTable extends AbstractModelMapper
 
     protected $modelClassName = 'Application\\Model\\Goods\\Goods';
 
-    public function buildSqlSelect(Select $select, $where = array())
+    public function buildSqlSelect(Select $select, $where)
     {
         $select->join('category', 'category.id=category_id', array(
             'category_name' => 'title'
@@ -29,7 +29,7 @@ class GoodsTable extends AbstractModelMapper
             ->select();
         $this->buildSqlSelect($select, $where);
         $select->columns(array(
-            new Expression('count(goods.id) as rownum')
+            new Expression('count(' . $this->tableName . '.id) as rownum')
         ));
         $statement = $this->getTableGateway()
             ->getSql()

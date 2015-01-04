@@ -16,7 +16,7 @@ class MemberGoodsTable extends AbstractModelMapper
 
     protected $modelClassName = 'Application\\Model\\Goods\\MemberGoods';
 
-    public function buildSqlSelect(Select $select, $where = array())
+    public function buildSqlSelect(Select $select, $where)
     {
         $select->join('goods', 'goods.id=goods_id', array(
             'goods_title' => 'title',
@@ -27,15 +27,14 @@ class MemberGoodsTable extends AbstractModelMapper
             'memeber_code' => 'code'
         ));
         $select->where($where);
-
     }
 
-    public function getFetchAllCounts()
+    public function getFetchAllCounts($where = array())
     {
         $select = $this->getTableGateway()
             ->getSql()
             ->select();
-        $this->buildSqlSelect($select);
+        $this->buildSqlSelect($select, $where);
         $select->columns(array(
             new Expression('count(' . $this->tableName . '.id) as rownum')
         ));

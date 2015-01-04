@@ -12,95 +12,91 @@ class UserTable extends AbstractModelMapper
 
     protected $modelClassName = 'Application\Model\Account\User';
 
-    public function buildSqlSelect(Select $select)
+    public function buildSqlSelect(Select $select, $where = array())
     {
-        $select->join('buyer', 'buyer.id=buyer_id', array(
-            'buyer_weixin' => 'weixin'
-        ));
-        $select->where(array(
-            'product_id' => $this->productId
-        ));
+        $select->where($where);
     }
 
-    public function getFetchAllCounts()
+    public function getFetchAllCounts($where = array())
     {
         $select = $this->getTableGateway()
             ->getSql()
             ->select();
-        $this->buildSqlSelect($select);
+        $this->buildSqlSelect($select, $where);
         $select->columns(array(
-            'id'
+            new Expression('count(' . $this->tableName . '.id) as rownum')
         ));
         $statement = $this->getTableGateway()
             ->getSql()
             ->prepareStatementForSqlObject($select);
-        $results = $statement->execute();
-        return $results->count();
+        $row = $statement->execute()->current();
+        return $row['rownum'];
     }
 
-    public function fetchAll($offset = 0, $limit = 1000)
+    public function fetchAll($where = array(), $offset = 0, $limit = 99999)
     {
         $offset = (int) $offset;
         $limit = (int) $limit;
 
         $table = $this;
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table)
+        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where)
         {
-            $table->buildSqlSelect($select);
+            $table->buildSqlSelect($select, $where);
             $select->offset($offset)
                 ->limit($limit);
         });
         return $resultSet;
     }
 
-    public function getUser($id)
+    public function getOneById($id)
     {
+        $tableGateway = $this->getTableGateway();
         $id = (int) $id;
-        $rowset = $this->getTableGateway()->select(array(
+        $rowset = $tableGateway->select(array(
             'id' => $id
         ));
         $row = $rowset->current();
         if (! $row) {
             throw new \Exception("Could not find row $id");
         }
+
         return $row;
     }
 
     /**
      *
-     * @param unknown $token
-     * @throws \Exception
-     * @return User
+     * @param unknown $id
+     * @return Goods
      */
-    public function getUserByWeiBoToken($token)
+    public function deleteById($id)
     {
         $tableGateway = $this->getTableGateway();
-        $rowset = $tableGateway->select(array(
-            'weibo_token' => $token
+        $model = $this->getOneById($id);
+        $model->enable = 0;
+        $tableGateway->update($model->getArrayCopyForSave(), array(
+            'id' => $id
         ));
-        $row = $rowset->current();
-        if (! $row) {
-            throw new \Exception("Could not find row by token: $token");
-        }
-        return $row;
+        return $model;
     }
 
-    public function saveUser(User $user)
+    public function save(User $items)
     {
         $tableGateway = $this->getTableGateway();
-        $data = $user->getArrayCopyForSave();
-        $id = (int) $user->id;
+        $items->update_time = date('YmdHis');
+        $data = $items->getArrayCopyForSave();
+        $id = (int) $items->id;
         if ($id == 0) {
             $tableGateway->insert($data);
-            $user->id = $this->getTableGateway()->getLastInsertValue();
+            $items->id = $this->getTableGateway()->getLastInsertValue();
         } else {
-            if ($this->getUser($id)) {
+            if ($this->getOneById($id)) {
                 $tableGateway->update($data, array(
                     'id' => $id
                 ));
             }
         }
-        return $user;
+
+        return $items;
     }
 }
 
