@@ -38,7 +38,8 @@ return array(
             'Application\Controller\Dashboard' => 'Application\Controller\DashboardController',
             'Application\Controller\Member' => 'Application\Controller\MemberController',
             'Application\Controller\Sale' => 'Application\Controller\SaleController',
-            'Application\Controller\Store' => 'Application\Controller\StoreController'
+            'Application\Controller\Store' => 'Application\Controller\StoreController',
+            'Application\Controller\User' => 'Application\Controller\UserController'
         )
     ),
     'view_manager' => array(

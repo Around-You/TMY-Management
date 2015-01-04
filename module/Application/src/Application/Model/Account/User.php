@@ -25,13 +25,13 @@ class User extends AbstractModel
 
     public $role = '';
 
-    public $enable = '';
+    public $enable = 1;
 
     public $create_time = '';
 
     public $update_time = '';
 
-    public $fake_log_discount = '';
+    public $fake_log_discount = 1;
 
     protected $exclude = array(
         'create_time',

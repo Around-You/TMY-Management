@@ -1,0 +1,45 @@
+<?php
+$title = '员工列表';
+$this->layout()->currentItem = $title;
+$this->headTitle($title);
+
+$tableOptions = array(
+    'cols' => array(
+        array(
+            'title' => '员工姓名',
+            'key' => 'realname'
+        ),
+        array(
+            'title' => '登陆名',
+            'key' => 'username'
+        ),
+        array(
+            'title' => '角色',
+            'key' => 'role'
+        ),
+    ),
+    'getListDataUrl' => '/user/getUserListData',
+    'operatingCol' => array(
+        'editUrl' => '/user/edit/',
+        'deleteUrl' => '/user/delete/',
+    )
+)?>
+<div class="page-header">
+	<h1>
+    <?= $this->escapeHtml($title); ?>
+    <small><a href="/user/add"><i
+				class="ace-icon glyphicon glyphicon-plus"></i>新增员工</a></small>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+         <?=$this->flashMessenger()->render();?>
+         <div class="row">
+			<div class="col-xs-12">
+				<?=$this->dataTable($tableOptions)?>
+			</div>
+		</div>
+	</div>
+</div>
+
+
