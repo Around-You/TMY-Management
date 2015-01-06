@@ -3,6 +3,7 @@ namespace Application\Model\Account;
 
 use SamFramework\Model\AbstractModel;
 use Zend\InputFilter\InputFilter;
+use SamFramework\Core\App;
 
 class Staff extends AbstractModel
 {
@@ -53,6 +54,16 @@ class Staff extends AbstractModel
                     ),
                     array(
                         'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'Zend\Validator\Db\NoRecordExists',
+                        'options' => array(
+                            'table' => 'staff',
+                            'field' => 'login_name',
+                            'adapter' => App::getReadDBAdapter()
+                        )
                     )
                 )
             ));
@@ -131,6 +142,17 @@ class Staff extends AbstractModel
             'fake_log_discount' => $this->fake_log_discount
         );
         return $data;
+    }
+
+    public function encryptPassword($password = NULL, $salt = NULL)
+    {
+        if ($password == NULL) {
+            $password = $this->password;
+        }
+        if ($salt == NULL) {
+            $salt = $this->login_name;
+        }
+        return md5($password . $salt);
     }
 }
 

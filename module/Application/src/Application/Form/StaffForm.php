@@ -37,6 +37,9 @@ class StaffForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => '登录名'
+            ),
+            'attributes' => array(
+                'tabindex'=>1
             )
         ));
         $this->add(array(
@@ -44,6 +47,9 @@ class StaffForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => '员工姓名'
+            ),
+            'attributes' => array(
+                'tabindex'=>2
             )
         ));
         $this->add(array(
@@ -51,6 +57,9 @@ class StaffForm extends Form
             'type' => 'Password',
             'options' => array(
                 'label' => '登陆密码'
+            ),
+            'attributes' => array(
+                'tabindex'=>3
             )
         ));
         $this->add(array(
@@ -58,6 +67,9 @@ class StaffForm extends Form
             'type' => 'Password',
             'options' => array(
                 'label' => '确认登陆密码'
+            ),
+            'attributes' => array(
+                'tabindex'=>4
             )
         ));
         $this->add(array(
@@ -65,6 +77,9 @@ class StaffForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => '联系地址'
+            ),
+            'attributes' => array(
+                'tabindex'=>5
             )
         ));
         $this->add(array(
@@ -72,6 +87,9 @@ class StaffForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => '联系电话'
+            ),
+            'attributes' => array(
+                'tabindex'=>6
             )
         ));
         $this->add(array(
@@ -80,10 +98,13 @@ class StaffForm extends Form
             'options' => array(
                 'label' => '角色',
                 'value_options' => array(
-                    'admin' => '管理员',
-                    'master' => '店长',
-                    'staff' => '店员'
+                    '管理员' => '管理员',
+                    '店长' => '店长',
+                    '店员' => '店员'
                 )
+            ),
+            'attributes' => array(
+                'tabindex'=>7
             )
         ));
         $this->add(array(
@@ -91,6 +112,9 @@ class StaffForm extends Form
             'type' => 'Text',
             'options' => array(
                 'label' => '流水折扣'
+            ),
+            'attributes' => array(
+                'tabindex'=>8
             )
         ));
 

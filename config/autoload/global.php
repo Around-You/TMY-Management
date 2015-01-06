@@ -1,4 +1,5 @@
 <?php
+use SamFramework\Core\App;
 /**
  * Global Configuration Override
  *
@@ -31,6 +32,9 @@ return array(
                 $adapter = $adapterFactory->createService($serviceManager);
 
                 \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($adapter);
+
+                App::setReadDBAdapter($adapter);
+                App::setWriteDBAdapter($adapter);
 
                 return $adapter;
             }

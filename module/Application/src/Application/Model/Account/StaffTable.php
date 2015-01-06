@@ -48,6 +48,12 @@ class StaffTable extends AbstractModelMapper
         return $resultSet;
     }
 
+    /**
+     *
+     * @param unknown $id
+     * @throws \Exception
+     * @return Staff
+     */
     public function getOneById($id)
     {
         $tableGateway = $this->getTableGateway();
@@ -62,6 +68,26 @@ class StaffTable extends AbstractModelMapper
 
         return $row;
     }
+    /**
+     *
+     * @param unknown $loginName
+     * @throws \Exception
+     * @return Staff
+     */
+    public function getOneByLoginName($loginName)
+    {
+        $tableGateway = $this->getTableGateway();
+        $rowset = $tableGateway->select(array(
+            'login_name' => $loginName
+        ));
+        $row = $rowset->current();
+        if (! $row) {
+            throw new \Exception("Could not find row $loginName");
+        }
+
+        return $row;
+    }
+
 
     /**
      *

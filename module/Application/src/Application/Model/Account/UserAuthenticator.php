@@ -4,21 +4,20 @@ namespace Application\Model\Account;
 use SamFramework\Model\AbstractModelMapper;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthDbTableAdapter;
-use SamFramework\Core\App;
-use Application\Model\Account\Social\Weibo;
+use Zend\Authentication\Result;
 
 class UserAuthenticator extends AbstractModelMapper
 {
 
-    protected $userTable;
+    protected $staffTable;
 
-    public function getUserTable()
+    public function getStaffTable()
     {
-        if (! $this->userTable) {
-            $this->userTable = $this->getServiceLocator()->get('Application\Model\Account\UserTable');
+        if (! $this->staffTable) {
+            $this->staffTable = $this->getServiceLocator()->get('Application\Model\Account\StaffTable');
         }
 
-        return $this->userTable;
+        return $this->staffTable;
     }
 
     /**
@@ -32,65 +31,41 @@ class UserAuthenticator extends AbstractModelMapper
      */
     public function doPasswordAuth($identity, $credential)
     {
-        $auth = new AuthenticationService();
-        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-        $authAdapter = new AuthDbTableAdapter($dbAdapter, 'user', 'username', 'password');
-        $authAdapter->setIdentity($identity);
-        $authAdapter->setCredential($credential);
-
-        // Attempt authentication, saving the result
-        $result = $auth->authenticate($authAdapter);
-        $storage = $auth->getStorage();
-        $storage->write($authAdapter->getResultRowObject(null, 'password'));
-        return $result;
-    }
-
-    public function existWeiboAccount($token)
-    {
-        $table = $this->getUserTable();
         try {
-            $user = $table->getUserByWeiBoToken($token);
-            return true;
-        } catch (\Exception $e) {
-            return false;
+            $table = $this->getStaffTable();
+            $staff = $table->getOneByLoginName($identity);
+            $credential = $staff->encryptPassword($credential,$identity);
+            if ($credential == $staff->password) {
+                $this->setIdentity($staff);
+                return Result::SUCCESS;
+            }else{
+                return Result::FAILURE_CREDENTIAL_INVALID;
+            }
+        }catch (\Exception $e){
+            return Result::FAILURE_IDENTITY_NOT_FOUND;
         }
+//         $auth = new AuthenticationService();
+//         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+//         $authAdapter = new AuthDbTableAdapter($dbAdapter, 'user', 'username', 'password');
+//         $authAdapter->setIdentity($identity);
+//         $authAdapter->setCredential($credential);
+
+//         // Attempt authentication, saving the result
+//         $result = $auth->authenticate($authAdapter);
+//         $storage = $auth->getStorage();
+//         $storage->write($authAdapter->getResultRowObject(null, 'password'));
+//         return $result;
     }
 
-    /**
-     *
-     * @param unknown $token
-     * @return boolean
-     */
-    public function doWeiboAuth($tokenArr)
-    {
-        $table = $this->getUserTable();
-        try {
-            $user = $table->getUserByWeiBoToken($tokenArr['access_token']);
-            $this->saveTokenToUser($tokenArr, $user);
-            return $this->setIdentity($user);
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
 
-    public function saveTokenToUser($tokenArr, User $user)
-    {
-        $socialModel = new Weibo();
-        $table = $this->getUserTable();
-        $expiryAt = time() + $tokenArr['expires_in'];
-        $user->weibo_token_expiry = date('Y-m-d H:i:s', $expiryAt);
-        $user->weibo_token = $tokenArr['access_token'];
-        $user->weibo_id = $tokenArr['uid'];
-        $userInfo = $socialModel->getUserInfo($user->weibo_token, $user->weibo_id);
-        $user->weibo_name = $userInfo['name'];
-        return $table->saveUser($user);
-    }
 
-    protected function setIdentity(User $user)
+
+
+    protected function setIdentity(Staff $staff)
     {
         $auth = new AuthenticationService();
         $storage = $auth->getStorage();
-        $storage->write($user);
+        $storage->write($staff);
         return true;
     }
 }

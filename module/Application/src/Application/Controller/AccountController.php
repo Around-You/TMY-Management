@@ -29,7 +29,7 @@ class AccountController extends AbstractActionController
             if ($form->isValid()) {
                 $authenticator =  $this->getServiceLocator()->get('Application\Model\Account\UserAuthenticator');
                 $result = $authenticator->doPasswordAuth($form->get('username')->getValue(), $form->get('password')->getValue());
-                switch ($result->getCode()) {
+                switch ($result) {
 
                     case Result::SUCCESS:
                         /** do stuff for successful authentication **/
@@ -44,9 +44,6 @@ class AccountController extends AbstractActionController
                         /** do stuff for other failure **/
                         $form->get( 'username')->setMessages( array('用户名或密码不正确'));
                         break;
-                }
-                foreach ($result->getMessages() as $message) {
-                    echo "$message\n";
                 }
             }
         }

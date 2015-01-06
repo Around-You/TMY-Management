@@ -50,6 +50,7 @@ class StaffController extends AbstractActionController
 
     public function addAction()
     {
+        $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $form = StaffForm::getInstance($this->getServiceLocator());
 
         $request = $this->getRequest();
@@ -57,14 +58,14 @@ class StaffController extends AbstractActionController
         $form->bind($staff);
         if ($request->isPost()) {
             $form->setData($request->getPost());
-            var_dump($form->isValid());
             if ($form->isValid()) {
                 $table = $this->getStaffTable();
-                $user = $table->save($staff);
-                $this->flashMessenger()->addSuccessMessage($user->staff_name . ' 已添加');
+                $staff->password = $staff->encryptPassword();
+                $staff = $table->save($staff);
+                $this->flashMessenger()->addSuccessMessage($staff->staff_name . ' 已添加');
                 return $this->redirect()->toUrl('/staff');
             } else {
-                print_r($form->getMessages());
+//                 print_r($form->getMessages());
             }
         }
 
