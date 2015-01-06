@@ -39,7 +39,7 @@ return array(
             'Application\Controller\Member' => 'Application\Controller\MemberController',
             'Application\Controller\Sale' => 'Application\Controller\SaleController',
             'Application\Controller\Store' => 'Application\Controller\StoreController',
-            'Application\Controller\User' => 'Application\Controller\UserController'
+            'Application\Controller\Staff' => 'Application\Controller\StaffController'
         )
     ),
     'view_manager' => array(

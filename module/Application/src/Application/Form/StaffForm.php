@@ -4,7 +4,7 @@ namespace Application\Form;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class UserForm extends Form
+class StaffForm extends Form
 {
     /**
      *
@@ -13,7 +13,7 @@ class UserForm extends Form
      */
     public static function getInstance(ServiceLocatorInterface $sl)
     {
-        return $sl->get('FormElementManager')->get('\Application\Form\UserForm');
+        return $sl->get('FormElementManager')->get('\Application\Form\StaffForm');
     }
 
     public function __construct($name = null)
@@ -33,14 +33,14 @@ class UserForm extends Form
             )
         ));
         $this->add(array(
-            'name' => 'username',
+            'name' => 'login_name',
             'type' => 'Text',
             'options' => array(
                 'label' => '登录名'
             )
         ));
         $this->add(array(
-            'name' => 'realname',
+            'name' => 'staff_name',
             'type' => 'Text',
             'options' => array(
                 'label' => '员工姓名'

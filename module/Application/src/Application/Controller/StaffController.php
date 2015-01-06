@@ -13,19 +13,20 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Application\Model\Json\DataTableResult;
 use Application\Form\UserForm;
-use Application\Model\Account\User;
+use Application\Model\Account\Staff;
+use Application\Form\StaffForm;
 
-class UserController extends AbstractActionController
+class StaffController extends AbstractActionController
 {
 
-    protected $userTable;
+    protected $staffTable;
 
-    public function getUserTable()
+    public function getStaffTable()
     {
-        if (! $this->userTable) {
-            $this->userTable = $this->getServiceLocator()->get('Application\Model\Account\UserTable');
+        if (! $this->staffTable) {
+            $this->staffTable = $this->getServiceLocator()->get('Application\Model\Account\StaffTable');
         }
-        return $this->userTable;
+        return $this->staffTable;
     }
 
     public function indexAction()
@@ -33,11 +34,11 @@ class UserController extends AbstractActionController
         return array();
     }
 
-    public function getUserListDataAction()
+    public function getStaffListDataAction()
     {
         try {
-            $count = $this->getUserTable()->getFetchAllCounts();
-            $logs = $this->getUserTable()->fetchAll(array(), $_GET['start'], $_GET['length']);
+            $count = $this->getStaffTable()->getFetchAllCounts();
+            $logs = $this->getStaffTable()->fetchAll(array(), $_GET['start'], $_GET['length']);
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $logs);
         } catch (\Exception $e) {
@@ -49,23 +50,21 @@ class UserController extends AbstractActionController
 
     public function addAction()
     {
-        $form = UserForm::getInstance($this->getServiceLocator());
+        $form = StaffForm::getInstance($this->getServiceLocator());
 
         $request = $this->getRequest();
+        $staff = new Staff();
+        $form->bind($staff);
         if ($request->isPost()) {
-            $user = new User();
-            $form->bind($user);
             $form->setData($request->getPost());
-
+            var_dump($form->isValid());
             if ($form->isValid()) {
-//                 $user->exchangeArray($form->getData());
-                $table = $this->getUserTable();
-                $user = $table->save($user);
-                $this->flashMessenger()->addSuccessMessage($user->realname . ' 已添加');
-                return $this->redirect()->toUrl('/user');
-            }else{
-                print_r( $form->getMessages() );
-//                 $this->flashMessenger()->addErrorMessage($form->getMessages());
+                $table = $this->getStaffTable();
+                $user = $table->save($staff);
+                $this->flashMessenger()->addSuccessMessage($user->staff_name . ' 已添加');
+                return $this->redirect()->toUrl('/staff');
+            } else {
+                print_r($form->getMessages());
             }
         }
 
@@ -78,7 +77,7 @@ class UserController extends AbstractActionController
     {
         $id = (int) $this->params('id', 0);
         try {
-            $user = $this->getUserTable()->getOneById($id);
+            $user = $this->getStaffTable()->getOneById($id);
         } catch (\Exception $ex) {
             $this->flashMessenger()->addErrorMessage('该员工不存在，请确认后重新操作');
             return $this->redirect()->toUrl('/user');

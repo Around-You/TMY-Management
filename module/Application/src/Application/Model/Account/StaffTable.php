@@ -5,12 +5,12 @@ use SamFramework\Model\AbstractModelMapper;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
 
-class UserTable extends AbstractModelMapper
+class StaffTable extends AbstractModelMapper
 {
 
-    protected $tableName = 'user';
+    protected $tableName = 'staff';
 
-    protected $modelClassName = 'Application\Model\Account\User';
+    protected $modelClassName = 'Application\Model\Account\Staff';
 
     public function buildSqlSelect(Select $select, $where = array())
     {
@@ -79,7 +79,7 @@ class UserTable extends AbstractModelMapper
         return $model;
     }
 
-    public function save(User $items)
+    public function save(Staff $items)
     {
         $tableGateway = $this->getTableGateway();
         $items->update_time = date('YmdHis');

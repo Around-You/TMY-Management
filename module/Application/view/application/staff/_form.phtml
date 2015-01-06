@@ -9,7 +9,7 @@ echo $this->formHidden($form->get('id'));
 ?>
 <div class="col-md-6">
 <?php
-echo $this->formRow($form->get('username'));
+echo $this->formRow($form->get('login_name'));
 echo $this->formRow($form->get('password'));
 echo $this->formRow($form->get('address'));
 echo $this->formRow($form->get('role'));
@@ -17,7 +17,7 @@ echo $this->formRow($form->get('role'));
 </div>
 <div class="col-md-6">
 <?php
-echo $this->formRow($form->get('realname'));
+echo $this->formRow($form->get('staff_name'));
 echo $this->formRow($form->get('confirm_password'));
 echo $this->formRow($form->get('phone'));
 echo $this->formRow($form->get('fake_log_discount'));

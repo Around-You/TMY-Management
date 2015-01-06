@@ -4,16 +4,16 @@ namespace Application\Model\Account;
 use SamFramework\Model\AbstractModel;
 use Zend\InputFilter\InputFilter;
 
-class User extends AbstractModel
+class Staff extends AbstractModel
 {
 
     public $id = 0;
 
     public $store_id = 1;
 
-    public $username = '';
+    public $login_name = '';
 
-    public $realname = '';
+    public $staff_name = '';
 
     public $email = '';
 
@@ -45,7 +45,7 @@ class User extends AbstractModel
             $inputFilter = new InputFilter();
 
             $inputFilter->add(array(
-                'name' => 'username',
+                'name' => 'login_name',
                 'required' => true,
                 'filters' => array(
                     array(
@@ -82,7 +82,9 @@ class User extends AbstractModel
                 'validators' => array(
                     array(
                         'name' => 'Zend\Validator\Identical',
-                        'token' => 'password'
+                        'options' => array(
+                            'token' => 'password'
+                        )
                     )
                 )
             ));
@@ -97,8 +99,8 @@ class User extends AbstractModel
     {
         $this->id = (isset($array['id'])) ? $array['id'] : $this->id;
         $this->store_id = (isset($array['store_id'])) ? $array['store_id'] : $this->store_id;
-        $this->username = (isset($array['username'])) ? $array['username'] : $this->username;
-        $this->realname = (isset($array['realname'])) ? $array['realname'] : $this->realname;
+        $this->login_name = (isset($array['login_name'])) ? $array['login_name'] : $this->login_name;
+        $this->staff_name = (isset($array['staff_name'])) ? $array['staff_name'] : $this->staff_name;
         $this->email = (isset($array['email'])) ? $array['email'] : $this->email;
         $this->password = (isset($array['password'])) ? $array['password'] : $this->password;
         $this->confirm_password = (isset($array['confirm_password'])) ? $array['confirm_password'] : $this->confirm_password;
@@ -116,8 +118,8 @@ class User extends AbstractModel
         $data = array(
             'id' => $this->id,
             'store_id' => $this->store_id,
-            'username' => $this->username,
-            'realname' => $this->realname,
+            'login_name' => $this->login_name,
+            'staff_name' => $this->staff_name,
             'email' => $this->email,
             'password' => $this->password,
             'address' => $this->address,
