@@ -1,0 +1,10 @@
+<?php
+$title = '编辑员工';
+$this->layout()->currentItem = '店铺员工';
+$this->headTitle($title);
+echo $this->pageHeader( $title );
+?>
+<?php
+echo $this->partial( '/application/user/_form.phtml', array(
+	'form' => $form
+));

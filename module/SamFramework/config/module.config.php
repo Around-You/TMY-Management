@@ -29,6 +29,7 @@ return array(
             'submitButton' => 'SamFramework\Form\Element\SubmitButton',
             'cancelButton' => 'SamFramework\Form\Element\CancelButton',
             'WYSIWYG' => 'SamFramework\Form\Element\WYSIWYG',
+            'password' => 'SamFramework\Form\Element\Password',
             'text' => 'SamFramework\Form\Element\Text',
             'select' => 'SamFramework\Form\Element\Select',
             'radio' => 'SamFramework\Form\Element\Radio',

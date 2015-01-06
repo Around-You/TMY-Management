@@ -9,7 +9,7 @@ class User extends AbstractModel
 
     public $id = 0;
 
-    public $store_id = 0;
+    public $store_id = 1;
 
     public $username = '';
 
@@ -19,6 +19,8 @@ class User extends AbstractModel
 
     public $password = '';
 
+    public $confirm_password = '';
+
     public $address = '';
 
     public $phone = '';
@@ -27,16 +29,69 @@ class User extends AbstractModel
 
     public $enable = 1;
 
-    public $create_time = '';
+    public $create_time = NULL;
 
-    public $update_time = '';
+    public $update_time = NULL;
 
     public $fake_log_discount = 1;
 
     protected $exclude = array(
-        'create_time',
+        'create_time'
     );
 
+    public function getInputFilter()
+    {
+        if (! $this->inputFilter) {
+            $inputFilter = new InputFilter();
+
+            $inputFilter->add(array(
+                'name' => 'username',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                )
+            ));
+            $inputFilter->add(array(
+                'name' => 'password',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                )
+            ));
+            $inputFilter->add(array(
+                'name' => 'confirm_password',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'Zend\Validator\Identical',
+                        'token' => 'password'
+                    )
+                )
+            ));
+
+            $this->inputFilter = $inputFilter;
+        }
+
+        return $this->inputFilter;
+    }
 
     public function exchangeArray(array $array)
     {
@@ -46,6 +101,7 @@ class User extends AbstractModel
         $this->realname = (isset($array['realname'])) ? $array['realname'] : $this->realname;
         $this->email = (isset($array['email'])) ? $array['email'] : $this->email;
         $this->password = (isset($array['password'])) ? $array['password'] : $this->password;
+        $this->confirm_password = (isset($array['confirm_password'])) ? $array['confirm_password'] : $this->confirm_password;
         $this->address = (isset($array['address'])) ? $array['address'] : $this->address;
         $this->phone = (isset($array['phone'])) ? $array['phone'] : $this->phone;
         $this->role = (isset($array['role'])) ? $array['role'] : $this->role;
@@ -71,30 +127,8 @@ class User extends AbstractModel
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
             'fake_log_discount' => $this->fake_log_discount
-        )
-        ;
+        );
         return $data;
-    }
-
-    public function getInputFilter()
-    {
-        if (! $this->inputFilter) {
-            $inputFilter = new InputFilter();
-
-            $inputFilter->add(array(
-                'name' => 'email',
-                'required' => true,
-                'filters' => array(
-                    array(
-                        'name' => 'StringTrim'
-                    )
-                )
-            ));
-
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
     }
 }
 

@@ -12,6 +12,8 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Application\Model\Json\DataTableResult;
+use Application\Form\UserForm;
+use Application\Model\Account\User;
 
 class UserController extends AbstractActionController
 {
@@ -43,5 +45,75 @@ class UserController extends AbstractActionController
         }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
+    }
+
+    public function addAction()
+    {
+        $form = UserForm::getInstance($this->getServiceLocator());
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $user = new User();
+            $form->bind($user);
+            $form->setData($request->getPost());
+
+            if ($form->isValid()) {
+//                 $user->exchangeArray($form->getData());
+                $table = $this->getUserTable();
+                $user = $table->save($user);
+                $this->flashMessenger()->addSuccessMessage($user->realname . ' 已添加');
+                return $this->redirect()->toUrl('/user');
+            }else{
+                print_r( $form->getMessages() );
+//                 $this->flashMessenger()->addErrorMessage($form->getMessages());
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
+    }
+
+    public function editAction()
+    {
+        $id = (int) $this->params('id', 0);
+        try {
+            $user = $this->getUserTable()->getOneById($id);
+        } catch (\Exception $ex) {
+            $this->flashMessenger()->addErrorMessage('该员工不存在，请确认后重新操作');
+            return $this->redirect()->toUrl('/user');
+        }
+
+        $form = UserForm::getInstance($this->getServiceLocator());
+        $form->bind($user);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setInputFilter($user->getInputFilter());
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $categoryTable = $this->getCategoryTable();
+                $user = $categoryTable->saveCategory($user);
+                $this->flashMessenger()->addSuccessMessage($user->title . ' 已编辑');
+                return $this->redirect()->toUrl('/category');
+            }
+        }
+        return array(
+            'form' => $form
+        );
+    }
+
+    public function deleteAction()
+    {
+        $id = (int) $this->params('id', 0);
+        $categoryTable = $this->getCategoryTable();
+        try {
+            $category = $categoryTable->getCategory($id);
+            $categoryTable->deleteCategory($id);
+            $this->flashMessenger()->addSuccessMessage($category->title . ' 已删除');
+            return $this->redirect()->toUrl('/category');
+        } catch (\Exception $ex) {
+            $this->flashMessenger()->addErrorMessage('该商品类型不存在，请确认后重新操作');
+            return $this->redirect()->toUrl('/category');
+        }
     }
 }
