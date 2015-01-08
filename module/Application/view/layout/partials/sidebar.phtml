@@ -1,4 +1,5 @@
 <?php
+use SamFramework\Core\App;
 $menus = array(
     '会员管理' => array(
         'title' => '会员管理',
@@ -17,7 +18,7 @@ $menus = array(
                 'title' => '会员扣次',
                 'icon' => 'fa fa-tachometer',
                 'url' => '/sale/use'
-            ),
+            )
         )
     ),
     '商品管理' => array(
@@ -32,7 +33,7 @@ $menus = array(
                 'title' => '商品类别',
                 'icon' => 'fa fa-tachometer',
                 'url' => '/category'
-            ),
+            )
         )
     ),
     '会员消费' => array(
@@ -47,7 +48,7 @@ $menus = array(
                 'title' => '充值续费',
                 'icon' => 'fa fa-tachometer',
                 'url' => '#'
-            ),
+            )
         )
     ),
     '店铺管理' => array(
@@ -57,19 +58,22 @@ $menus = array(
                 'title' => '店铺流水',
                 'icon' => 'fa fa-tachometer',
                 'url' => '/store/sellLog'
-            ),
-            array(
-                'title' => '店铺员工',
-                'icon' => 'fa fa-tachometer',
-                'url' => '/staff'
-            ),
+            )
         )
+
     )
 );
+if (App::getUser()->role != '店员') {
+    $menus['店铺管理']['submenu'][] = array(
+        'title' => '店铺员工',
+        'icon' => 'fa fa-tachometer',
+        'url' => '/staff'
+    );
+}
 
 ?>
 <div class="sidebar responsive" id="sidebar">
-    <script type="text/javascript">
+	<script type="text/javascript">
         try {
             ace.settings.check('sidebar', 'fixed')
         } catch(e) {}
@@ -77,45 +81,40 @@ $menus = array(
 
 	<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 		<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-			<a class="btn btn-info" href="/dashboard" title="首页">
-				<i class="ace-icon fa fa-home"></i>
-			</a>
-
-			<a class="btn btn-warning" href="/member/add" title="新增会员">
-				<i class="ace-icon fa fa-plus-square"></i>
+			<a class="btn btn-info" href="/dashboard" title="首页"> <i
+				class="ace-icon fa fa-home"></i>
+			</a> <a class="btn btn-warning" href="/member/add" title="新增会员"> <i
+				class="ace-icon fa fa-plus-square"></i>
 			</a>
 
 			<!-- #section:basics/sidebar.layout.shortcuts -->
-			<a class="btn btn-success" href="/sale/use" title="会员扣次">
-				<i class="ace-icon fa fa-user"></i>
-			</a>
-
-			<a class="btn btn-purple" href="/sale/quick" title="快速消费">
-				<i class="ace-icon fa fa-shopping-cart"></i>
+			<a class="btn btn-success" href="/sale/use" title="会员扣次"> <i
+				class="ace-icon fa fa-user"></i>
+			</a> <a class="btn btn-purple" href="/sale/quick" title="快速消费"> <i
+				class="ace-icon fa fa-shopping-cart"></i>
 			</a>
 
 			<!-- /section:basics/sidebar.layout.shortcuts -->
 		</div>
 
 		<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-			<span class="btn btn-success"></span>
+			<span class="btn btn-success"></span> <span class="btn btn-info"></span>
 
-			<span class="btn btn-info"></span>
-
-			<span class="btn btn-warning"></span>
-
-			<span class="btn btn-danger"></span>
+			<span class="btn btn-warning"></span> <span class="btn btn-danger"></span>
 		</div>
-	</div><!-- /.sidebar-shortcuts -->
+	</div>
+	<!-- /.sidebar-shortcuts -->
 
-    <ul class="nav nav-list">
+	<ul class="nav nav-list">
     <?=$this->sidebar($menus,$currentItem); ?>
     </ul>
-    <!-- /.nav-list -->
+	<!-- /.nav-list -->
 
 	<!-- #section:basics/sidebar.layout.minimize -->
 	<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
-		<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+		<i class="ace-icon fa fa-angle-double-left"
+			data-icon1="ace-icon fa fa-angle-double-left"
+			data-icon2="ace-icon fa fa-angle-double-right"></i>
 	</div>
 
 	<!-- /section:basics/sidebar.layout.minimize -->

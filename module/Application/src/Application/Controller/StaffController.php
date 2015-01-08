@@ -83,20 +83,26 @@ class StaffController extends AbstractActionController
             $staff = $this->getStaffTable()->getOneById($id);
         } catch (\Exception $ex) {
             $this->flashMessenger()->addErrorMessage('该员工不存在，请确认后重新操作');
-            return $this->redirect()->toUrl('/user');
+            return $this->redirect()->toUrl('/staff');
         }
 
         $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $form = StaffForm::getInstance($this->getServiceLocator());
 
         $request = $this->getRequest();
-        $staff->confirm_password = $staff->password;
         $form->bind($staff);
         if ($request->isPost()) {
-            $form->setData($request->getPost());
+            $postData = $request->getPost();
+            if($postData['password'] == ''){
+                unset($postData['password']);
+                unset($postData['confirm_password']);
+            }
+            $form->setData($postData);
             if ($form->isValid()) {
                 $table = $this->getStaffTable();
-                $staff->password = $staff->encryptPassword();
+                if($postData['password'] != ''){
+                    $staff->password = $staff->encryptPassword();
+                }
                 $staff = $table->save($staff);
                 $this->flashMessenger()->addSuccessMessage($staff->staff_name . ' 已编辑');
                 return $this->redirect()->toUrl('/staff');
