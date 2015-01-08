@@ -4,6 +4,9 @@ namespace Application\Model\Logs;
 use SamFramework\Model\AbstractModelMapper;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
+use Application\Model\Goods\Goods;
+use Application\Model\Member\Member;
+use SamFramework\Core\App;
 
 class SellLogTable extends AbstractModelMapper
 {
@@ -12,9 +15,19 @@ class SellLogTable extends AbstractModelMapper
 
     public $currentUserId = 0;
 
+    protected $memberTable;
+
     protected $tableName = 'sell_log';
 
     protected $modelClassName = 'Application\\Model\\Logs\\SellLog';
+
+    public function getMemberTable()
+    {
+        if (! $this->memberTable) {
+            $this->memberTable = $this->getServiceLocator()->get('Application\Model\Member\MemberTable');
+        }
+        return $this->memberTable;
+    }
 
     public function buildSqlSelect(Select $select, $where)
     {
@@ -36,7 +49,7 @@ class SellLogTable extends AbstractModelMapper
         $select = $this->getTableGateway()
             ->getSql()
             ->select();
-        $this->buildSqlSelect($select,$where);
+        $this->buildSqlSelect($select, $where);
         $select->columns(array(
             new Expression('count(' . $this->tableName . '.id) as rownum')
         ));
@@ -79,6 +92,26 @@ class SellLogTable extends AbstractModelMapper
         }
         return $item;
     }
+
+    public function addSellLog(Goods $goods, Member $member = null)
+    {
+        $log = new SellLog();
+        if ($member) {
+            $log->member_id = $member->id;
+        }
+        $log->goods_id = $goods->id;
+        $log->user_id = App::getUser()->id;
+        $log->price = $goods->price;
+        $log->quantity = 1;
+        $this->saveSellLog($log);
+        $this->afterAddedSellLog($goods, $member);
+    }
+
+    public function afterAddedSellLog(Goods $goods, Member $member)
+    {
+        $this->getMemberTable()->addPoint($member, $goods->price);
+    }
+
 
 }
 

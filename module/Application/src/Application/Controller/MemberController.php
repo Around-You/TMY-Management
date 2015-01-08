@@ -27,6 +27,8 @@ class MemberController extends AbstractActionController
 
     protected $memberGoodsTable;
 
+    protected $sellLogTable;
+
     public function getMemberTable()
     {
         if (! $this->memberTable) {
@@ -51,6 +53,14 @@ class MemberController extends AbstractActionController
             $this->memberGoodsTable = $this->getServiceLocator()->get('Application\Model\Goods\MemberGoodsTable');
         }
         return $this->memberGoodsTable;
+    }
+
+    public function getSellLogTable()
+    {
+        if (! $this->sellLogTable) {
+            $this->sellLogTable = $this->getServiceLocator()->get('Application\Model\Logs\SellLogTable');
+        }
+        return $this->sellLogTable;
     }
 
     public function getGoodsUseForMember()
@@ -109,6 +119,7 @@ class MemberController extends AbstractActionController
 
                 if ($member->goods > 0) {
                     $goods = $this->getGoodsTable()->getOneById($member->goods);
+                    $this->getSellLogTable()->addSellLog($goods, $member);
                     $memberGoods = new MemberGoods();
                     $memberGoods->setGoods($goods);
                     $memberGoods->member_id = $member->id;

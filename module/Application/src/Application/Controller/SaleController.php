@@ -97,8 +97,7 @@ class SaleController extends AbstractActionController
             if (! empty($goodsCodeArr)) {
                 foreach ($goodsCodeArr as $goodsCode) {
                     $goods = $this->getGoodsTable()->getGoodsByCode($goodsCode);
-                    $this->addSellLog($goods, $member);
-                    $this->addPointToMember($member, $goods->price);
+                    $this->getSellLogTable()->addSellLog($goods, $member);
                     if ($goods->isVirtual()) {
                         $this->addToMemberGoods($goods, $member);
                     }
@@ -219,26 +218,9 @@ class SaleController extends AbstractActionController
         return $viewModel;
     }
 
-    public function addSellLog(Goods $goods, Member $member = null)
-    {
-        $log = new SellLog();
-        if ($member) {
-            $log->member_id = $member->id;
-        }
-        $log->goods_id = $goods->id;
-        $log->user_id = App::getUser()->id;
-        $log->price = $goods->price;
-        $log->quantity = 1;
-        $this->getSellLogTable()->saveSellLog($log);
-    }
 
-    public function addPointToMember(Member $member, $point)
-    {
-        if ($member) {
-            $member->point += round($point);
-            $this->getMemberTable()->saveMember($member);
-        }
-    }
+
+
 
     public function addToMemberGoods(Goods $goods, Member $member)
     {

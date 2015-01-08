@@ -123,5 +123,11 @@ class MemberTable extends AbstractModelMapper
 
         return $member;
     }
+
+    public function addPoint(Member $member, $point)
+    {
+        $member->point += round($point);
+        $this->saveMember($member);
+    }
 }
 
