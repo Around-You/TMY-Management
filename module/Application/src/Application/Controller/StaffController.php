@@ -12,7 +12,6 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Application\Model\Json\DataTableResult;
-use Application\Form\UserForm;
 use Application\Model\Account\Staff;
 use Application\Form\StaffForm;
 
@@ -37,8 +36,11 @@ class StaffController extends AbstractActionController
     public function getStaffListDataAction()
     {
         try {
-            $count = $this->getStaffTable()->getFetchAllCounts();
-            $logs = $this->getStaffTable()->fetchAll(array(), $_GET['start'], $_GET['length']);
+            $where = array(
+                'staff.enable' => 1
+            );
+            $count = $this->getStaffTable()->getFetchAllCounts($where);
+            $logs = $this->getStaffTable()->fetchAll($where, $_GET['start'], $_GET['length']);
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $logs);
         } catch (\Exception $e) {
@@ -65,7 +67,7 @@ class StaffController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage($staff->staff_name . ' 已添加');
                 return $this->redirect()->toUrl('/staff');
             } else {
-//                 print_r($form->getMessages());
+                // print_r($form->getMessages());
             }
         }
 
@@ -78,25 +80,31 @@ class StaffController extends AbstractActionController
     {
         $id = (int) $this->params('id', 0);
         try {
-            $user = $this->getStaffTable()->getOneById($id);
+            $staff = $this->getStaffTable()->getOneById($id);
         } catch (\Exception $ex) {
             $this->flashMessenger()->addErrorMessage('该员工不存在，请确认后重新操作');
             return $this->redirect()->toUrl('/user');
         }
 
-        $form = UserForm::getInstance($this->getServiceLocator());
-        $form->bind($user);
+        $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = StaffForm::getInstance($this->getServiceLocator());
+
         $request = $this->getRequest();
+        $staff->confirm_password = $staff->password;
+        $form->bind($staff);
         if ($request->isPost()) {
-            $form->setInputFilter($user->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $categoryTable = $this->getCategoryTable();
-                $user = $categoryTable->saveCategory($user);
-                $this->flashMessenger()->addSuccessMessage($user->title . ' 已编辑');
-                return $this->redirect()->toUrl('/category');
+                $table = $this->getStaffTable();
+                $staff->password = $staff->encryptPassword();
+                $staff = $table->save($staff);
+                $this->flashMessenger()->addSuccessMessage($staff->staff_name . ' 已编辑');
+                return $this->redirect()->toUrl('/staff');
+            } else {
+                // print_r($form->getMessages());
             }
         }
+
         return array(
             'form' => $form
         );
@@ -105,15 +113,15 @@ class StaffController extends AbstractActionController
     public function deleteAction()
     {
         $id = (int) $this->params('id', 0);
-        $categoryTable = $this->getCategoryTable();
+        $staffTable = $this->getStaffTable();
         try {
-            $category = $categoryTable->getCategory($id);
-            $categoryTable->deleteCategory($id);
-            $this->flashMessenger()->addSuccessMessage($category->title . ' 已删除');
-            return $this->redirect()->toUrl('/category');
+            $staff = $staffTable->getOneById($id);
+            $staffTable->deleteById($id);
+            $this->flashMessenger()->addSuccessMessage($staff->staff_name . ' 已禁用');
+            return $this->redirect()->toUrl('/staff');
         } catch (\Exception $ex) {
-            $this->flashMessenger()->addErrorMessage('该商品类型不存在，请确认后重新操作');
-            return $this->redirect()->toUrl('/category');
+            $this->flashMessenger()->addErrorMessage('该员工不存在，请确认后重新操作');
+            return $this->redirect()->toUrl('/staff');
         }
     }
 }

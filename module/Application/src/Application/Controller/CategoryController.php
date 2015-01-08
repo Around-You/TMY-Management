@@ -128,7 +128,7 @@ class CategoryController extends AbstractActionController
         try {
             $category = $categoryTable->getCategory($id);
             $categoryTable->deleteCategory($id);
-            $this->flashMessenger()->addSuccessMessage($category->title . ' 已删除');
+            $this->flashMessenger()->addSuccessMessage($category->title . ' 已禁用');
             return $this->redirect()->toUrl('/category');
         } catch (\Exception $ex) {
             $this->flashMessenger()->addErrorMessage('该商品类型不存在，请确认后重新操作');

@@ -92,16 +92,14 @@ class StaffTable extends AbstractModelMapper
     /**
      *
      * @param unknown $id
-     * @return Goods
+     * @return Staff
      */
     public function deleteById($id)
     {
         $tableGateway = $this->getTableGateway();
         $model = $this->getOneById($id);
         $model->enable = 0;
-        $tableGateway->update($model->getArrayCopyForSave(), array(
-            'id' => $id
-        ));
+        $this->save($model);
         return $model;
     }
 

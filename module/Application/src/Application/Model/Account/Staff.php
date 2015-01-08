@@ -62,14 +62,18 @@ class Staff extends AbstractModel
                         'options' => array(
                             'table' => 'staff',
                             'field' => 'login_name',
-                            'adapter' => App::getReadDBAdapter()
+                            'adapter' => App::getReadDBAdapter(),
+                            'exclude' => array(
+                                'field' => 'login_name',
+                                'value' => $this->login_name
+                            )
                         )
                     )
                 )
             ));
             $inputFilter->add(array(
                 'name' => 'password',
-                'required' => true,
+                'required' => $this->id > 0 ? false : true,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -81,7 +85,7 @@ class Staff extends AbstractModel
             ));
             $inputFilter->add(array(
                 'name' => 'confirm_password',
-                'required' => true,
+                'required' => $this->id > 0 ? false : true,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
