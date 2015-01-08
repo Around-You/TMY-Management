@@ -92,9 +92,7 @@ class MemberTable extends AbstractModelMapper
         $tableGateway = $this->getTableGateway();
         $model = $this->getOneById($id);
         $model->enable = 0;
-        $tableGateway->update($model->getArrayCopyForSave(), array(
-            'id' => $id
-        ));
+        $this->saveMember($model);
         return $model;
     }
 

@@ -62,7 +62,7 @@ class DataTableResult implements ArraySerializableInterface
      * @param ArraySerializableInterface|Array $data
      * @return \Application\src\Application\Model\Json\JsonResult
      */
-    public static function buildResult($draw = 0, $count = 0, $data = array())
+    public static function buildResult($draw = 1, $count = 0, $data = array())
     {
         $result = new DataTableResult();
         if (! empty($data)) {

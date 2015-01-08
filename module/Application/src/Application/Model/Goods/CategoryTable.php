@@ -14,7 +14,8 @@ class CategoryTable extends AbstractModelMapper
 
     protected $modelClassName = 'Application\\Model\\Goods\\Category';
 
-    public function buildSqlSelect(Select $select, $where){
+    public function buildSqlSelect(Select $select, $where)
+    {
         $select->where($where);
     }
 
@@ -23,7 +24,7 @@ class CategoryTable extends AbstractModelMapper
         $select = $this->getTableGateway()
             ->getSql()
             ->select();
-        $this->buildSqlSelect($select,$where);
+        $this->buildSqlSelect($select, $where);
         $select->columns(array(
             new Expression('count(' . $this->tableName . '.id) as rownum')
         ));
@@ -49,7 +50,7 @@ class CategoryTable extends AbstractModelMapper
         return $resultSet;
     }
 
-    public function getCategory($id)
+    public function getOneById($id)
     {
         $tableGateway = $this->getTableGateway();
         $id = (int) $id;
@@ -63,11 +64,12 @@ class CategoryTable extends AbstractModelMapper
         return $row;
     }
 
-    public function deleteCategory($id)
+    public function deleteById($id)
     {
-        $this->tableGateway->delete(array(
-            'id' => (int) $id
-        ));
+        $model = $this->getOneById($id);
+        $model->enable = 0;
+        $this->saveCategory($model);
+        return $model;
     }
 
     public function saveCategory(Category $category)
@@ -80,7 +82,7 @@ class CategoryTable extends AbstractModelMapper
             $tableGateway->insert($data);
             $category->id = $this->getTableGateway()->getLastInsertValue();
         } else {
-            if ($this->getCategory($id)) {
+            if ($this->getOneById($id)) {
                 $tableGateway->update($data, array(
                     'id' => $id
                 ));

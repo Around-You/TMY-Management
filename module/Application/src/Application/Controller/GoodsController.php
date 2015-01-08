@@ -44,10 +44,11 @@ class GoodsController extends AbstractActionController
     public function getGoodsListDataAction()
     {
         try {
-            $count = $this->getGoodsTable()->getFetchAllCounts();
-            $products = $this->getGoodsTable()->fetchAll(array(
+            $where = array(
                 'goods.enable' => 1
-            ), $_GET['start'], $_GET['length']);
+            );
+            $count = $this->getGoodsTable()->getFetchAllCounts($where);
+            $products = $this->getGoodsTable()->fetchAll($where, $_GET['start'], $_GET['length']);
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
         } catch (\Exception $e) {
@@ -61,7 +62,9 @@ class GoodsController extends AbstractActionController
     {
         $form = GoodsForm::getInstance($this->getServiceLocator());
         $form->setCategories($this->getCategoryTable()
-            ->fetchAll());
+            ->fetchAll(array(
+            'category.enable' => 1
+        )));
 
         $goods = new Goods();
         $form->bind($goods);
@@ -90,7 +93,9 @@ class GoodsController extends AbstractActionController
             $form = GoodsForm::getInstance($this->getServiceLocator());
             $form->bind($goods);
             $form->setCategories($this->getCategoryTable()
-                ->fetchAll());
+                ->fetchAll(array(
+                'category.enable' => 1
+            )));
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $form->setInputFilter($goods->getInputFilter());
