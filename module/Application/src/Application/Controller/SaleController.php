@@ -98,6 +98,7 @@ class SaleController extends AbstractActionController
                 foreach ($goodsCodeArr as $goodsCode) {
                     $goods = $this->getGoodsTable()->getGoodsByCode($goodsCode);
                     $this->addSellLog($goods, $member);
+                    $this->addPointToMember($member, $goods->price);
                     if ($goods->isVirtual()) {
                         $this->addToMemberGoods($goods, $member);
                     }
@@ -155,12 +156,13 @@ class SaleController extends AbstractActionController
         $member = $this->getMemberTable()->getOneById($memberLog->member_id);
         $usedGoods = $this->getGoodsTable()->getOneById($memberLog->goods_id);
         $memberGoods = $this->getMemberGoodsTable()->fetchAll(array(
-                'member.id' => $memberLog->member_id
-            ));;
+            'member.id' => $memberLog->member_id
+        ));
+        ;
         return array(
-        	'member'=>$member,
+            'member' => $member,
             'usedGoods' => $usedGoods,
-            'memberGoodsList'=>$memberGoods
+            'memberGoodsList' => $memberGoods
         );
     }
 
@@ -228,6 +230,14 @@ class SaleController extends AbstractActionController
         $log->price = $goods->price;
         $log->quantity = 1;
         $this->getSellLogTable()->saveSellLog($log);
+    }
+
+    public function addPointToMember(Member $member, $point)
+    {
+        if ($member) {
+            $member->point += round($point);
+            $this->getMemberTable()->saveMember($member);
+        }
     }
 
     public function addToMemberGoods(Goods $goods, Member $member)
