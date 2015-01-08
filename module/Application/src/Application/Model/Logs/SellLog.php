@@ -2,6 +2,7 @@
 namespace Application\Model\Logs;
 
 use SamFramework\Model\AbstractModel;
+use SamFramework\Core\App;
 
 /**
  *
@@ -63,6 +64,20 @@ class SellLog extends AbstractModel
         $this->staff_name = (isset($array['staff_name'])) ? $array['staff_name'] : $this->staff_name;
     }
 
+    public function getArrayCopyForSave()
+    {
+        $data = array(
+            'id' => $this->id,
+            'action' => $this->action,
+            'member_id' => $this->member_id,
+            'user_id' => $this->user_id,
+            'goods_id' => $this->goods_id,
+            'quantity' => $this->quantity,
+            'price' => $this->price
+        );
+        return $data;
+    }
+
     public function getArrayCopy()
     {
         $data = array(
@@ -73,7 +88,7 @@ class SellLog extends AbstractModel
             'goods_id' => $this->goods_id,
             'create_time' => $this->create_time,
             'quantity' => $this->quantity,
-            'price' => $this->price,
+            'price' => $this->price * App::getUser()->fake_log_discount,
             'member_name' => $this->member_name,
             'member_code' => $this->member_code,
             'goods_title' => $this->goods_title,
@@ -85,7 +100,7 @@ class SellLog extends AbstractModel
 
     public function getTotalPrice()
     {
-        return money_format('%.2n', $this->price * $this->quantity);
+        return money_format('%.2n', $this->price * $this->quantity * App::getUser()->fake_log_discount);
     }
 }
 
