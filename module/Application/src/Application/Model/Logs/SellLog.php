@@ -33,7 +33,7 @@ class SellLog extends AbstractModel
 
     public $goods_title = '';
 
-    public $user_name = '';
+    public $staff_name = '';
 
     /**
      * exclude fields to save
@@ -43,7 +43,7 @@ class SellLog extends AbstractModel
         'member_name',
         'member_code',
         'goods_title',
-        'user_name',
+        'staff_name',
         'total_price'
     );
 
@@ -60,7 +60,7 @@ class SellLog extends AbstractModel
         $this->member_name = (isset($array['member_name'])) ? $array['member_name'] : $this->member_name;
         $this->member_code = (isset($array['member_code'])) ? $array['member_code'] : $this->member_code;
         $this->goods_title = (isset($array['goods_title'])) ? $array['goods_title'] : $this->goods_title;
-        $this->user_name = (isset($array['user_name'])) ? $array['user_name'] : $this->user_name;
+        $this->staff_name = (isset($array['staff_name'])) ? $array['staff_name'] : $this->staff_name;
     }
 
     public function getArrayCopy()
@@ -77,7 +77,7 @@ class SellLog extends AbstractModel
             'member_name' => $this->member_name,
             'member_code' => $this->member_code,
             'goods_title' => $this->goods_title,
-            'user_name' => $this->user_name,
+            'staff_name' => $this->staff_name,
             'total_price' => $this->getTotalPrice()
         );
         return $data;

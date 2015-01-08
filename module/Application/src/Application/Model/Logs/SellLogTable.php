@@ -25,8 +25,8 @@ class SellLogTable extends AbstractModelMapper
         $select->join('goods', 'goods.id=goods_id', array(
             'goods_title' => 'title'
         ));
-        $select->join('user', 'user.id=user_id', array(
-            'user_name' => 'realname'
+        $select->join('staff', 'staff.id=user_id', array(
+            'staff_name' => 'staff_name'
         ));
         $select->where($where);
     }

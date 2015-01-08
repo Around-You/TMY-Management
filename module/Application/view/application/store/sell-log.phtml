@@ -36,7 +36,9 @@ $tableOptions = array(
         ),
         array(
             'title' => '操作人',
-            'key' => 'user_name'
+            'key' => 'staff_name',
+            'linkTarget' => '/staff/edit/',
+            'linkDataCol' => 'user_id'
         )
     ),
     'getListDataUrl' => '/store/getSellLogListData',
