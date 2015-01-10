@@ -431,21 +431,9 @@
 
  
  
-  //highlight .hover menus when mouse is in submenus
- .hover_highlight_skin_1() {
-	.nav-list > li {
-		.submenu > li.hover:hover > a {
-			background-color: @submenu-item-hover-background;
-		}
-		&.active .submenu > li.hover:hover > a {
-			background-color: @submenu-item-background-active-hover;
-		}
-	}
- }
-
+ 
 .enable_submenu_hover_skin_1() when(@enable-submenu-hover = true) {
  //.hover submenu
- @media only screen and (min-width: @screen-hover-menu) {
  .nav-list li.hover > .submenu {
 	padding-left: 0;
 	padding-bottom: 2px;
@@ -479,14 +467,23 @@
  .nav-list > li.active > .submenu li.hover > .submenu {
 	background-color: @hover-submenu-active-background;
  }
-}//@media
 
-
+ //highlight .hover menus when mouse is in submenus
+ .hover_highlight_skin_1() {
+	.nav-list > li {
+		.submenu > li.hover:hover > a {
+			background-color: @submenu-item-hover-background;
+		}
+		&.active .submenu > li.hover:hover > a {
+			background-color: @submenu-item-background-active-hover;
+		}
+	}
+ }
 
 
  //sometimes .hover items are opened in small view, and back in large view we reset the highlight state
  .enable_collpasible_responsive_menu_skin_1_tmp() when(@enable-collapsible-responsive-menu = true) {
- @media only screen and (min-width: max(@screen-hover-menu, @grid-float-breakpoint)) {
+ @media only screen and (min-width: @grid-float-breakpoint) {
   .sidebar.navbar-collapse {
 	.nav-list > li.open.hover:not(:hover):not(:focus):not(.active) > a {
 		color: @nav-item-color;
@@ -510,7 +507,7 @@
 
 
  //navbar-collapse
-@media only screen and (min-width: @screen-hover-menu) and (max-width: @grid-float-breakpoint-max) {
+@media only screen and (max-width: @grid-float-breakpoint-max) {
  .sidebar.navbar-collapse {
 	//.nav-list li li.hover.active.open > a {
 	//	background-color: @submenu-item-background-active;
@@ -569,10 +566,8 @@
 }
 .enable_collpasible_responsive_menu_skin_1_tmp();
 
- @media only screen and (min-width: @screen-hover-menu) {
-  .sidebar:not(.navbar-collapse) {
+ .sidebar:not(.navbar-collapse) {
 	.hover_highlight_skin_1();
-  }
  }
 
 
@@ -580,7 +575,8 @@
  .enable_submenu_hover_skin_1();
 
 
-
+ 
+ 
  //-li > .arrow
  //the submenu li > .arrow 
  .sub_arrow1_skin_1() {
@@ -678,20 +674,17 @@
 
 
   .navbar .navbar-toggle {
+	transition: background-color 0.1s ease 0s;
 	background-color: #4D9DCC;
 	
 	&:focus {
 		background-color: #4D9DCC;
-		border-color: transparent;
 	}
 	&:hover {
 		background-color: darken(#4D9DCC , 5%);
-		border-color: rgba(255,255,255,0.1);
 	}
 	&.display, &[data-toggle=collapse]:not(.collapsed) {
 		background-color: darken(#4D9DCC , 10%);
-		box-shadow: inset 1px 1px 2px 0 rgba(0, 0, 0, 0.25);
-			border-color: rgba(255, 255, 255, 0.35);
 	}
   }
 
@@ -862,29 +855,6 @@
  }
 }
 
-
-
-
-	.nav-list > li.disabled:before {
-		display: none !important;
-	}
-	.nav-list > li.disabled > a {
-		background-color: #333 !important;
-		color: #AAA !important;
-	}
-	
-	.nav-list li .submenu > li.disabled > a,
-	.nav-list li.disabled .submenu > li > a {
-		background-color: #444 !important;
-		color: #A0A0A0 !important;
-		cursor: not-allowed !important;
-		> .menu-icon {
-			display: none;
-		}
-	}
-	.nav-list > li.disabled .submenu > li > a {
-		border-top-color: #505050;
-	}
 
 
 }//.skin-1

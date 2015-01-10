@@ -44,26 +44,18 @@ body {
 		&, .rtl & {padding-left: 0; padding-right: 0;}
 		
 		&:before {
-			.box-shadow(~"0 0 0 1px rgba(0,0,0,0.1)");
-			width: inherit;
-
-			//we use above+this instead of min-width, for better results when we disable responsiveness
-			@media (max-width: @screen-xs-max) {
-				.box-shadow(~"none");
-				width: 100%;
+			@media (min-width: @screen-sm-min) {
+				.box-shadow(~"0 0 0 1px rgba(0,0,0,0.1)");
+				width: inherit;
 			}
 		}
 	}
 }
 
 .main-content {
-	margin-left: 0;
+	margin-left: @sidebar-width;
 	min-height: 100%;
 	padding: 0;
-	
-	.sidebar + & {
-		margin-left: @sidebar-width;
-	}
 }
 
 .page-content {

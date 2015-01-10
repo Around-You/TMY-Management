@@ -15,7 +15,6 @@
 
 
 
-
 #cboxLoadingGraphic > .ace-icon, #cboxLoadingGraphic > .fa , #cboxLoadingGraphic > .glyphicon {
  display:inline-block;
  background:#FFF url('images/loading.gif') no-repeat center; 
@@ -75,11 +74,6 @@ body {
 .sidebar .nav-list > li:before {
 	z-index: 4444;
 	left: -3px;
-}
-
-.sidebar.navbar-collapse {
-  width: 190px;/* @sidebar-width */
-  max-height: none;
 }
 
 
@@ -348,11 +342,5 @@ input[type=checkbox].ace.ace-switch ~ .lbl {
 .ace-settings-box.open {
  display: block;
 }
-
-[data-toggle="buttons"] > .btn > input[type="radio"],
-[data-toggle="buttons"] > .btn > input[type="checkbox"] {
-  display: none;
-}
-
 
 }

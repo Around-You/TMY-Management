@@ -172,6 +172,8 @@
 .label-arrow(~"light");
 .label-arrow(~"grey");
 
+}
+.enable_label_colors();
 
 
 
@@ -234,110 +236,3 @@
 
 
 
-.label:not(.label-lg):not(.label-xlg):not(.label-sm) {
-
-@media
-screen and (-webkit-min-device-pixel-ratio: 1.08) and (-webkit-max-device-pixel-ratio: 1.15),
-screen and (-webkit-min-device-pixel-ratio: 1.3) and (-webkit-max-device-pixel-ratio: 1.35),
-screen and (-webkit-min-device-pixel-ratio: 1.7) and (-webkit-max-device-pixel-ratio: 1.75)
-{
- 	&.arrowed:before {
-		border-width: 10px 6px 11px;
-		left: -11px;
-	}
-	&.arrowed-right:after {
-		border-width: 10px 6px 11px;
-		right: -11px;
-	}
-
-	&.arrowed-in:before {
-		border-width: 10px 5px 10.5px;
-		left: -6px;
-	}
-	&.arrowed-in-right:after {
-		border-width: 10px 5px 10.5px;
-		right: -6px;
-	}
-}
-
-@media
-screen and (min--moz-device-pixel-ratio: 1.08) and (max--moz-device-pixel-ratio: 1.15),
-screen and (min--moz-device-pixel-ratio: 1.3) and (max--moz-device-pixel-ratio: 1.35),
-screen and (min--moz-device-pixel-ratio: 1.7) and (max--moz-device-pixel-ratio: 1.75) 
-{
- 	&.arrowed:before {
-		border-width: 10px 6px 11px;
-		left: -11px;
-	}
-	&.arrowed-right:after {
-		border-width: 10px 6px 11px;
-		right: -11px;
-	}
-
-	&.arrowed-in:before {
-		border-width: 10px 5px 10.5px;
-		left: -6px;
-	}
-	&.arrowed-in-right:after {
-		border-width: 10px 5px 10.5px;
-		right: -6px;
-	}
-}
-
-
-@media screen and (-webkit-min-device-pixel-ratio: 1.3) and (-webkit-max-device-pixel-ratio: 1.34)
-{
-	&.arrowed:before {
-		border-width: 10px 6px 11px;
-		left: -11.5px;
-	}
-	&.arrowed-right:after {
-		border-width: 10px 6px 11px;
-		right: -11.5px;
-	}
-}
-@media screen and (min--moz-device-pixel-ratio: 1.3) and (max--moz-device-pixel-ratio: 1.34)
- {
-	&.arrowed:before {
-		border-width: 10px 6px 11px;
-		left: -11.5px;
-	}
-	&.arrowed-right:after {
-		border-width: 10px 6px 11px;
-		right: -11.5px;
-	}
-}
-
-
-@media only screen and (-webkit-max-device-pixel-ratio: 1.7) and (-webkit-min-device-pixel-ratio: 1.75) 
-{
-	&.arrowed-in:before {
-		border-width: 10px 5px;
-		left: -6px;
-	}
-	&.arrowed-in-right:after {
-		border-width: 10px 5px;
-		right: -6px;
-	}
-}
-@media only screen and (min--moz-device-pixel-ratio: 1.7) and (max--moz-device-pixel-ratio: 1.75) 
-{
-	&.arrowed-in:before {
-		border-width: 10px 5px;
-		left: -6px;
-	}
-	&.arrowed-in-right:after {
-		border-width: 10px 5px;
-		right: -6px;
-	}
-}
-
-
-}
-
-
-
-
-
-}
-.enable_label_colors();

@@ -762,44 +762,5 @@ th[aria-selected=true] {
 
 
 
-
-@media only screen and (max-width: @screen-xs-max) {
-
- .ui-jqgrid .ui-jqgrid-pager {
-    height: 90px;
-    > .ui-pager-control {
-		height: 85px;
-		padding-top: 9px;
-		
-		> .ui-pg-table {
-			> tbody > tr > td { 
-				vertical-align: top; 
-				
-				//move the center one a bit down
-				&#grid-pager_center {
-					width: 0 !important;
-					position: static;
-					
-					> .ui-pg-table {
-						margin: 36px auto 0;
-						position: absolute;
-						right: 0;
-						left: 0;
-						text-align: center;
-					}
-				}
-			}
-		}
-    }
- }
-}
-
-@media only screen and (max-width: @screen-xs-max) and (-webkit-min-device-pixel-ratio:0) {
- .ui-jqgrid .ui-jqgrid-pager > .ui-pager-control > .ui-pg-table > tbody > tr > td#grid-pager_center > .ui-pg-table {
-	width: 300px;//required by chrome to put the table at center
- }
-}
-
-
 }
 .enable_plugin_jqgrid();

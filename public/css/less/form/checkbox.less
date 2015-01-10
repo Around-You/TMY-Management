@@ -43,9 +43,9 @@ input[type=checkbox].ace , input[type=radio].ace {
 
 	label & {
 		z-index: -100 !important;
-		width: 1 !important;//width '0' has issues with jQuery Validate not recognizing this
+		width: 0 !important;
 		height: 0 !important;
-		//position: fixed;
+		position: fixed;
 		//we don't need it to be hoverable/clickable when inside a label
 	}
 	
@@ -399,7 +399,7 @@ input[type=checkbox].ace.ace-switch {
 				content: "\f00d";
 				text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 				box-shadow: none;
-				border-width: 0;
+				border: none;
 
 				font-weight: lighter;
 				font-size: 16px;
@@ -426,7 +426,7 @@ input[type=checkbox].ace.ace-switch {
 				top: 2px;
 				left: 3px;
 				
-				border-radius: 12px;
+				border-radius:12px;
 				box-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);
 
 				width: 18px;

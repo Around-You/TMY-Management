@@ -30,7 +30,6 @@
 		}
 	}
 
-
 	.nav-list > li {
 		border-color: @nav-item-border;
 		> a {
@@ -87,11 +86,8 @@
 		> li.active.open > a > .menu-icon {
 			color: inherit;
 		}
-		
-		@media only screen and (min-width: @screen-hover-menu) {
-			> li.active.hover > a.dropdown-toggle > .menu-icon {
-				color: inherit;
-			}
+		> li.active.hover > a.dropdown-toggle > .menu-icon {
+			color: inherit;
 		}
 
 
@@ -220,12 +216,6 @@
 		right: 0;
 	}
 
-	
-	@media only screen and (max-width: @grid-float-breakpoint-max) {
-		.sidebar.responsive .nav-list > li.active.open > a:after {
-			display: block;
-		}
-	}
 
 
 
@@ -309,7 +299,6 @@
 
   .enable_hover_submenu_no_skin() when(@enable-submenu-hover = true) {
 	//.hover menu
-	@media only screen and (min-width: @screen-hover-menu) {
 	.nav-list li.hover {
 		> .submenu {
 			.box-shadow(@menumin-shadow1);
@@ -326,11 +315,11 @@
 
 		}
 	}
-	}
+
 
 	
-   .enable_collapsible_responsive_hover_menu_no_skin() when(@enable-collapsible-responsive-menu = true) {
-	@media only screen and (min-width: @screen-hover-menu) and (max-width: @grid-float-breakpoint-max) {
+   .enable_collapsible_responsive_menu_no_skin() when(@enable-collapsible-responsive-menu = true) {
+	@media only screen and (max-width: @grid-float-breakpoint-max) {
 	 .sidebar.navbar-collapse {
 		.nav-list li li.hover.active.open > a {
 			background-color: @nav-item-background-active;
@@ -360,7 +349,7 @@
 	}
 
 	//sometimes .hover items are opened in small view, and back in large view we reset the highlight state
-	@media only screen and (min-width: max(@screen-hover-menu, @grid-float-breakpoint)) {
+	@media only screen and (min-width: @grid-float-breakpoint) {
 	  .sidebar.navbar-collapse {
 		.nav-list > li.open.hover:not(:hover):not(:focus):not(.active) > a {
 			color: @nav-item-color;
@@ -381,7 +370,7 @@
 	  }
 	}//@media
 	//reset .hover to normal
-	@media only screen and (min-width: @screen-hover-menu) and (max-width: @grid-float-breakpoint-max) {
+	@media only screen and (max-width: @grid-float-breakpoint-max) {
 		.sidebar.navbar-collapse {
 			.nav-list li.hover > .submenu {
 				border-top-color: @submenu-border;
@@ -397,8 +386,9 @@
 		}
 	}
    }
-   .enable_collapsible_responsive_hover_menu_no_skin();
-
+   .enable_collapsible_responsive_menu_no_skin();
+	
+	
 	
   }
   .enable_hover_submenu_no_skin();
@@ -524,63 +514,25 @@
 	 }
 	}
 
+}
 
 
-
-	.enable_old_menu_toggle_button_no_skin() when(@enable-old-menu-toggle-button = true) {
-	  .main-container .menu-toggler {
-		background-color: @sidebar-toggler-background;
-		&:before {
-			border-top-color: @sidebar-toggler-line-1;
-			border-bottom-color: @sidebar-toggler-line-2;
-		}
-		
-		&:after {
-			border-top-color: @sidebar-toggler-line-3;
-			border-bottom-color: @sidebar-toggler-line-4;
-		}
-		> .toggler-text {
-			border-top-color: @sidebar-toggler-background;
-			-moz-border-top-colors: @sidebar-toggler-background;
-		}
-	  }
-	}
-	.enable_old_menu_toggle_button_no_skin();
-	
-	
-	
-	//disabled state
-	.nav-list > li.disabled:before {
-		display: none !important;
-	}
-	.nav-list > li.disabled > a {
-		background-color: darken(@nav-item-background, 5%) !important;
-		color: lighten(@nav-item-color, 5%) !important;
+.enable_old_menu_toggle_button_no_skin() when(@enable-old-menu-toggle-button = true) {
+  .main-container .menu-toggler {
+	background-color: @sidebar-toggler-background;
+	&:before {
+		border-top-color: @sidebar-toggler-line-1;
+		border-bottom-color: @sidebar-toggler-line-2;
 	}
 	
-	
-	.nav-list li .submenu > li.disabled > a,
-	.nav-list li.disabled .submenu > li > a {
-		background-color: darken(@submenu-item-background, 5%) !important;
-		color: desaturate(lighten(@submenu-item-color, 10%), 10%) !important;
-		cursor: not-allowed !important;
-		> .menu-icon {
-			display: none;
-		}
+	&:after {
+		border-top-color: @sidebar-toggler-line-3;
+		border-bottom-color: @sidebar-toggler-line-4;
 	}
-	/**
-	.nav-list > li.disabled.active:after {
-		border-color: #999;
+	> .toggler-text {
+		border-top-color: @sidebar-toggler-background;
+		-moz-border-top-colors: @sidebar-toggler-background;
 	}
-	.nav-list li.disabled li.active > a:after,
-	.nav-list li.active.disabled > a:after {
-		-moz-border-right-colors: #999 !important;
-		border-right-color: #999 !important;
-	}
-	*/
-	
-}//.no-skin
-
-
-//hover highlight
-@import "../sidebar/highlight.less";
+  }
+}
+.enable_old_menu_toggle_button_no_skin();

@@ -33,7 +33,7 @@
 	 display: inline-block;
 	 line-height: 20px;
 
-	 margin: 6px 22px 0 @breadcrumb-margin-left;
+	 margin: 4px 22px 0 @breadcrumb-margin-left;
 	 padding: 0;
 
 	 font-size: @font-size-breadcrumb;
@@ -110,16 +110,13 @@
   .breadcrumbs-fixed {
 	position: fixed;
 	right: 0;
-	left: 0;
+	left: (@sidebar-width);
 	top: auto;
 	z-index: @zindex-breadcrumbs-fixed;
 
     + .page-content {
 		padding-top: @page-content-padding-top + @breadcrumb-height;
 	}
-  }
-  .sidebar + .main-content .breadcrumbs-fixed {
-	left: (@sidebar-width);
   }
 
 
@@ -140,13 +137,11 @@
 
 
  //when sidebar is compact or minimized
- @media (min-width: max(@grid-float-breakpoint, @screen-compact-menu)) {
+ @media (min-width: @grid-float-breakpoint) {
   .sidebar.compact + .main-content .breadcrumbs-fixed {
 	left: (@sidebar-compact-width);
   }
- }
 
- @media (min-width: @grid-float-breakpoint) {
   .sidebar.menu-min + .main-content .breadcrumbs-fixed {
 	left: (@sidebar-min-width); 
   }
@@ -165,23 +160,16 @@
 
 .enable_container_breadcrumbs() when(@enable-container = true) {
 .container.main-container {
- @media (min-width: max(@screen-sm-min , @screen-fixed-breadcrumbs, @screen-compact-menu)) {
-	.sidebar.compact + .main-content .breadcrumbs-fixed {
-		left: auto;
-		right: auto;
-		width: @container-sm - @sidebar-compact-width;
-	}
- } 
  @media (min-width: max(@screen-sm-min , @screen-fixed-breadcrumbs)) {
 	.breadcrumbs-fixed {
 		left: auto;
 		right: auto;
-		width: @container-sm;
+		width: @container-sm - @sidebar-width;
 	}
-	.sidebar + .main-content .breadcrumbs-fixed {
+	.sidebar.compact + .main-content .breadcrumbs-fixed {
 		left: auto;
 		right: auto;
-		width: @container-sm - @sidebar-width;
+		width: @container-sm - @sidebar-compact-width;
 	}
 	.sidebar.menu-min + .main-content .breadcrumbs-fixed {
 		left: auto;
@@ -189,35 +177,23 @@
 		width: @container-sm - @sidebar-min-width;
 	}
  }
- 
- @media (min-width: max(@screen-compact-menu, @screen-md-min)) {
-  .sidebar.compact + .main-content .breadcrumbs-fixed {
-	width: @container-md - @sidebar-compact-width;
-  }
- }
  @media (min-width: @screen-md-min) {
 	.breadcrumbs-fixed {
-		width: @container-md;
-	}
-	.sidebar + .main-content .breadcrumbs-fixed {
 		width: @container-md - @sidebar-width;
+	}
+	.sidebar.compact + .main-content .breadcrumbs-fixed {
+		width: @container-md - @sidebar-compact-width;
 	}
 	.sidebar.menu-min + .main-content .breadcrumbs-fixed {
 		width: @container-md - @sidebar-min-width;
 	}
  }
- 
- @media (min-width: max(@screen-compact-menu, @screen-md-min)) {
-    .sidebar.compact + .main-content .breadcrumbs-fixed {
-		width: @container-lg - @sidebar-compact-width;
-	}
- }
  @media (min-width: @screen-lg-min) {
 	.breadcrumbs-fixed {
-		width: @container-lg;
-	}
-	.sidebar + .main-content .breadcrumbs-fixed {
 		width: @container-lg - @sidebar-width;
+	}
+	.sidebar.compact + .main-content .breadcrumbs-fixed {
+		width: @container-lg - @sidebar-compact-width;
 	}
 	.sidebar.menu-min + .main-content .breadcrumbs-fixed {
 		width: @container-lg - @sidebar-min-width;
@@ -227,15 +203,10 @@
 
 
 .container.main-container {
-
- @media (min-width: max(@screen-sm-min , @screen-compact-menu, @screen-fixed-breadcrumbs)) and (max-width: @grid-float-breakpoint-max) {
-	.sidebar.compact + .main-content .breadcrumbs-fixed	{
-		width: @container-sm;
-	}
- } 
  @media (min-width: max(@screen-sm-min , @screen-fixed-breadcrumbs)) and (max-width: @grid-float-breakpoint-max) {
 	.breadcrumbs-fixed,
-	.sidebar.menu-min + .main-content .breadcrumbs-fixed {
+	.sidebar.menu-min + .main-content .breadcrumbs-fixed,
+	.sidebar.compact + .main-content .breadcrumbs-fixed	{
 		width: @container-sm;
 	}
 

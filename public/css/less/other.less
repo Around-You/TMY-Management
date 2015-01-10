@@ -1,5 +1,7 @@
 @ace-settings-box-border: #FFB34B;
-
+@datepicker-active-bg: #2283C5;
+@datepicker-disabled-bg: #8B9AA3;
+@datepicker-active-bg2: #7D8893;//inside .well
 
 // other page sections
 
@@ -12,7 +14,7 @@
   z-index: 99;
   
   .transition-duration(0.3s);
-  //.transition-property(opacity, bottom);
+  //.transition-property(opacity);
   
   .opacity(0);
   bottom: -24px;
@@ -70,14 +72,14 @@
  width: 42px !important;
  text-align: center;
 
- border-radius: 6px 0 0 6px !important;
- opacity: 0.55;
+ .border-radius(~"6px 0 0 6px") !important;
+ .opacity(0.55);
 
  vertical-align: top;
  margin: 0;
  
  &:hover , &.open {
-	opacity: 1;
+	.opacity(1);
  }
 
 }
@@ -94,8 +96,6 @@
 
  background-color: #FFF;
  border: 0 solid @ace-settings-box-border;
- 
- 
  .transition(~"max-width 0.15s linear 0s, max-height 0s linear 0.15s, padding 0s linear 0.15s, border-width 0s linear 0.15s");
 
  &.open {
@@ -109,20 +109,13 @@
 	-moz-transition-delay: 0s;
 	-o-transition-delay: 0s;
 	transition-delay: 0s;
-	
-	.ace-settings-item {
-		z-index: auto;
-		min-width: 140px;
-	}
  }
  
  .ace-settings-item {
 	margin: 6px 0;
 	color: #444;
 	max-height: 24px;
-
-	position: relative;
-	z-index: -1;
+	min-width: 140px;
 	
 	white-space: nowrap;
 

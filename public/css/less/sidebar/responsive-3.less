@@ -1,11 +1,9 @@
 .enable_collapsible_responsive_menu() when(@enable-collapsible-responsive-menu = true) {
 
-//3rd style responsive menu (the collapsible menu)
-
-@media only screen and (min-width: @grid-float-breakpoint) {
- .sidebar.navbar-collapse {
-	max-height: none;
- }
+//2nd style responsive menu (the collapsible menu)
+.sidebar.navbar-collapse {
+  width: @sidebar-width;//for IE8 only
+  max-height: none;
 }
 
 @media only screen and (max-width: @grid-float-breakpoint-max) {
@@ -167,6 +165,10 @@
 		}
 	}//menu-min
 
+	.nav-list > li > .submenu li.hover > .submenu > li > a,
+	.nav-list > li > .submenu li > .submenu > li.hover > .submenu > li > a {
+			margin-left: 20px !important;
+	}
 
 	.nav-list a {
 	  .badge , .label {
@@ -193,17 +195,8 @@
  }
 }
 
-.enable_hover_submenu_responsive_style_3() when(@enable-submenu-hover = true) {
-@media (min-width: @screen-hover-menu) and (max-width: @grid-float-breakpoint-max) {
-  .sidebar.navbar-collapse {
-	.nav-list > li > .submenu li.hover > .submenu > li > a,
-	.nav-list > li > .submenu li > .submenu > li.hover > .submenu > li > a {
-			margin-left: 20px !important;
-	}
-  }
-}
-}
-.enable_hover_submenu_responsive_style_3();
+
+
 
 
  //if .sidebar is .navbar-collapse, and .navbar is fixed, make .sidebar fixed as well
