@@ -1,13 +1,10 @@
 /**
  <b>Submenu hover adjustment</b>. Automatically move up a submenu to fit into screen when some part of it goes beneath window.
- Pass a "true" value as an argument and submenu will have native browser scrollbars when necessary.
 */
 
-ace.sidebar_hoverable = function($, options) {
- if( !('querySelector' in document) || !('removeProperty' in document.documentElement.style) ) return;
+ace.sidebar_hoverable = function($) {
+ if( !('querySelector' in document) || !('removeProperty' in document.body.style) ) return;
  //ignore IE8 & below
- 
- var sub_scroll = options.sub_scroll || false;
 
  //on window resize or sidebar expand/collapse a previously "pulled up" submenu should be reset back to its default position
  //for example if "pulled up" in "responsive-min" mode, in "fullmode" should not remain "pulled up"
@@ -24,7 +21,7 @@ ace.sidebar_hoverable = function($, options) {
 					menu_text.style.removeProperty('margin-top')
 				}
 			}
-
+			
 			if( li.className.lastIndexOf('_up') >= 0 ) {//has .pull_up
 				$(li).removeClass('pull_up');
 			}
@@ -32,16 +29,14 @@ ace.sidebar_hoverable = function($, options) {
 	}
  }
 
-
-var is_element_pos =
+ var is_navbar_fixed =
 	'getComputedStyle' in window ?
-	//el.offsetHeight is used to force redraw and recalculate 'el.style.position' esp for webkit!
-	function(el, pos) { el.offsetHeight; return window.getComputedStyle(el).position == pos }
+	//navbar.offsetHeight is used to force redraw and recalculate 'sidebar.style.position' esp for webkit!
+	function() { navbar.offsetHeight; return window.getComputedStyle(navbar).position == 'fixed' }
 	:
-	function(el, pos) { el.offsetHeight; return $(el).css('position') == pos }
-
+	function() { navbar.offsetHeight; return $navbar.css('position') == 'fixed' }
  $(window).on('resize.ace_hover', function() {
-	navbar_fixed = is_element_pos(navbar, 'fixed');
+	navbar_fixed = is_navbar_fixed();
 	ace.helper.sidebar_hover.reset();
  })
  $(document).on('settings.ace.hover', function(e, event_name, event_val) {
@@ -62,8 +57,6 @@ var is_element_pos =
 
  $sidebar.find('.submenu').parent().addClass('hsub');//add .hsub (has-sub) class
 
- var sub_scroll = (sub_scroll && ace.vars['touch']) || false;
-
  //some mobile browsers don't have mouseenter
  $sidebar.on('mouseenter.ace_hover', '.nav-list li.hsub', function (e) {
 	//ignore if collapsible mode (mobile view .navbar-collapse) so it doesn't trigger submenu movements
@@ -73,7 +66,8 @@ var is_element_pos =
 	var sub = this.querySelector('.submenu');
 	if(sub) {
 		//try to move/adjust submenu if the parent is a li.hover
-		if( ace.helper.hasClass(this, 'hover') && is_element_pos(sub, 'absolute') ) {//for example in small device .hover > .submenu may not be absolute anymore!
+		if( ace.helper.hasClass(this, 'hover') ) {
+			
 			adjust_submenu.call(this, sub);
 		}
 		//or if submenu is minimized
@@ -117,9 +111,8 @@ var is_element_pos =
 	var sub_bottom = parseInt(off.top + sub_h)
 
 	var diff
-	var winh = window.innerHeight;
 	//if the bottom of menu is going to go below visible window
-	if( (diff = sub_bottom - (winh + scroll - 50)) > 0 ) {
+	if( (diff = sub_bottom - (window.innerHeight + scroll - 50)) > 0 ) {
 
 		//if it needs to be moved top a lot! use bottom unless it makes it go out of window top
 		if(sub_h - diff < $diff && off.top - diff > $scroll ) {
@@ -156,35 +149,15 @@ var is_element_pos =
 	}
 
 
-	
 
 	//pull_up means, pull the menu up a little bit, and some styling may need to change
 	var pos = this.className.lastIndexOf('pull_up');//pull_up
 	if (pull_up) {
 		if (pos == -1)
 			this.className = this.className + ' pull_up';
-
-		if(sub_scroll) {
-			var h = sub_h + off.top - diff;
-			if( winh - h < 0 ) {
-				$(sub)
-				.css({'max-height': (sub_h + winh - h - 50), 'overflow-x': 'hidden', 'overflow-y': 'scroll'})
-				.on('mousewheel.sub_scroll DOMMouseScroll.sub_scroll ace_drag.sub_scroll', function(event) {
-					event.stopPropagation();
-				});
-			}
-			else {
-				$(sub)
-				.css({'max-height': '', 'overflow-x': '', 'overflow-y': ''})
-				.off('mousewheel.sub_scroll DOMMouseScroll.sub_scroll ace_drag.sub_scroll', function(event) {
-					event.stopPropagation();
-				});
-			}
-		}
-
 	} else {
 		if (pos >= 0)
-			this.className = this.className.replace(/(^|\s)pull_up($|\s)/ , ' ');
+			this.className = this.className.replace(/(^|\s)pull_up($|\s)/ , '');
 	}
 
 

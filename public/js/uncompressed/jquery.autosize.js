@@ -1,5 +1,5 @@
 /*!
-	Autosize v1.18.9 - 2014-05-27
+	Autosize v1.18.7 - 2014-04-13
 	Automatically adjust textarea height based on user input.
 	(c) 2014 Jack Moore - http://www.jacklmoore.com/autosize
 	license: http://www.opensource.org/licenses/mit-license.php
@@ -70,8 +70,7 @@
 				resize: ta.style.resize
 			},
 			timeout,
-			width = $ta.width(),
-			taResize = $ta.css('resize');
+			width = $ta.width();
 
 			if ($ta.data('autosize')) {
 				// exit if autosize has already been applied, or if the textarea is the mirror element.
@@ -89,14 +88,9 @@
 			$ta.css({
 				overflow: 'hidden',
 				overflowY: 'hidden',
-				wordWrap: 'break-word' // horizontal overflow is hidden, so break-word is necessary for handling words longer than the textarea width
+				wordWrap: 'break-word', // horizontal overflow is hidden, so break-word is necessary for handling words longer than the textarea width
+				resize: ($ta.css('resize') === 'none' || $ta.css('resize') === 'vertical') ? 'none' : 'horizontal'
 			});
-
-			if (taResize === 'vertical') {
-				$ta.css('resize','none');
-			} else if (taResize === 'both') {
-				$ta.css('resize', 'horizontal');
-			}
 
 			// The mirror width must exactly match the textarea width, so using getBoundingClientRect because it doesn't round the sub-pixel value.
 			// window.getComputedStyle, getBoundingClientRect returning a width are unsupported, but also unneeded in IE8 and lower.
@@ -116,10 +110,10 @@
 						width -= parseInt(style[val],10);
 					});
 				} else {
-					width = $ta.width();
+					width = Math.max($ta.width(), 0);
 				}
 
-				mirror.style.width = Math.max(width,0) + 'px';
+				mirror.style.width = width + 'px';
 			}
 
 			function initMirror() {

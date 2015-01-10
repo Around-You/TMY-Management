@@ -1,5 +1,5 @@
 /*!
-	Colorbox v1.5.10 - 2014-06-26
+	Colorbox v1.5.6 - 2014-04-04
 	jQuery lightbox and modal window plugin
 	(c) 2014 Jack Moore - http://www.jacklmoore.com/colorbox
 	license: http://www.opensource.org/licenses/mit-license.php
@@ -81,13 +81,14 @@
 			return this.rel;
 		},
 		href: function() {
-			// using this.href would give the absolute url, when the href may have been inteded as a selector (e.g. '#container')
+			// Using .attr() so that the href can also be used to provide a selector for inline content
 			return $(this).attr('href');
 		},
 		title: function() {
 			return this.title;
 		}
 	},
+
 
 	// Abstracting the HTML and event identifiers for easy rebranding
 	colorbox = 'colorbox',
@@ -238,10 +239,10 @@
 		}
 	}
 
-	function getRelated(rel) {
+	function getRelated() {
 		index = 0;
 		
-		if (rel && rel !== false && rel !== 'nofollow') {
+		if (rel && rel !== 'nofollow') {
 			$related = $('.' + boxElement).filter(function () {
 				var options = $.data(this, colorbox);
 				var settings = new Settings(this, options);
@@ -352,11 +353,13 @@
 
 		if (!closing) {
 
-			options = $(element).data(colorbox);
+			options = $(element).data('colorbox');
 
 			settings = new Settings(element, options);
+
+			rel = settings.get('rel');
 			
-			getRelated(settings.get('rel'));
+			getRelated();
 
 			if (!open) {
 				open = active = true; // Prevents the page-change action from queuing up if the visitor holds down the left or right keys.
@@ -548,7 +551,7 @@
 	}
 
 	// Don't do anything if Colorbox already exists.
-	if ($[colorbox]) {
+	if ($.colorbox) {
 		return;
 	}
 
@@ -928,16 +931,15 @@
 		}, 100);
 		
 		if (settings.get('inline')) {
-			var $target = $(href);
 			// Inserts an empty placeholder where inline content is being pulled from.
 			// An event is bound to put inline content back when Colorbox closes or loads new content.
-			$inline = $('<div>').hide().insertBefore($target);
+			$inline = $tag(div).hide().insertBefore($(href)[0]);
 
 			$events.one(event_purge, function () {
-				$inline.replaceWith($target);
+				$inline.replaceWith($loaded.children());
 			});
 
-			prep($target);
+			prep($(href));
 		} else if (settings.get('iframe')) {
 			// IFrame element won't be added to the DOM until it is ready to be displayed,
 			// to avoid problems with DOM-ready JS that might be trying to run in that iframe.
@@ -948,7 +950,7 @@
 
 			href = retinaUrl(settings, href);
 
-			photo = new Image();
+			photo = document.createElement('img');
 
 			$(photo)
 			.addClass(prefix + 'Photo')
@@ -956,61 +958,61 @@
 				prep($tag(div, 'Error').html(settings.get('imgError')));
 			})
 			.one('load', function () {
+				var percent;
+
 				if (request !== requests) {
 					return;
 				}
 
-				// A small pause because some browsers will occassionaly report a 
-				// img.width and img.height of zero immediately after the img.onload fires
-				setTimeout(function(){
-					var percent;
-
-					$.each(['alt', 'longdesc', 'aria-describedby'], function(i,val){
-						var attr = $(settings.el).attr(val) || $(settings.el).attr('data-'+val);
-						if (attr) {
-							photo.setAttribute(val, attr);
-						}
-					});
-
-					if (settings.get('retinaImage') && window.devicePixelRatio > 1) {
-						photo.height = photo.height / window.devicePixelRatio;
-						photo.width = photo.width / window.devicePixelRatio;
+				$.each(['alt', 'longdesc', 'aria-describedby'], function(i,val){
+					var attr = $(settings.el).attr(val) || $(settings.el).attr('data-'+val);
+					if (attr) {
+						photo.setAttribute(val, attr);
 					}
+				});
 
-					if (settings.get('scalePhotos')) {
-						setResize = function () {
-							photo.height -= photo.height * percent;
-							photo.width -= photo.width * percent;
-						};
-						if (settings.mw && photo.width > settings.mw) {
-							percent = (photo.width - settings.mw) / photo.width;
-							setResize();
-						}
-						if (settings.mh && photo.height > settings.mh) {
-							percent = (photo.height - settings.mh) / photo.height;
-							setResize();
-						}
-					}
-					
-					if (settings.h) {
-						photo.style.marginTop = Math.max(settings.mh - photo.height, 0) / 2 + 'px';
-					}
-					
-					if ($related[1] && (settings.get('loop') || $related[index + 1])) {
-						photo.style.cursor = 'pointer';
-						photo.onclick = function () {
-							publicMethod.next();
-						};
-					}
+				if (settings.get('retinaImage') && window.devicePixelRatio > 1) {
+					photo.height = photo.height / window.devicePixelRatio;
+					photo.width = photo.width / window.devicePixelRatio;
+				}
 
-					photo.style.width = photo.width + 'px';
-					photo.style.height = photo.height + 'px';
+				if (settings.get('scalePhotos')) {
+					setResize = function () {
+						photo.height -= photo.height * percent;
+						photo.width -= photo.width * percent;
+					};
+					if (settings.mw && photo.width > settings.mw) {
+						percent = (photo.width - settings.mw) / photo.width;
+						setResize();
+					}
+					if (settings.mh && photo.height > settings.mh) {
+						percent = (photo.height - settings.mh) / photo.height;
+						setResize();
+					}
+				}
+				
+				if (settings.h) {
+					photo.style.marginTop = Math.max(settings.mh - photo.height, 0) / 2 + 'px';
+				}
+				
+				if ($related[1] && (settings.get('loop') || $related[index + 1])) {
+					photo.style.cursor = 'pointer';
+					photo.onclick = function () {
+						publicMethod.next();
+					};
+				}
+
+				photo.style.width = photo.width + 'px';
+				photo.style.height = photo.height + 'px';
+
+				setTimeout(function () { // A pause because Chrome will sometimes report a 0 by 0 size otherwise.
 					prep(photo);
 				}, 1);
 			});
 			
-			photo.src = href;
-
+			setTimeout(function () { // A pause because Opera 10.6+ will sometimes not run the onload function otherwise.
+				photo.src = href;
+			}, 1);
 		} else if (href) {
 			$loadingBay.load(href, settings.get('data'), function (data, status) {
 				if (request === requests) {
@@ -1066,8 +1068,8 @@
 		if (!$box) { return; }
 
 		$box.stop();
-		$[colorbox].close();
-		$box.stop(false, true).remove();
+		$.colorbox.close();
+		$box.stop().remove();
 		$overlay.remove();
 		closing = false;
 		$box = null;
@@ -1075,7 +1077,7 @@
 			.removeData(colorbox)
 			.removeClass(boxElement);
 
-		$(document).unbind('click.'+prefix).unbind('keydown.'+prefix);
+		$(document).unbind('click.'+prefix);
 	};
 
 	// A method for fetching the current element Colorbox is referencing.

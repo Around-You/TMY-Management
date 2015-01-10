@@ -95,11 +95,11 @@
 
 			if(settings.mouseWheel) {
 				var lock = settings.mouseWheelLock;
-				var lock_anyway = settings.lockAnyway;
+				var lock_anyway = !settings.lockAnyway;
 
 				this.$element.on('mousewheel.ace_scroll DOMMouseScroll.ace_scroll', function(event) {
 					if(disabled) return;
-					if(!active) return !lock_anyway;
+					if(!active) return lock_anyway;
 
 					if(mouse_track) {
 						mouse_track = false;
@@ -122,7 +122,7 @@
 					var step = parseInt(Math.round(Math.min(Math.max(clientSize / 8 , 54)) , self.size )) + 1;
 					content_wrap[scroll_direction] = scrollAmount - (delta * step);
 
-					return scrollEnd && !lock_anyway;
+					return scrollEnd && lock_anyway;
 				})
 			}
 			
@@ -133,16 +133,6 @@
 			if(touchDrag/** || ($.fn.swipe && settings.touchSwipe)*/) {
 				var dir = '', event_name = touchDrag ? 'ace_drag' : 'swipe';
 				this.$element.on(event_name + '.ace_scroll', function(event) {
-					if(disabled) {
-						event.retval.cancel = true;
-						return;
-					}
-					if(!active) {
-						event.retval.cancel = lock_anyway;
-						return;
-					}
-
-				
 					dir = event.direction;
 					if( (vertical && (dir == 'up' || dir == 'down'))
 						||
@@ -157,7 +147,10 @@
 							self.move_bar(true);
 							content_wrap[scroll_direction] = content_wrap[scroll_direction] + distance;
 						}
+						
+						//if(event.retval) event.retval['cancel'] = true;//prevents document scroll
 					}
+					//else if(event.retval) event.retval['cancel'] = false;//allows document scroll
 					
 				})
 			}

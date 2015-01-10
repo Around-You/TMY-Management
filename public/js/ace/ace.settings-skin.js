@@ -21,7 +21,7 @@ ace.settings_skin = function($) {
 		ace.data.set('skin', skin_class);
 		//save the selected skin to cookies
 		//which can later be used by your server side app to set the skin
-		//for example: <body class="<?php echo $_COOKIE['ace_skin']; ?>"
+		//for example: <body class="<?php echo $_COOKIE['ace.skin']; ?>"
 	//} else ace.data.remove('skin');
 	
 	var skin3_colors = ['red', 'blue', 'green', ''];

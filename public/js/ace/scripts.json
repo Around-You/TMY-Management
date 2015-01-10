@@ -12,8 +12,6 @@
  "ace.js" : true,
  "ace.touch-drag.js" : true,
  "ace.sidebar.js" : true,
- "ace.ajax-content.js" : false,
-
  "ace.submenu-1.js" : true,
  "ace.sidebar-scroll-1.js" : true,
  "ace.submenu-hover.js" : true,

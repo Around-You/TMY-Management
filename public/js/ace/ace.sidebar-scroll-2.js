@@ -2,10 +2,9 @@
  <b>Scrollbars for sidebar</b>. This approach can be used on fixed or normal sidebar.
  It uses <u>"overflow:hidden"</u> so you can't use <u>.hover</u> submenus and it will be disabled when sidebar is minimized.
  It may also be marginally (negligibily) faster especially when resizing browser window.
- Needs some work! Has a few issues!
 */
 
-ace.sidebar_scrollable = function($ , options) {
+ace.sidebar_scrollable = function($ , only_if_fixed, scroll_to_active, include_shortcuts, include_toggle) {
 	if( !$.fn.ace_scroll ) return;
 
 	var old_safari = ace.vars['safari'] && navigator.userAgent.match(/version\/[1-5]/i)
@@ -27,11 +26,8 @@ ace.sidebar_scrollable = function($ , options) {
 
 		if(!sidebar || !nav) return;
 
-	var submenu_hover = function() {
-		return sidebar.first('li.hover > .submenu').css('position') == 'absolute'
-	}
+	if( $sidebar.find('li.hover').length > 0 ) ace.vars['no-scroll'] = true;
 
-	
 	var scroll_div = null,
 		scroll_content = null,
 		scroll_content_div = null,
@@ -41,10 +37,10 @@ ace.sidebar_scrollable = function($ , options) {
 	var is_scrolling = false,
 		_initiated = false;
 		
-	var scroll_to_active = options.scroll_to_active || false,
-		include_shortcuts = options.include_shortcuts || false,
-		include_toggle = options.include_toggle || false,
-		only_if_fixed = options.only_if_fixed && true;
+	var scroll_to_active = scroll_to_active || false,
+		include_shortcuts = include_shortcuts || false,
+		include_toggle = include_toggle || false,
+		only_if_fixed = only_if_fixed && true;
 		
 	var is_sidebar_fixed =
 	'getComputedStyle' in window ?
@@ -73,7 +69,7 @@ ace.sidebar_scrollable = function($ , options) {
 		},
 		initiate: function(on_page_load) {
 			if( _initiated ) return;
-			if( (only_if_fixed && !sidebar_fixed) || submenu_hover() ) return;//eligible??
+			if( (only_if_fixed && !sidebar_fixed) || ace.vars['no-scroll'] === true ) return;//eligible??
 			//return if we want scrollbars only on "fixed" sidebar and sidebar is not "fixed" yet!
 
 			//initiate once
@@ -108,42 +104,38 @@ ace.sidebar_scrollable = function($ , options) {
 			if(on_page_load == true) {
 				scrollbars.reset();//try resetting at first
 
-				if( scroll_to_active && ace_scroll && ace_scroll.is_active() ) {
-					try {
-						//sometimes there's no active item or not 'offsetTop' property
-						var $active;
+				if( scroll_to_active && ace_scroll.is_active() ) {
+					var $active;
 
-						var nav_list = $sidebar.find('.nav-list')
-						if(ace.vars['minimized'] && !ace.vars['collapsible']) {
-							$active = nav_list.find('> .active')
-						}
-						else {
-							$active = $nav.find('> .active.hover')
-							if($active.length == 0)	$active = $nav.find('.active:not(.open)')
-						}
+					var nav_list = $sidebar.find('.nav-list')
+					if(ace.vars['minimized'] && !ace.vars['collapsible']) {
+						$active = nav_list.find('> .active')
+					}
+					else {
+						$active = $nav.find('> .active.hover')
+						if($active.length == 0)	$active = $nav.find('.active:not(.open)')
+					}
 
-						var top = $active.outerHeight();
+					var top = $active.outerHeight();
 
-						nav_list = nav_list.get(0);
-						var active = $active.get(0);
-						while(active != nav_list) {
-							top += active.offsetTop;
-							active = active.parentNode;
-						}
+					nav_list = nav_list.get(0);
+					var active = $active.get(0);
+					while(active != nav_list) {
+						top += active.offsetTop;
+						active = active.parentNode;
+					}
 
-						var scroll_amount = top - scroll_div.height();
-						if(scroll_amount > 0) {
-							scroll_content.scrollTop(scroll_amount);
-						}
-					}catch(e){}
-
+					var scroll_amount = top - scroll_div.height();
+					if(scroll_amount > 0) {
+						scroll_content.scrollTop(scroll_amount);
+					}
 				}
 				scroll_to_active = false;
 			}
 		},
 		
 		reset: function() {
-			if( (only_if_fixed && !sidebar_fixed) || submenu_hover() ) {
+			if( (only_if_fixed && !sidebar_fixed) || ace.vars['no-scroll'] === true ) {
 				scrollbars.disable();
 				return;//eligible??
 			}

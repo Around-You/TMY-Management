@@ -4,12 +4,8 @@
 ace.widget_boxes = function($) {
 	//bootstrap collapse component icon toggle
 	$(document).on('hide.bs.collapse show.bs.collapse', function (ev) {
-		var panel_id = ev.target.getAttribute('id')
-		var panel = $('a[href*="#'+ panel_id+'"]');
-		if(panel.length == 0) panel = $('a[data-target*="#'+ panel_id+'"]');
-		if(panel.length == 0) return;
-
-		panel.find(ace.vars['.icon']).each(function(){
+		var hidden_id = ev.target.getAttribute('id')
+		$('[href*="#'+ hidden_id+'"]').find(ace.vars['.icon']).each(function(){
 			var $icon = $(this)
 
 			var $match
@@ -92,17 +88,23 @@ ace.widget_boxes = function($) {
 				}
 			}
 
-			var expandSpeed   = 250;
+			var $body_inner = $body.find('.widget-body-inner')
+			if($body_inner.length == 0) {
+				$body = $body.wrapInner('<div class="widget-body-inner"></div>').find(':first-child').eq(0);
+			} else $body = $body_inner.eq(0);
+
+
+			var expandSpeed   = 300;
 			var collapseSpeed = 200;
 
 			if( event_name == 'show' ) {
 				if($icon) $icon.removeClass($icon_down).addClass($icon_up);
-
-				$body.hide();
 				$box.removeClass('collapsed');
-				$body.slideDown(expandSpeed, function(){
-					$box.trigger(event_complete_name+'.ace.widget')
-				})
+				$body.slideUp(0 , function(){//do it once
+					$body.slideDown(expandSpeed, function(){
+						$box.trigger(event_complete_name+'.ace.widget')})
+					}
+				)
 			}
 			else {
 				if($icon) $icon.removeClass($icon_up).addClass($icon_down);

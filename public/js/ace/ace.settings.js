@@ -61,11 +61,14 @@ ace.settings_box = function($) {
  $('#ace-settings-hover').removeAttr('checked').on('click', function(){
 	if($('.sidebar').hasClass('h-sidebar')) return;
 	if(this.checked) {
+		ace.vars['no-scroll'] = true;
+
 		$('#sidebar li').addClass('hover')
 		.filter('.open').removeClass('open').find('> .submenu').css('display', 'none');
 		//and remove .open items
 	}
 	else {
+		ace.vars['no-scroll'] = false;
 		$('#sidebar li.hover').removeClass('hover');
 
 		var compact = $('#ace-settings-compact');

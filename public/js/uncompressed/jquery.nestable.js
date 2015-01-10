@@ -26,9 +26,10 @@
         return !!supports;
     })();
 
-    var eStart  = 'mousedown touchstart MSPointerDown pointerdown',//ACE
-        eMove   = 'mousemove touchmove MSPointerMove pointermove',//ACE
-        eEnd    = 'mouseup touchend touchcancel MSPointerUp MSPointerCancel pointerup pointercancel';//ACE
+    var eStart  = hasTouch ? 'touchstart'  : 'mousedown',
+        eMove   = hasTouch ? 'touchmove'   : 'mousemove',
+        eEnd    = hasTouch ? 'touchend'    : 'mouseup';
+        eCancel = hasTouch ? 'touchcancel' : 'mouseup';
 
     var defaults = {
             listNodeName    : 'ol',
@@ -74,7 +75,7 @@
             });
 
             list.el.on('click', 'button', function(e) {
-                if (list.dragEl || ('button' in e && e.button !== 0)) {
+                if (list.dragEl || (!hasTouch && e.button !== 0)) {
                     return;
                 }
                 var target = $(e.currentTarget),
@@ -90,7 +91,6 @@
 
             var onStartEvent = function(e)
             {
-				e = e.originalEvent;//ACE
                 var handle = $(e.target);
                 if (!handle.hasClass(list.options.handleClass)) {
                     if (handle.closest('.' + list.options.noDragClass).length) {
@@ -98,44 +98,39 @@
                     }
                     handle = handle.closest('.' + list.options.handleClass);
                 }
-				//ACE
-                if (!handle.length || list.dragEl || ('button' in e && e.button !== 0) || ('touches' in e && e.touches.length !== 1)) {
+                if (!handle.length || list.dragEl || (!hasTouch && e.button !== 0) || (hasTouch && e.touches.length !== 1)) {
                     return;
                 }
                 e.preventDefault();
-                list.dragStart('touches' in e ? e.touches[0] : e);//ACE
+                list.dragStart(hasTouch ? e.touches[0] : e);
             };
 
             var onMoveEvent = function(e)
             {
                 if (list.dragEl) {
-					e = e.originalEvent;//ACE
                     e.preventDefault();
-                    list.dragMove('touches' in e ? e.touches[0] : e);//ACE
+                    list.dragMove(hasTouch ? e.touches[0] : e);
                 }
             };
 
             var onEndEvent = function(e)
             {
-				if (list.dragEl) {
-					e = e.originalEvent;//ACE
+                if (list.dragEl) {
                     e.preventDefault();
-                    list.dragStop('touches' in e ? e.touches[0] : e);//ACE
+                    list.dragStop(hasTouch ? e.touches[0] : e);
                 }
             };
 
-			//ACE
-            /**if (hasTouch) {
+            if (hasTouch) {
                 list.el[0].addEventListener(eStart, onStartEvent, false);
                 window.addEventListener(eMove, onMoveEvent, false);
                 window.addEventListener(eEnd, onEndEvent, false);
-                //window.addEventListener(eCancel, onEndEvent, false);
+                window.addEventListener(eCancel, onEndEvent, false);
             } else {
-			*/
                 list.el.on(eStart, onStartEvent);
                 list.w.on(eMove, onMoveEvent);
                 list.w.on(eEnd, onEndEvent);
-            //}
+            }
 
         },
 

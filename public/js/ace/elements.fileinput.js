@@ -20,8 +20,6 @@
 		this.$element
 		.off('change.ace_inner_call')
 		.on('change.ace_inner_call', function(e , ace_inner_call){
-			if(self.disabled) return;
-		
 			if(ace_inner_call === true) return;//this change event is called from above drop event and extra checkings are taken care of there
 			return handle_on_change.call(self);
 			//if(ret === false) e.preventDefault();
@@ -224,7 +222,6 @@
 
 	var enable_drop_functionality = function() {
 		var self = this;
-		
 		var dropbox = this.$element.parent();
 		dropbox
 		.off('dragenter')
@@ -242,8 +239,6 @@
 			e.preventDefault();
 			e.stopPropagation();
 
-			if(self.disabled) return;
-		
 			var dt = e.originalEvent.dataTransfer;
 			var file_list = dt.files;
 			if(!self.multi && file_list.length > 1) {//single file upload, but dragged multiple files

@@ -24,9 +24,6 @@ ace.handle_side_menu = function($) {
 		ace.vars['minimized'] = !ace.vars['minimized'];
 		ace.settings.sidebar_collapsed.call(this, ace.vars['minimized']);//@ ace-extra.js
 		//ace.settings.sidebar_collapsed(ace.vars['minimized']);
-		
-		//force redraw for ie8
-		if(ace.vars['old_ie']) ace.helper.redraw(sidebar.get(0));
 	})
 	//this button is used in `mobile_style = 3` responsive menu style to expand minimized sidebar
 	.on(ace.click_event+'.ace.menu', '.sidebar-expand', function(){
@@ -94,22 +91,13 @@ ace.handle_side_menu = function($) {
 			}
 
 			//some browsers need to be forced 
-			
-			//specify data-link attribute to ignore this
-			if(ios_fix /**&& ace.vars['ajax_content'] !== true*/ && link_element.attr('data-link') !== 'false') {
-				//only ios safari has a bit of a problem not navigating to link address when scrolling down
-				//please see issues section in documentation
+			if(ios_fix && link_element.attr('data-link') !== 'false') {//specify data-link attribute to ignore this
+				//ios safari only has a bit of a problem not navigating to link address when scrolling down
+				//please see issues section
 				document.location = link_element.attr('href');
 				ev.preventDefault();
 				return false;
 			}
-			
-			/**
-			ev.preventDefault();
-			var href = link_element.attr('href');
-			history.pushState({'url': href, 'hash': link_element.attr('data-url')}, null, href);
-			*/
-
 			return;
 		}
 
@@ -125,7 +113,7 @@ ace.handle_side_menu = function($) {
 		(
 			( minimized && parent_ul == nav_list )
 			 || 
-			( ( $(sub.parentNode).hasClass('hover') && $(sub).css('position') == 'absolute' ) && !ace.vars['collapsible'] )
+			( $(sub.parentNode).hasClass('hover') && !ace.vars['collapsible'] )
 		)
 		{
 			ev.preventDefault();

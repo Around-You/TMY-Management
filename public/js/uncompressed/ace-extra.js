@@ -34,8 +34,6 @@ ace.settings = {
 		if(!navbar) return false;
 	
 		fix = fix || false;
-		save = save && true;
-		
 		if(!fix && chain !== false) {
 			//unfix sidebar as well
 			var sidebar = null;
@@ -45,7 +43,7 @@ ace.settings = {
 				((sidebar = document.getElementById('sidebar')) && ace.hasClass(sidebar , 'sidebar-fixed'))
 			 )
 			{
-				ace.settings.sidebar_fixed(false, save);
+				ace.settings.sidebar_fixed(false);
 			}
 		}
 		
@@ -58,9 +56,8 @@ ace.settings = {
 			
 			if(save !== false) ace.settings.unset('navbar', 'fixed');
 		}
-		try {
-			document.getElementById('ace-settings-navbar').checked = fix;
-		} catch(e) {}
+		
+		document.getElementById('ace-settings-navbar').checked = fix;
 		
 		if(window.jQuery) jQuery(document).trigger('settings.ace', ['navbar_fixed' , fix]);
 	},
@@ -71,8 +68,6 @@ ace.settings = {
 		if(!sidebar) return false;
 	
 		fix = fix || false;
-		save = save && true;
-		
 		if(!fix && chain !== false) {
 			//unfix breadcrumbs as well
 			var breadcrumbs = null;
@@ -82,12 +77,12 @@ ace.settings = {
 				((breadcrumbs = document.getElementById('breadcrumbs')) && ace.hasClass(breadcrumbs , 'breadcrumbs-fixed'))
 			 )
 			{
-				ace.settings.breadcrumbs_fixed(false, save);
+				ace.settings.breadcrumbs_fixed(false);
 			}
 		}
 
 		if( fix && chain !== false && !ace.settings.is('navbar', 'fixed') ) {
-			ace.settings.navbar_fixed(true, save);
+			ace.settings.navbar_fixed(true);
 		}
 
 		if(fix) {
@@ -105,9 +100,7 @@ ace.settings = {
 
 			if(save !== false) ace.settings.unset('sidebar', 'fixed');
 		}
-		try {
-			document.getElementById('ace-settings-sidebar').checked = fix;
-		} catch(e) {}
+		document.getElementById('ace-settings-sidebar').checked = fix;
 		
 		if(window.jQuery) jQuery(document).trigger('settings.ace', ['sidebar_fixed' , fix]);
 	},
@@ -118,10 +111,8 @@ ace.settings = {
 		if(!breadcrumbs) return false;
 	
 		fix = fix || false;
-		save = save && true;
-		
 		if(fix && chain !== false && !ace.settings.is('sidebar', 'fixed')) {
-			ace.settings.sidebar_fixed(true, save);
+			ace.settings.sidebar_fixed(true);
 		}
 
 		if(fix) {
@@ -131,9 +122,7 @@ ace.settings = {
 			ace.removeClass(breadcrumbs , 'breadcrumbs-fixed');
 			if(save !== false) ace.settings.unset('breadcrumbs', 'fixed');
 		}
-		try {
-			document.getElementById('ace-settings-breadcrumbs').checked = fix;
-		} catch(e) {}
+		document.getElementById('ace-settings-breadcrumbs').checked = fix;
 		
 		if(window.jQuery) jQuery(document).trigger('settings.ace', ['breadcrumbs_fixed' , fix]);
 	},
@@ -141,7 +130,6 @@ ace.settings = {
 	//fixed size
 	main_container_fixed : function(inside , save) {
 		inside = inside || false;
-		save = save && true;
 
 		var main_container = document.getElementById('main-container');
 		if(!main_container) return false;
@@ -156,10 +144,8 @@ ace.settings = {
 			ace.removeClass(navbar_container , 'container');
 			if(save !== false) ace.settings.unset('main-container', 'fixed');
 		}
-		try {
-			document.getElementById('ace-settings-add-container').checked = inside;
-		} catch(e) {}
-
+		document.getElementById('ace-settings-add-container').checked = inside;
+		
 		
 		if(navigator.userAgent.match(/webkit/i)) {
 			//webkit has a problem redrawing and moving around the sidebar background in realtime
@@ -257,7 +243,7 @@ ace.settings.check = function(item, val) {
 //method == 2, use cookies
 //method not specified, use localStorage if available, otherwise cookies
 ace.data_storage = function(method, undefined) {
-	var prefix = 'ace_';
+	var prefix = 'ace.';
 
 	var storage = null;
 	var type = 0;
@@ -289,8 +275,8 @@ ace.data_storage = function(method, undefined) {
 		}
 		else {
 			if(type == 1) {//localStorage
-				if(value == null) storage.remove(prefix+namespace+'_'+key)
-				else storage.set(prefix+namespace+'_'+key, value);
+				if(value == null) storage.remove(prefix+namespace+'.'+key)
+				else storage.set(prefix+namespace+'.'+key, value);
 			}
 			else if(type == 2) {//cookie
 				var val = storage.get(prefix+namespace);
@@ -322,7 +308,7 @@ ace.data_storage = function(method, undefined) {
 		}
 		else {
 			if(type == 1) {//localStorage
-				return storage.get(prefix+namespace+'_'+key);
+				return storage.get(prefix+namespace+'.'+key);
 			}
 			else if(type == 2) {//cookie
 				var val = storage.get(prefix+namespace);

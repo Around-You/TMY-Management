@@ -5,7 +5,7 @@
 */
 ace.auto_container = function($) {
  $(window).on('resize.auto_container', function() {
-	var enable = ace.vars.window['width'] > 1140;
+	var enable = ace.vars.window['width'] > 1140 ? true : false;
 	try {
 		ace.settings.main_container_fixed(enable, false, false);
 	} catch(e) {

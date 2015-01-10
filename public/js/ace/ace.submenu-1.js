@@ -6,7 +6,6 @@ It's a bit smoother but the transition does not work on IE9 and below and it is 
 //CSS3 transition version, no animation on IE9 and below
 ace.submenu = {
  show : function(sub, duration) {
-	var $ = window.jQuery;
 	var $sub = $(sub);
 
 	var event;
@@ -28,14 +27,14 @@ ace.submenu = {
 		'transition-duration': (duration/1000)+'s'})
 	}
 
-	var complete = function(ev, trigger) {
+	var complete = function(ev) {
 		ev && ev.stopPropagation();
 		$sub
 		.css({'transition-property': '', 'transition-duration': '', overflow:'', height: ''})
 		//if(ace.vars['webkit']) ace.helper.redraw(sub);//little Chrome issue, force redraw ;)
 
 		if(ace.vars['transition']) $sub.off('.trans');
-		if(trigger !== false) $sub.trigger($.Event('shown.ace.submenu'))
+		$sub.trigger($.Event('shown.ace.submenu'))
 	}
 	if( duration > 0 && ace.vars['transition'] ) {
 	  $sub.one('transitionend.trans webkitTransitionEnd.trans mozTransitionEnd.trans oTransitionEnd.trans', complete);
@@ -45,15 +44,14 @@ ace.submenu = {
 	//there is sometimes a glitch, so maybe retry
 	if(ace.vars['android']) {
 		setTimeout(function() {
-			complete(null, false);
-		}, duration + 20);
+			$sub.css({overflow:'', height: ''});
+		}, duration + 10);
 	}
 
 	return true;
  }
  ,
  hide : function(sub, duration) {
-	var $ = window.jQuery;
 	var $sub = $(sub);
 
 	var event;
@@ -77,14 +75,14 @@ ace.submenu = {
 	}
 
 
-	var complete = function(ev, trigger) {
+	var complete = function(ev) {
 		ev && ev.stopPropagation();
 		$sub
 		.css({display: 'none', overflow:'', height: '', 'transition-property': '', 'transition-duration': ''})
 		.removeClass('nav-show').addClass('nav-hide')//only for window < @grid-float-breakpoint and .navbar-collapse.menu-min
 
 		if(ace.vars['transition']) $sub.off('.trans');
-		if(trigger !== false) $sub.trigger($.Event('hidden.ace.submenu'))
+		$sub.trigger($.Event('hidden.ace.submenu'))
 	}
 	if( duration > 0 && ace.vars['transition'] ) {
 	  $sub.one('transitionend.trans webkitTransitionEnd.trans mozTransitionEnd.trans oTransitionEnd.trans', complete);
@@ -95,8 +93,8 @@ ace.submenu = {
 	//there is sometimes a glitch, so maybe retry
 	if(ace.vars['android']) {
 		setTimeout(function() {
-			complete(null, false);
-		}, duration + 20);
+			$sub.css({display: 'none', overflow:'', height: ''})
+		}, duration + 10);
 	}
 
 	return true;

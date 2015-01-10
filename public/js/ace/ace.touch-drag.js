@@ -36,7 +36,7 @@ ace.add_touch_drag = function($) {
 						origin: $(event.target)
 					},
 					stop;
-					//start.origin.trigger({'type' : 'ace_dragStart', 'start':(start || [-1,-1])});
+					start.origin.trigger({'type' : 'ace_dragStart', 'start':(start || [-1,-1])});
 					
 					var direction = false, dx = 0, dy = 0;
 
@@ -58,8 +58,7 @@ ace.add_touch_drag = function($) {
 
 
 					if (start && stop) {
-						dx = 0;
-						dy = 0;
+						dx = 0; dy = 0;
 
 						direction = 
 							(
@@ -82,7 +81,7 @@ ace.add_touch_drag = function($) {
 							
 
 							if( direction !== false ) {
-							 var retval = {cancel: false}
+							 var retval = {}
 							 start.origin.trigger({
 								'type': 'ace_drag',
 								//'start': start.coords,
@@ -93,8 +92,10 @@ ace.add_touch_drag = function($) {
 								'retval': retval
 							 })
 
-		 					  // prevent document scrolling unless retval.cancel == true
-							  if( retval.cancel == false ) event.preventDefault();
+		 					  // prevent scrolling?
+							  //if(retval.cancel === true || event.cancel === undefined) {
+									event.preventDefault();
+							  //}
 							}
 					}
 					start.coords[0] = stop.coords[0];
@@ -105,7 +106,7 @@ ace.add_touch_drag = function($) {
 				.on(touchMoveEvent, moveHandler)
 				.one(touchStopEvent, function(event) {
 					$this.off(touchMoveEvent, moveHandler);
-					//start.origin.trigger({'type' : 'ace_dragEnd', 'stop':(stop || [-1,-1])});
+					start.origin.trigger({'type' : 'ace_dragEnd', 'stop':(stop || [-1,-1])});
 					
 					start = stop = undefined;
 				
