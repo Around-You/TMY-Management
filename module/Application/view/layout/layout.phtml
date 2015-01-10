@@ -24,11 +24,34 @@ echo $this->doctype();
         	</div>
 
             <?php include_once __DIR__ . '/partials/footer.phtml';?>
-            <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
-				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-			</a>
         </div><!-- /.main-container -->
 
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='<?=$this->basepath('js/jquery.min.js')?>'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='<?=$this->basepath('js/jquery1x.min.js')?>'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='<?=$this->basepath('js/jquery.mobile.custom.min.js')?>'>"+"<"+"/script>");
+		</script>
+		<script src="<?=$this->basepath('js/bootstrap.min.js')?>"></script>
+		<script src="<?=$this->basepath('js/jquery-ui.min.js')?>"></script>
+
+		<!-- ace scripts -->
+		<script src="<?=$this->basepath('js/ace.min.js')?>"></script>
+		<script src="<?=$this->basepath('js/ace-elements.min.js')?>"></script>
+
+		<!-- inline scripts related to this page -->
 
         <?php echo $this->inlineScript() ?>
         <?php include_once __DIR__ . '/partials/analytics.phtml';?>

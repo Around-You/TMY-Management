@@ -1,6 +1,32 @@
 var main_sale = {
 	init : function() {
 	    this.bindEvent();
+	    $("#member-code").autocomplete({
+	        source: [
+                     "ActionScript",
+                     "AppleScript",
+                     "Asp",
+                     "BASIC",
+                     "C",
+                     "C++",
+                     "Clojure",
+                     "COBOL",
+                     "ColdFusion",
+                     "Erlang",
+                     "Fortran",
+                     "Groovy",
+                     "Haskell",
+                     "Java",
+                     "JavaScript",
+                     "Lisp",
+                     "Perl",
+                     "PHP",
+                     "Python",
+                     "Ruby",
+                     "Scala",
+                     "Scheme"
+                   ]
+	      });
 	},
 	bindEvent: function(){
 	    var me = this;
@@ -15,7 +41,8 @@ var main_sale = {
 	    });
 	    $("#buy-button").on('click', function(){
 	    	me.buyGoods();
-	    })
+	    });
+
 	},
 	getMember: function(memberCode){
 	    $.get('/sale/getMemberData',{member_code: memberCode}, function(result){
