@@ -72,6 +72,22 @@ class GoodsTable extends AbstractModelMapper
      *
      * @param string $code
      * @throws \Exception
+     * @return Zend\Db\ResultSet\ResultSet
+     */
+    public function getAllGoodsLikeCode($code)
+    {
+        $resultSet = $this->getTableGateway()->select(function (Select $select) use($code)
+        {
+            $select->where->like('code', $code . '%');
+        });
+
+        return $resultSet;
+    }
+
+    /**
+     *
+     * @param string $code
+     * @throws \Exception
      * @return Goods
      */
     public function getGoodsByCode($code)

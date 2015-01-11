@@ -15,7 +15,6 @@ use Zend\View\Model\JsonModel;
 use Application\Model\Json\JsonResult;
 use Application\Model\Goods\Goods;
 use Application\Model\Member\Member;
-use Application\Model\Logs\SellLog;
 use Application\Model\Goods\MemberGoods;
 use Application\Model\Logs\MemberLog;
 
@@ -218,8 +217,35 @@ class SaleController extends AbstractActionController
         return $viewModel;
     }
 
+    public function getMemberByCodeAction()
+    {
+        $code = $_GET['term'];
+        $members = $this->getMemberTable()->getMembersByCode($code);
+        $memberArr = array();
+        foreach ($members as $member){
+            $memberArr[] = array(
+                'id' => $member->code,
+                'value' => $member->code . ' - ' .$member->name
+            );
+        }
+        $viewModel = new JsonModel($memberArr);
+        return $viewModel;
+    }
 
-
+    public function getGoodsByCodeAction()
+    {
+        $code = $_GET['term'];
+        $resultSet = $this->getGoodsTable()->getAllGoodsLikeCode($code);
+        $goodsArr = array();
+        foreach ($resultSet as $goods){
+            $goodsArr[] = array(
+                'id' => $goods->code,
+                'value' => $goods->code . ' - ' .$goods->title
+            );
+        }
+        $viewModel = new JsonModel($goodsArr);
+        return $viewModel;
+    }
 
 
     public function addToMemberGoods(Goods $goods, Member $member)

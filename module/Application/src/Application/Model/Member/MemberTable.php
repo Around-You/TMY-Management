@@ -71,6 +71,22 @@ class MemberTable extends AbstractModelMapper
      *
      * @param string $code
      * @throws \Exception
+     * @return Zend\Db\ResultSet\ResultSet
+     */
+    public function getMembersByCode($code)
+    {
+        $resultSet = $this->getTableGateway()->select(function (Select $select) use($code)
+        {
+            $select->where->like('code', $code . '%');
+        });
+
+        return $resultSet;
+    }
+
+    /**
+     *
+     * @param string $code
+     * @throws \Exception
      * @return Member
      */
     public function getMemberByCode($code)

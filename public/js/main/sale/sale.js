@@ -1,40 +1,21 @@
 var main_sale = {
 	init : function() {
 	    this.bindEvent();
-	    $("#member-code").autocomplete({
-	        source: [
-                     "ActionScript",
-                     "AppleScript",
-                     "Asp",
-                     "BASIC",
-                     "C",
-                     "C++",
-                     "Clojure",
-                     "COBOL",
-                     "ColdFusion",
-                     "Erlang",
-                     "Fortran",
-                     "Groovy",
-                     "Haskell",
-                     "Java",
-                     "JavaScript",
-                     "Lisp",
-                     "Perl",
-                     "PHP",
-                     "Python",
-                     "Ruby",
-                     "Scala",
-                     "Scheme"
-                   ]
-	      });
+
 	},
 	bindEvent: function(){
 	    var me = this;
-	    $('#member-code').on('blur', function(){
-	        me.getMember($(this).val());
+	    $("#member-code").autocomplete({
+	        source: '/sale/getMemberByCode',
+	        select: function( event, ui ) {
+	        	 me.getMember(ui.item.id);
+	        }
 	    });
-	    $('#goods-code').on('blur', function(){
-	        me.addGoods($(this).val());
+	    $("#goods-code").autocomplete({
+	        source: '/sale/getGoodsByCode',
+	        select: function( event, ui ) {
+	        	 me.addGoods(ui.item.id);
+	        }
 	    });
 	    $('#goods-tbl').on('click', '.remove-goods-btn', function(){
 	        me.removeGoods(this);
