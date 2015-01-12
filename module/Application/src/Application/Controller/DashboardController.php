@@ -51,8 +51,15 @@ class DashboardController extends AbstractActionController
                 $day->member_count
             );
         }
+        for ($i = 0; $i < 30; $i ++) {
+            $returnArr['x'][] = array(
+                strtotime("-{$i} days"),
+                date('m/d', strtotime("-{$i} days"))
+            );
+        }
         $returnArr['sale'] = array_reverse($returnArr['sale']);
         $returnArr['member'] = array_reverse($returnArr['member']);
+        $returnArr['x'] = array_reverse($returnArr['x']);
         return $returnArr;
     }
 }
