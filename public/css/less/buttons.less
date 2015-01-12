@@ -1,16 +1,16 @@
-/** buttons */
+//buttons
 .btn {
  display: inline-block;
 
  color: #FFF !important;
- text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
+ text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);// !important;
 
- background-image:none !important;
+ background-image: none !important;
  border: 5px solid #FFF;
  border-radius: 0;
  box-shadow: none !important;
 
- .transition(~"all ease .15s");
+ .transition(~"background-color 0.15s, border-color 0.15s, opacity 0.15s");
 
  cursor: pointer;
 
@@ -18,23 +18,50 @@
  margin: 0;
 
  position: relative;
+ 
+ /**
+ &:hover, &:focus, &.focus, .open > &.dropdown-toggle {
+	color: #FFF;
+	box-shadow: none;
+ }
+ */
+}
+.btn.active , .open > .btn.active.dropdown-toggle {
+ box-shadow: none;
+ //color: @btn-active-color;
 }
 
-.btn-lg {
+
+.btn-lg, .btn-group-lg > .btn {
+	border-width: 5px;
+	line-height: 1.4;
+    padding: 5px 16px 6px;
+}
+.btn-xlg, .btn-group-xlg > .btn {
 	border-width: 5px;
 	line-height: 1.35;
     padding: 7px 16px;
+	font-size: @font-size-large;
 }
-.btn-sm {
+.btn-sm, .btn-group-sm > .btn {
 	border-width: 4px;
 	font-size: @font-size-btn-sm;
 	padding: 4px 9px;
-	line-height: 1.39;
+	line-height: 1.38;//1.39;
 }
-.btn-xs {
+.btn-xs, .btn-group-xs > .btn {
+	padding-top: 3px;
+	padding-bottom: 3px;
 	border-width: 3px;
 }
-.btn-minier {
+.btn-mini, .btn-group-mini > .btn {
+	padding: 1px 5px;
+	border-width: 3px;
+	font-size: @font-size-btn-xs;
+	line-height: 1.5;
+}
+
+.btn-minier, .btn-group-minier > .btn {
 	padding: 0 4px;
 	line-height: 18px;
 	border-width: 2px;
@@ -54,19 +81,19 @@ button.btn:active {
 //button color
 .btn-color(@color1, @color2) {
   & , &:focus {
-	background-color:@color1 !important;
-	border-color:@color1;
+	background-color: @color1 !important;
+	border-color: @color1;
   }
 
-  &:hover , &:active, .open &.dropdown-toggle {
-	background-color:@color2 !important;
-	border-color:@color1;
+  &:hover , &:active, .open > &.dropdown-toggle {
+	background-color: @color2 !important;
+	border-color: @color1;
   }
   &.no-border:hover , &.no-border:active {
-	border-color:@color2;
+	border-color: @color2;
   }
   &.no-hover:hover , &.no-hover:active {
-	background-color:@color1 !important;
+	background-color: @color1 !important;
   }
   &.active {
 	background-color: mix(@color1,@color2) !important;
@@ -82,7 +109,7 @@ button.btn:active {
     &:focus,
     &:active,
     &.active {
-		background-color:@color1 !important;
+		background-color: @color1 !important;
 		border-color:@color1;
 	}
   }
@@ -132,16 +159,25 @@ button.btn:active {
 
 .btn-yellow {
  .btn-color(~"yellow");
- color:@btn-yellow-color !important;
+ color: @btn-yellow-color !important;
  text-shadow:0 -1px 0 rgba(255, 255, 255, 0.4) !important;
+ 
+  &:hover, &:focus, &.focus, .open > &.dropdown-toggle, &.active , .open > &.active.dropdown-toggle {
+	color:@btn-yellow-color;
+  }
+
 }
 
 .btn-light {
  .btn-color(~"light");
- color:@btn-light-color !important;
+ color: @btn-light-color !important;
  text-shadow:0 -1px 0 rgba(250, 250, 250, 0.25) !important;
  
- &.btn-xs:after {
+  &:hover, &:focus, &.focus, .open > &.dropdown-toggle, &.active , .open > &.active.dropdown-toggle {
+	color:@btn-light-color;
+  }
+ 
+ &.btn-xs:after, &.btn-mini:after {
 	left: -2px;
 	right: -2px;
 	top: -2px;
@@ -191,16 +227,23 @@ button.btn:active {
  border-color: @border-color;
  color: @txt-color !important;
 
- &:hover, &:focus , &.active, &:active, .open &.dropdown-toggle {
+ &:hover, &:focus , &.active, &:active, .open > &.dropdown-toggle, .open > &.active.dropdown-toggle {
 	background-color: @bg-hover-color !important;
 	border-color: @border-color;
- }
- &:hover {
 	color: saturate(darken(@txt-color , 5%) , 5%) !important;
+	
+	&.no-border {
+		border-color: @border-color;
+	}
  }
- &.no-border:hover , &.no-border:active {
-	border-color: @border-color;
- }
+ /**
+ //&:hover, &:focus, &.focus, .open > &.dropdown-toggle {
+	//color: saturate(darken(@txt-color , 5%) , 5%) !important;
+ //}
+ //&.no-border:hover , &.no-border:active {
+	//border-color: @border-color;
+ //}
+ */
 
  &.disabled, &[disabled], fieldset[disabled] & {
 	&,
@@ -272,7 +315,6 @@ button.btn:active {
 
 //active buttons
 .btn.active {
- color:@btn-active-color;
  &:after {
 	display: inline-block;
 	content: "";
@@ -294,7 +336,7 @@ button.btn:active {
 	bottom: -5px;
 	//border-bottom-width:1px;
  }
- &.btn-xs:after ,  &.btn-minier:after {
+ &.btn-xs:after , &.btn-mini:after, &.btn-minier:after {
 	left: -1px;
 	right: -1px;
 	bottom: -2px;
@@ -339,7 +381,7 @@ button.btn:active {
 	}
 }
 
-.btn-large > .@{icon} {
+.btn-lg > .@{icon} {
 	margin-right: 6px;
 	
 	&.icon-on-right {
@@ -355,7 +397,7 @@ button.btn:active {
 		margin-left: 3px;
 	}
 }
-.btn-xs > .@{icon} , &.btn-minier > .@{icon} {
+.btn-xs > .@{icon} , .btn-mini > .@{icon} , .btn-minier > .@{icon} {
 	margin-right: 2px;
 
 	&.icon-on-right {
@@ -367,7 +409,7 @@ button.btn:active {
 
 
 .btn.btn-link {
-  border: none !important;
+  border-width: 0 !important;
   background: transparent none !important;
   color: @btn-link-color !important;
   text-shadow: none !important;
@@ -413,9 +455,7 @@ button.btn:active {
 	  &:first-child {
 		margin: 0 1px 0 0;
 	  }
-	  &:first-child , &:last-child {
-		border-radius: 0;
-	  }
+
 	  
 	  //caret inside buttons
 	  > .caret {
@@ -429,11 +469,11 @@ button.btn:active {
 		margin-top: 10px;
 		border-width: 4px;
 	 }
-	 &.btn-large > .caret {
+	 &.btn-lg > .caret {
 		margin-top: 18px;
 		border-width: 6px;
 	 }
-	 &.btn-xs > .caret {
+	 &.btn-xs > .caret , &.btn-mini > .caret {
 		margin-top: 9px;
 		border-width: 4px;
 	 }
@@ -447,7 +487,7 @@ button.btn:active {
 		padding-right: 3px;
 		padding-left: 3px;
 	}
-	+ .btn-large.dropdown-toggle {
+	+ .btn-lg.dropdown-toggle {
 		padding-right: 4px;
 		padding-left: 4px;
 	}
@@ -471,7 +511,7 @@ button.btn:active {
 		.btn-group-active-state(-2, -2, -2, 1);
    }
 
-   > .btn-large  , + .btn-large{
+   > .btn-lg  , + .btn-lg{
 		border-width: 4px;// !important;
 		.btn-group-active-state(-3, -3, -3, 1);
    }
@@ -479,7 +519,7 @@ button.btn:active {
 		border-width: 2px;// !important;
 		.btn-group-active-state(-1, -1, -1, 1);
    }
-   > .btn-xs  , + .btn-xs{
+   > .btn-xs  , + .btn-xs , > .btn-mini  , + .btn-mini {
 		border-width: 1px;// !important;
 		.btn-group-active-state(0, 0, 0, 1);
    }
@@ -487,47 +527,47 @@ button.btn:active {
 		border-width: 1px;// !important;
 		.btn-group-active-state(0, 0, 0, 1);
    }
+   
+}
+.btn-group-vertical > .btn:last-child:not(:first-child) {
+	border-radius: 0;
 }
 
-.btn-group > .btn {
-	border-radius: 0 !important;
-}
-.btn-group > .btn.btn-round {
-	border-radius: 4px !important;
-}
+
+
 .btn-group-vertical > .btn , .btn-group-vertical > .btn + .btn {
-	margin: 1px 0 0 !important;//to override .RTL's
+	margin: 1px 0 0;
 }
 .btn-group-vertical > .btn:first-child {
-	margin-top: 0 !important;//to override .RTL's
+	margin-top: 0;
 }
 .btn-group.btn-overlap > .btn {
 	margin-right: -1px;
 }
 .btn-group.btn-corner > .btn {
 	&:first-child {
-		border-bottom-left-radius: 8px !important;
-		border-top-left-radius: 8px !important;
+		border-bottom-left-radius: 8px;
+		border-top-left-radius: 8px;
 	}
 	&:last-child {
-		border-bottom-right-radius: 8px !important;
-		border-top-right-radius: 8px !important;
+		border-bottom-right-radius: 8px;
+		border-top-right-radius: 8px;
 	}
 	&.btn-sm:first-child {
-		border-bottom-left-radius: 6px !important;
-		border-top-left-radius: 6px !important;
+		border-bottom-left-radius: 6px;
+		border-top-left-radius: 6px;
 	}
 	&.btn-sm:last-child {
-		border-bottom-right-radius: 6px !important;
-		border-top-right-radius: 6px !important;
+		border-bottom-right-radius: 6px;
+		border-top-right-radius: 6px;
 	}
-	&.btn-xs:first-child {
-		border-bottom-left-radius: 4px !important;
-		border-top-left-radius: 4px !important;
+	&.btn-xs:first-child , &.btn-mini:first-child {
+		border-bottom-left-radius: 4px;
+		border-top-left-radius: 4px;
 	}
-	&.btn-xs:last-child {
-		border-bottom-right-radius: 4px !important;
-		border-top-right-radius: 4px !important;
+	&.btn-xs:last-child, &.btn-mini:last-child {
+		border-bottom-right-radius: 4px;
+		border-top-right-radius: 4px;
 	}
 }
 
@@ -637,6 +677,13 @@ button.btn:active {
 
 
 .btn.btn-app {
+	> .@{icon} {
+		opacity: 0.88;
+	}
+	&:hover > .@{icon} {
+		opacity: 1;
+	}
+
 	&.btn-sm {
 		width: 80px;
 		font-size: @font-size-btn-app-sm;
@@ -702,24 +749,35 @@ button.btn:active {
 			left: -2px;
 		}
 	}
+	
+	> .badge-yellow, > .label-yellow {
+		color: @label-yellow-text;
+	}
+	> .badge-light, > .label-light {
+		color: @label-light-text;
+	}
+
+	
 	> .label {
 		padding:1px 6px 3px;
 		font-size: @font-size-label-inside-btn-app;
 	}
 	&.radius-4 , &.no-radius {
 		> .badge {
-			border-radius:3px;
+			border-radius: 3px;
 			&.no-radius {// > .badge.no-radius
-				border-radius:0;
+				border-radius: 0;
 			}
 		}
 	}
 	
-	/* active state */
+	
+	
+	//active state
 	&.active {
 		color:@btn-app-active;
 		&:after {
-			display:none;
+			display: none;
 		}
 		&.btn-yellow {
 			color:@btn-app-yellow-color;
@@ -729,6 +787,29 @@ button.btn:active {
 			color:@btn-app-light-active;
 		}
 	}
+}
+
+
+
+
+//////////
+//
+//ie8 fix needed (ace-ie.css)
+.btn-group > .btn-app:first-child:not(:last-child):not(.dropdown-toggle) {
+	margin-right: 24px;
+}
+.btn-group > .btn-app + .btn-app.dropdown-toggle {
+	position: absolute;
+	width: auto;
+	height: 100%;
+	padding-left: 6px;
+	padding-right: 6px;
+	
+	margin-left: -23px;
+	
+	.border-left-radius(0);
+	
+	right: 0;
 }
 
 

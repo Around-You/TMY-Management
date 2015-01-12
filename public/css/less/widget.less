@@ -46,8 +46,8 @@
 
 
 .collapsed {
-	//.widget-box& {border-bottom-width: 1px;}
-	> .widget-header { border-bottom-width: 0; }
+	//.widget-box& {border-bottom-width: 0px;}
+	.widget-box& > .widget-header { border-bottom-width: 0; }
 	&.fullscreen > .widget-header { border-bottom-width: 1px; }
 	> .widget-body { display: none; }
 }
@@ -223,67 +223,6 @@
 
 
 
-.enable_widget_colors() when(@enable-widget-colors = true) {
-[class*="widget-color-"] > .widget-header > .widget-toolbar ,
-[class*="widget-color-"] > .widget-header > .widget-toolbar > .widget-menu {
-	> [data-action] { 
-		text-shadow: 0px 1px 1px rgba(0,0,0,0.2); 
-	}
-	> [data-action="settings"] {
-		color: #D3E4ED; 
-	}
-	> [data-action="reload"] {
-		color: #DEEAD3;
-	}
-	> [data-action="collapse"] {
-		color: #E2E2E2;
-	}
-	> [data-action="close"] {
-		color: #FFD9D5; 
-	}
-}
-.widget-color-orange > .widget-header > .widget-toolbar ,
-.widget-color-orange > .widget-header > .widget-toolbar > .widget-menu {
-	> [data-action] { 
-		text-shadow: none; 
-	}
-	> [data-action="settings"] {
-		color: #559AAB;
-	}
-	> [data-action="reload"] {
-		color: #7CA362; 
-	}
-	> [data-action="collapse"] { 
-		color: #777; 
-	}
-	> [data-action="close"] {
-		color: #A05656;
-	}
-}
-
-}
-.enable_widget_colors();
-
-.widget-box , .widget-color-dark {
- > .widget-header > .widget-toolbar ,
- > .widget-header > .widget-toolbar > .widget-menu {
-	> [data-action="settings"] {
-		color: #99CADB;
-	}
-	> [data-action="reload"] {
-		color: #ACD392;
-	}
-	> [data-action="collapse"] {
-		color: #AAA;
-	}
-	> [data-action="close"] {
-		color: #E09E96;
-	}
- }
-}
-
-
-
 
 .widget-body {
   background-color: #FFF;
@@ -317,7 +256,28 @@
 
 
 
+
+.widget-box , .widget-color-dark {
+ > .widget-header > .widget-toolbar ,
+ > .widget-header > .widget-toolbar > .widget-menu {
+	> [data-action="settings"] {
+		color: #99CADB;
+	}
+	> [data-action="reload"] {
+		color: #ACD392;
+	}
+	> [data-action="collapse"] {
+		color: #AAA;
+	}
+	> [data-action="close"] {
+		color: #E09E96;
+	}
+ }
+}
+
+
 .enable_widget_colors() when(@enable-widget-colors = true) {
+
 // widget header colors
 .widget-box[class*="widget-color-"] > .widget-header {
 	color: #FFF;
@@ -406,6 +366,44 @@
 
 
 
+[class*="widget-color-"] > .widget-header > .widget-toolbar ,
+[class*="widget-color-"] > .widget-header > .widget-toolbar > .widget-menu {
+	> [data-action] { 
+		text-shadow: 0px 1px 1px rgba(0,0,0,0.2); 
+	}
+	> [data-action="settings"] {
+		color: #D3E4ED; 
+	}
+	> [data-action="reload"] {
+		color: #DEEAD3;
+	}
+	> [data-action="collapse"] {
+		color: #E2E2E2;
+	}
+	> [data-action="close"] {
+		color: #FFD9D5; 
+	}
+}
+.widget-color-orange > .widget-header > .widget-toolbar ,
+.widget-color-orange > .widget-header > .widget-toolbar > .widget-menu {
+	> [data-action] { 
+		text-shadow: none; 
+	}
+	> [data-action="settings"] {
+		color: #559AAB;
+	}
+	> [data-action="reload"] {
+		color: #7CA362; 
+	}
+	> [data-action="collapse"] { 
+		color: #777; 
+	}
+	> [data-action="close"] {
+		color: #A05656;
+	}
+}
+
+
 }
 .enable_widget_colors();
 
@@ -437,8 +435,8 @@
   background-color: #FFF;
   border-width: 3px;
 
-  z-index: @zindex-navbar-fixed;
-  -moz-backface-visibility: hidden;
+  z-index: @zindex-navbar-fixed + 10 !important;//to override inline style from jquery ui draggable
+  //-moz-backface-visibility: hidden;
   
   &:not([class*="widget-color-"]) {
 	border-color: #AAA;
@@ -629,6 +627,22 @@
 	
 	&.center {
 		text-align:center;
+	}
+	
+	&.toolbox-vertical {
+		border-bottom-width: 0;
+		border-right: 1px solid #D9D9D9;
+		
+		display: table-cell;
+		padding: 6px 4px;
+		vertical-align: top;
+		
+		width: 1px;
+		
+		+ .widget-main {
+			display: table-cell;
+			vertical-align: top;
+		}
 	}
 }
 

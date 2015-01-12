@@ -86,21 +86,21 @@
 	position: fixed;
 	left: auto;
 	margin-left: auto;
-	-moz-backface-visibility: hidden;
+	//-moz-backface-visibility: hidden;
  }
  //but if `.menu-toggler` button is inside .main-container, then `fixed .navbar` should have no effect
  .navbar-fixed-top + .main-container > .menu-toggler + .responsive {
 	position: absolute;
 	left: (@sidebar-width);
 	margin-left: -(@sidebar-width);
-	-moz-backface-visibility: visible;
+	//-moz-backface-visibility: visible;
  }
  //unless specified as fixed
  .navbar-fixed-top + .main-container > .menu-toggler + .responsive.sidebar-fixed {
  	position: fixed;
 	left: auto;
 	margin-left: auto;
-	-moz-backface-visibility: hidden;
+	//-moz-backface-visibility: hidden;
  }
 }
 
@@ -114,7 +114,7 @@
 	position: fixed;
 	left: auto;
 	z-index: @zindex-sidebar-fixed - 1;
-	-moz-backface-visibility: hidden;
+	//-moz-backface-visibility: hidden;
  }
  
  //for responsive style # 2

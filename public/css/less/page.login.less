@@ -13,10 +13,12 @@
  }
 
  .main-content {
-	margin-left:0;
-	min-height:100%;
+	margin-left: 0 !important;//to override RTL
+	margin-right: 0 !important;//to override RTL
+
+	min-height: 100%;
 	padding-left: 15px;
-	padding-right:15px;
+	padding-right: 15px;
  }
 
 
@@ -141,7 +143,7 @@
 		background: #F7F7F7;
 		padding: 0 8px;
 		color: #5090C1;
-		font-size: @baseFontSize;
+		font-size: @base-font-size;
 	}
 	
 	&:before {

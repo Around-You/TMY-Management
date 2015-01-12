@@ -74,6 +74,8 @@
   
   .infobox-content {
 	 color: #555;
+	 max-width: 140px;
+	 
 	 &:first-child {//like in small infoboxes that have no number data etc
 		font-weight: bold;
 	 }
@@ -422,13 +424,13 @@
 
 
 .percentage {
-  font-size: @baseFontSize + 1;
+  font-size: @base-font-size + 1;
   font-weight: bold;
   display: inline-block;
   vertical-align: top;
   
   .infobox-small & {
-		font-size: @baseFontSize;
+		font-size: @base-font-size;
 		font-weight: normal;
 		margin-top: 2px;
 		margin-left: 2px;

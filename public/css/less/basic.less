@@ -1,8 +1,6 @@
 //some elements variables
 @blockquote-border:#E5EAF1;
 
-@modal-footer-border:#E4E9EE;
-@modal-footer-bg:#EFF3F8;
 
 @pagination-color: #2283C5;
 @pagination-border: darken(#E0E8EB , 4%);
@@ -131,22 +129,7 @@ pre.prettyprint {
 }
 
 
-//modals
-.modal-content {
- .border-radius(0);
- .box-shadow(none);
-}
-.modal-footer {
- padding-top: 12px;
- padding-bottom: 14px;
 
- border-top-color: @modal-footer-border;
- .box-shadow(none);
- background-color: @modal-footer-bg;
-}
-.modal-header .close {
- font-size: 32px;
-}
 
 //wells
 .well {
@@ -166,7 +149,7 @@ pre.prettyprint {
  .border-radius(0);
 
  .close {
-	font-size: 16px;
+	font-size: @font-size-alert-close;
  }
 }
 .alert-block p + p {
@@ -226,6 +209,9 @@ pre.prettyprint {
 
 
 //list group
+.list-group {
+ margin-left: auto;
+}
 .list-group-item {
 	border-radius: 0 !important;
 }

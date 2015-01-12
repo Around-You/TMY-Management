@@ -49,6 +49,7 @@
 	.biggerX(@index + 10);
 }
 .biggerX(110);
+.bigger-115 { font-size: 115% !important;}
 .bigger-125 { font-size: 125% !important;}
 .bigger-175 { font-size: 175% !important; }
 .bigger-225 { font-size: 225% !important; }
@@ -103,12 +104,12 @@
  .box-shadow(none) !important;
 }
 
-
-.overflow-hidden {overflow: hidden !important;}
 .overflow-auto {overflow: auto !important;}
-.overflow-scroll {overflow: scroll !important;}
 .overflow-visible {overflow: visible !important;}
 */
+
+.overflow-hidden {overflow: hidden !important;}
+.overflow-scroll {overflow-x: hidden !important; overflow-y: scroll !important;}
 
 .no-radius {
  .border-radius(0) !important;
@@ -258,3 +259,5 @@
 	.transform(~"scale(1.2)");
   }
 }
+
+

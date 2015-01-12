@@ -1,16 +1,18 @@
 .enable_collapsible_responsive_menu() when(@enable-collapsible-responsive-menu = true) {
 
-//2nd style responsive menu (the collapsible menu)
-.sidebar.navbar-collapse {
-  width: @sidebar-width;//for IE8 only
-  max-height: none;
+//3rd style responsive menu (the collapsible menu)
+
+@media only screen and (min-width: @grid-float-breakpoint) {
+ .sidebar.navbar-collapse {
+	max-height: none;
+ }
 }
 
 @media only screen and (max-width: @grid-float-breakpoint-max) {
  .sidebar.navbar-collapse {
 	position: relative;
 	float: none !important;//to override .rtl's
-	margin-top: auto;
+	margin-top: auto !important;//to override inline h-sidebar margin-top!
 	z-index: 1;//for box-shadow to be visible
 
 	width: 100% !important;
@@ -29,11 +31,11 @@
 		padding-top: 10px !important;//to override .compact, etc
 		padding-bottom: 10px !important;
 
-		line-height: 20px !important;
-		height: @nav-item-height + 2 !important;
+		line-height: 20px;
+		height: @nav-item-height + 2;
 	}
 	.nav-list > li:before {
-		height: @nav-item-height + 4 !important;
+		height: @nav-item-height + 4;
 	}
 	.nav-list > li.active:after {
 		display: none;
@@ -45,20 +47,21 @@
 	}
 
 	.nav-list li > .submenu {
-		border-left-width: 0 !important;
+		border-left-width: 0;
 	}
 
 	.sidebar-toggle {
-		display: none !important;
+		display: none;
 	}
 	.sidebar-shortcuts {
-		padding: 3px 0 6px !important;
-		max-height: none !important;
+		padding: 3px 0 6px;
+		max-height: none;
 		border-bottom-width: 0;
 	}
 
 	+ .main-content {
 		margin-left: 0 !important;
+		margin-right: 0 !important;//to override rtl's
 		.breadcrumb {
 			margin-left: @breadcrumb-margin-left;
 		}
@@ -77,11 +80,11 @@
 			width: auto;
 			z-index: auto;
 			
-			margin-top: auto !important;
+			margin-top: auto;
 			padding-top: 0;
 			padding-bottom: 0;
 
-			border-width: 1px 0 0 0;
+			border-width: 1px 0 0 0 !important;
 			.box-shadow(none) !important;//to override .rtl's
 
 			&:before {
@@ -91,7 +94,6 @@
 				display: block;
 			}
 			li > a  {
-				padding-left: 37px !important;	
 				> .menu-icon {
 					left: 10px;
 				}
@@ -102,6 +104,20 @@
 				display: none;
 			}
 		}
+		
+		.nav-list > li > .submenu li > a {
+			padding: 7px 0 9px 37px;
+		}
+		.nav-list > li > .submenu li > .submenu > li > a {
+			margin-left: 20px;
+			padding-left: 22px;
+		}
+		.nav-list > li > .submenu li > .submenu > li > .submenu > li > a {
+			margin-left: 20px;
+			padding-left: 38px;
+		}
+		
+		
 		
 		.nav-list > li > a:hover:before {// the left side border on hover
 			width:3px;
@@ -118,7 +134,7 @@
 		}
 		.nav-list > li > a > .menu-text {
 			position: relative;
-			display: inline !important;
+			display: inline;
 			line-height: normal;
 			padding-left: 0;
 			height: auto;
@@ -128,7 +144,7 @@
 			z-index: auto;
 			width: auto;
 
-			border-width: 0  !important;
+			border-width: 0 !important;
 			background-color: transparent !important;
 
 			.box-shadow(none) !important;
@@ -154,21 +170,17 @@
 			display: block;
 			position: static;
 			.box-shadow(none) !important;//to override .rtl's;
-			border-width: 0;
-			background-color: transparent;
+			border-width: 0 !important;
+			background-color: transparent !important;
 			width: auto;
 
-			padding: 0 !important;//override that of .menu-min
+			padding: 0;//override that of .menu-min
 		}
 		.sidebar-shortcuts-mini {
 			display: none;
 		}
 	}//menu-min
 
-	.nav-list > li > .submenu li.hover > .submenu > li > a,
-	.nav-list > li > .submenu li > .submenu > li.hover > .submenu > li > a {
-			margin-left: 20px !important;
-	}
 
 	.nav-list a {
 	  .badge , .label {
@@ -196,7 +208,40 @@
 }
 
 
+//
+@media (max-width: @grid-float-breakpoint-max) and (max-height: 400px){
+ .sidebar.navbar-collapse {
+	max-height: 300px;
+ }
+}
+@media (max-width: @grid-float-breakpoint-max) and (max-height: 350px){
+ .sidebar.navbar-collapse {
+	max-height: 250px;
+ }
+}
+@media (max-width: @grid-float-breakpoint-max) and (max-height: 300px){
+ .sidebar.navbar-collapse {
+	max-height: 200px;
+ }
+}
+@media (max-width: @grid-float-breakpoint-max) and (max-height: 250px){
+ .sidebar.navbar-collapse {
+	max-height: 150px;
+ }
+}
 
+
+.enable_hover_submenu_responsive_style_3() when(@enable-submenu-hover = true) {
+@media (min-width: @screen-hover-menu) and (max-width: @grid-float-breakpoint-max) {
+  .sidebar.navbar-collapse {
+	.nav-list > li > .submenu li.hover > .submenu > li > a,
+	.nav-list > li > .submenu li > .submenu > li.hover > .submenu > li > a {
+			margin-left: 20px !important;
+	}
+  }
+}
+}
+.enable_hover_submenu_responsive_style_3();
 
 
  //if .sidebar is .navbar-collapse, and .navbar is fixed, make .sidebar fixed as well

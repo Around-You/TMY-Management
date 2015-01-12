@@ -1,7 +1,12 @@
+@datepicker-active-bg: #2283C5;
+@datepicker-disabled-bg: #8B9AA3;
+@datepicker-active-bg2: #7D8893;//inside .well
+
+
 .enable_plugin_datetime() when(@enable-plugin-datetime = true) {
 // date & time picker
 .datepicker , .daterangepicker  {
-	td , th { .border-radius(0) !important; font-size: @baseFontSize; }
+	td , th { .border-radius(0) !important; font-size: @base-font-size; }
 	
 	td.active {
 	  & , &:hover {	background:@datepicker-active-bg !important; }
@@ -91,7 +96,7 @@
 .bootstrap-datetimepicker-widget [class=btn] {
 	border-width: 0 !important;
 	background-color: transparent !important;
-	color: #777 !important;
+	color: desaturate(lighten(#1B6AAA, 20%), 40%) !important;
 
 	text-shadow: none !important;
 	
@@ -109,7 +114,7 @@
 		width: 90% !important;
 		background-color: #EEE !important;
 		color: @ace-blue !important;
-		font-size: 16px;
+		font-size: @font-size-datetimepicker-switch;
 
 		&:hover {
 			background-color: desaturate(lighten(@btn-primary , 40%) , 10%) !important;

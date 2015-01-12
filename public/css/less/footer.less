@@ -2,7 +2,7 @@
 .footer {
   @footer-offset: @grid-gutter-width / 2;
 
-  padding-top: 64px;
+  padding-top: 75px;
   height: 0;
   width: 0;
   
@@ -11,12 +11,17 @@
 
 	 position: absolute;
 	 z-index: auto;
-	 left: @sidebar-width;
+	 left: 0;
 	 right: 0;
 	 bottom: 0;
 
-	 .sidebar.compact ~ & {
+	 .sidebar ~ & {
+		left: @sidebar-width;
+	 }
+	 @media (min-width: @screen-compact-menu) {
+	  .sidebar.compact ~ & {
 		left: @sidebar-compact-width;
+	  }
 	 }
 	 .sidebar.menu-min ~ & {
 		left: @sidebar-min-width;
@@ -28,7 +33,7 @@
 	 }
 	 
 	 @media (max-width: @grid-float-breakpoint-max) {
-		& , .sidebar.compact ~ & , .sidebar.menu-min ~ & {
+		& , .sidebar ~ &, .sidebar.compact ~ & , .sidebar.menu-min ~ & {
 			left: 0;
 		}
 		.sidebar.responsive-min ~ & {
@@ -38,7 +43,26 @@
 
 
 	 .enable_container_footer() when(@enable-container = true) {
-		 .container.main-container & {
+		 .container.main-container & {//no sidebar
+			 @media (min-width: @screen-sm-min) and (max-width: @grid-float-breakpoint-max) {
+				left: auto !important;//for RTL
+				right: auto !important;//for RTL
+			
+				margin-left: auto;
+				width: @container-sm;
+			 }
+			 @media (min-width: @screen-md-min) {
+				left: auto !important;//for RTL
+				right: auto !important;//for RTL
+			
+				width: @container-md;
+			 }
+			 @media (min-width: @screen-lg-min) {
+				width: @container-lg;
+			 }
+		 }
+		 
+		 .container.main-container .sidebar ~ & {
 			 @media (min-width: @screen-sm-min) and (max-width: @grid-float-breakpoint-max) {
 				left: auto !important;//for RTL
 				right: auto !important;//for RTL
@@ -60,16 +84,17 @@
 		 }
 		 
 		 .enable_compact_menu_footer_container() when (@enable-compact-menu = true) {
-		  .container.main-container .sidebar.compact ~ & {
-			 @media (min-width: @screen-md-min) {
+		 
+		   .container.main-container .sidebar.compact ~ & {
+			 @media (min-width: max(@screen-compact-menu, @screen-md-min)) {
 				margin-left: @sidebar-compact-width;
 				width: @container-md - @sidebar-compact-width;
 			 }
-			 @media (min-width: @screen-lg-min) {
+			 @media (min-width: max(@screen-compact-menu, @screen-lg-min)) {
 				margin-left: @sidebar-compact-width;
 				width: @container-lg - @sidebar-compact-width;
 			 }
-		  }
+		   }
 		 }
 		 .enable_compact_menu_footer_container();
 		 

@@ -2,8 +2,12 @@
 @hover-submenu-item-background-hover: #EEF3F7;
 @hover-submenu-item-color-hover: #2E7DB4;
 
+@hover-submenu-width: @sidebar-width;
+
 
 .enable_submen_hover() when (@enable-submenu-hover = true) {
+ 
+ @media only screen and (min-width: @screen-hover-menu) {
   .nav-list li.hover {
 	 > .submenu {
 		position: absolute;
@@ -14,14 +18,16 @@
 		bottom: auto;
 		z-index: @zindex-submenu;
 
-		width: @sidebar-width;
+		width: @hover-submenu-width;
 		border: 1px solid;
 		
 		display: none !important;
 
 		//.transition(~"max-height 0s linear 0.4s, z-index 0s linear 0.4s, opacity 0.1s linear 0.3s");
 	 }
-	 &:hover > .submenu {
+	 &:hover > .submenu,
+	 &.hover-show > .submenu
+	 {
 		display: block !important;
 	 }
 
@@ -37,7 +43,7 @@
 		display: block;
 	 }
 	 //hide the active caret when hovered, li > .arrow is show instead
-	 &.active:hover > a.dropdown-toggle:after {
+	 &.active:hover > a.dropdown-toggle:after, &.active.hover-show > a.dropdown-toggle:after {
 		display: none;
 	 }
 
@@ -99,12 +105,13 @@
 		}
 	}
 
+ }//@media
 
 
 
   .enable_collapsible_responsive_menu_hover() when (@enable-collapsible-responsive-menu = true) {
 	//reset .hover styles for small screens with .navbar-collapse
-	@media only screen and (max-width: @grid-float-breakpoint-max) {
+	@media (min-width: @screen-hover-menu) and (max-width: @grid-float-breakpoint-max) {
 	 .sidebar.navbar-collapse {
 		.nav-list li.hover > .submenu {
 			position: relative;
@@ -146,7 +153,7 @@
 		}
 
 		.nav-list li.hover > .submenu > li {
-			&:hover, &.active {
+			&:hover, &.hover-show, &.active {
 				> a > .menu-icon {
 					display: inline-block;
 				}
@@ -185,7 +192,7 @@
 		//}
 
 		//-li > .arrow
-		.nav-list li.hover > .submenu, .nav-list li.hover:hover > .submenu , .nav-list li.hover > .arrow {
+		.nav-list li.hover > .submenu, .nav-list li.hover:hover > .submenu , .nav-list li.hover.hover-show > .submenu, .nav-list li.hover > .arrow {
 			display: none !important;
 		}
 
@@ -199,13 +206,17 @@
 		.nav-list li.hover > .submenu.nav-show {
 			display: block !important;
 		}
-
+	  }
+	}
+	
+	@media (min-width: max(@screen-compact-menu, @screen-hover-menu)) and (max-width: @grid-float-breakpoint-max) {
+	 .sidebar.navbar-collapse {
 		&.compact {
 			.nav-list > li.hover.active > a:after {
 				display: none;
 			}
 		}
-	  }
+	 }
 	}
 
   }//@enable-collapsible-responsive-menu

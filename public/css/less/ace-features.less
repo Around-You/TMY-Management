@@ -1,5 +1,11 @@
 //~General Options
-@enable-container:						true;//Like the ".container" settings options
+@enable-selected-skin:					no-skin;//Select a default skin.<br /> For more info about using skins please refer to documentation {"no-skin": "Default Skin", "skin-1": "Skin 1", "skin-2": "Skin 2", "skin-3": "Skin 3"}
+@enable-skin-file:						false;//Compile &amp; enable skins style file.<br /> You don't need this if you only want to use one skin (selected above)
+@enable-rtl-file:						false;//Compile &amp; enable RTL style file.<br /> You don't need this if you don't provide support for Arabic, Hebrew, Persian!
+@enable-mobile-width:					991;//Point at which navbar and sidebar become collapsed.<br /><i>Bootstrap's default is <u>767</u> but <u>991</u> is recommended because of small devices. Also most desktop devices are above <u>1024px</u> wide.</i> {"767": 767, "991": 991}
+@enable-gutter-width:					24px;//Padding between columns. Gets divided in half for the left and right.<br /><i>Bootstrap's default is 30px which has been changed to 24px in Ace!</i>
+@enable-no-responsive:					false;//Disable responsive (small screen) styles by stripping some media queries. <br /> You may also specify <span class="text-danger">min-width: some_value !important</span> for <b>.navbar</b> and <b>.main-container</b> to get better results.
+@enable-container:						true;//Enable Container (like "inside <b>.container</b>" settings options)
 
 //~Sidebar Options
 @enable-submenu-hover: 					true;//Submenu Items That Are Shown On Mouse Hover
@@ -30,6 +36,7 @@
 @enable-application-buttons:			true;//Large Application Buttons
 
 @enable-label-colors:					true;//Differnet Label and Badge Colors & Options
+@enable-label-white-colors:				true;//White Label Colors
 
 //~Menus & Dropdowns
 @enable-dropdown-colors:				true;//Dropdown Menu Different Colors
@@ -88,9 +95,10 @@
 @enable-plugin-datatables:				true;//jQuery dataTables plugin
 @enable-plugin-fullcalendar:			true;//FullCalendar plugin
 @enable-plugin-chosen:					true;//Chosen plugin
-@enable-plugin-chosen-style-2:			true;//Chosen plugin 2nd Style
+@enable-plugin-chosen-style-2:			true;//Chosen plugin 2nd Style (like tag input)
 
 @enable-plugin-select2:					true;//Select2 plugin
+@enable-plugin-select2-style-2:			true;//Chosen plugin 2nd Style (like tag input)
 @enable-plugin-colorbox:				true;//Colorbox Image Slideshow Plugin
 
 @enable-plugin-fuelux-treeview:			true;//FuelUX Treeview
@@ -113,8 +121,13 @@
 
 @enable-plugin-datetime:				true;//Date & Time picker plugins
 
+@enable-plugin-typeahead:				true;//typeahead.js Plugin
+@enable-plugin-duallist:				true;//Dual Listbox Plugin
+@enable-plugin-raty:					true;//Raty Rating Plugin
+
 //~Other parts
 @enable-footer:							true;//Footer Area
 @enable-pagination:						true;//Pagination
 @enable-animated-icon:					true;//Animated Icons
 @enable-settings-box:					true;//Settings Box
+@enable-onpage-help:					true;//Onpage Help (see documentation for more info)

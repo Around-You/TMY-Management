@@ -8,9 +8,11 @@
 }
 
 .enable_responsive_menu() when(@enable-responsive-menu = true) {
+@duration : 0.2s;
+
 //responsive sidebar
 @media only screen and (max-width: @grid-float-breakpoint-max) {
- .sidebar:before {
+ .sidebar.responsive:before {
 	display: none;
  }
 
@@ -23,7 +25,6 @@
 	max-height: 0;
 
 	.transform(translateX(-@sidebar-width - 10));
-	@duration : 0.2s;
 	//"left" or "margin-left" transition is slow on Chrome, so we use translateX
 	-webkit-transition: -webkit-transform @duration linear 0s, max-height 0s linear @duration;
 	-moz-transition: -moz-transform @duration linear 0s, max-height 0s linear @duration;
@@ -44,10 +45,26 @@
 	//so we use negative "margin-left" on .sidebar to get more space and bring back .main-content
 	//and then we move .sidebar again back to its place using "left" property
 	//so it will look like the "position: absolute" alternative, but it's not
-
-	&.compact {
+  }
+ }
+	
+ @media (min-width: @screen-compact-menu) and (max-width: @grid-float-breakpoint-max) {
+	.sidebar.responsive.compact {
 		.transform(translateX(-@sidebar-compact-width - 10));
+		
+		&.push_away.display + .main-content {
+			.transform(translateX(@sidebar-compact-width));
+		}
+		.navbar.navbar-fixed-top + .main-container & {
+			&.push_away.display ~ .footer .footer-inner {
+				.transform(translateX(@sidebar-compact-width));
+			}
+		}
 	}
+ }
+
+ @media only screen and (max-width: @grid-float-breakpoint-max) {
+  .sidebar.responsive {
 	&.menu-min {
 		.transform(translateX(-@sidebar-min-width - 10));
 	}
@@ -79,9 +96,6 @@
 		&.display + .main-content {
 			.transform(translateX(@sidebar-width));
 		}
-		&.display.compact + .main-content {
-			.transform(translateX(@sidebar-compact-width));
-		}
 		&.display.menu-min + .main-content {
 			.transform(translateX(@sidebar-min-width));
 		}
@@ -103,9 +117,6 @@
 				&.display ~ .footer .footer-inner {
 					.transform(translateX(@sidebar-width));
 				}
-				&.display.compact ~ .footer .footer-inner {
-					.transform(translateX(@sidebar-compact-width));
-				}
 				&.display.menu-min ~ .footer .footer-inner {
 					.transform(translateX(@sidebar-min-width));
 				}
@@ -114,26 +125,19 @@
 			
 		}
 	}
+	
+
+	 
+	// &.menu-min .nav-list > li.active:after {
+		//display: block;
+	// }
+	 
+	 + .main-content {
+		margin-left: 0 !important;
+		margin-right: 0 !important;//to override rtl's
+	 }
  }
 
- .main-content {
-	margin-left: 0 !important;
- }
-
-
-
- .nav-list > li.active:after {
-	height: @nav-item-height + 2;
- }
- .nav-list > li.active.open > a:after {
-	display: block;
- }
- .nav-list li li.active > a:after {
-	display: none;
- }
- .menu-min .nav-list > li.active:after {
-	display: block;
- }
 }
 
 
@@ -147,6 +151,9 @@
 	transition: none;
 	
 	display: none;
+	&:before {
+		display: none !important;
+	}
 	&.display {
 		display: block;
 	}

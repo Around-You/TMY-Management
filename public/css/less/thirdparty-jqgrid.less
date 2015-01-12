@@ -5,7 +5,7 @@
  .ui-paging-info,
  .ui-pg-table,
  .ui-pg-selbox {
-    font-size: @baseFontSize;
+    font-size: @base-font-size;
  }
 
  .ui-jqgrid-title {
@@ -25,7 +25,7 @@
     color: #FFF;
     background: @table-header-bg; 
 	padding:0;
-	font-size: floor(@baseFontSize * 1.2);
+	font-size: floor(@base-font-size * 1.2);
 }
 
 
@@ -215,7 +215,7 @@
 	//display: none;
 	font-weight: bold;
 
-	font-size: @baseFontSize - 1;
+	font-size: @base-font-size - 1;
 	
 	background-color: #FFF;
 	border: 2px solid #8EB8D1;
@@ -256,7 +256,7 @@
 
 .ui-jqgrid-sortable {
   padding-left:4px;
-  font-size:@baseFontSize;
+  font-size:@base-font-size;
   color:#777;
   font-weight:bold;
 
@@ -274,8 +274,8 @@ th[aria-selected=true] {
 
 
 
-.ui-icon {
-  text-indent:0;
+.ui-jqgrid .ui-icon {
+  text-indent: 0;
   color: @table-sort-active;
   float: none;
   right: 2px;
@@ -285,6 +285,13 @@ th[aria-selected=true] {
 	right: auto;
 	left: 2px;
   }
+  
+  &.ui-state-disabled {
+	color: #BBB;
+	&:hover {
+		padding: 0;
+	}
+  }
 }
 
 
@@ -292,14 +299,12 @@ th[aria-selected=true] {
  display: inline;
  content: "\f0d7";
  font-family: FontAwesome;
- font-size: 12px;
+ font-size: @base-font-size - 1;
 }
 .ui-icon-asc:before {
  content:"\f0d8";
 }
-.ui-state-disabled {
- color:#BBB;
-}
+
 
 
 
@@ -372,7 +377,7 @@ th[aria-selected=true] {
   vertical-align: middle;
   cursor: pointer;
   
-  font-size: 17px;
+  font-size: @font-size-grid-pager;
   
   &:hover{
 	.transform(~"scale(1.2)");
@@ -386,29 +391,30 @@ th[aria-selected=true] {
   }
 }
 
-.ui-icon-pencil { color:#478FCA; }
-.ui-icon-pencil:before { content:"\f040"; }
-.ui-icon-trash { color:#DD5A43; }
-.ui-icon-trash:before { content:"\f014"; }
-.ui-icon-disk { color:#69AA46; }
-.ui-icon-disk:before { content:"\f00c"; }
-.ui-icon-cancel { color:#DD5A43; }
-.ui-icon-cancel:before { content:"\f00d"; }
-
+.ui-jqgrid {
+ .ui-icon-pencil { color:#478FCA; }
+ .ui-icon-pencil:before { content:"\f040"; }
+ .ui-icon-trash { color:#DD5A43; }
+ .ui-icon-trash:before { content:"\f014"; }
+ .ui-icon-disk { color:#69AA46; }
+ .ui-icon-disk:before { content:"\f00c"; }
+ .ui-icon-cancel { color:#DD5A43; }
+ .ui-icon-cancel:before { content:"\f00d"; }
+}
 
 
 .ui-jqdialog-content, .ui-jqdialog .ui-jqdialog-content {
-	font-size:@baseFontSize;
+	font-size:@base-font-size;
 	padding:4px 0 0;
 
 	.formdata {
-		font-size:@baseFontSize;
+		font-size:@base-font-size;
 		padding:6px 12px;
 	}
 
 	.form-view-data {
 		vertical-align:middle;
-		font-size:@baseFontSize;
+		font-size:@base-font-size;
 	}
 	
 	
@@ -419,7 +425,7 @@ th[aria-selected=true] {
 
 .ui-jqdialog-content {
 	.CaptionTD {
-		font-size: @baseFontSize - 1;
+		font-size: @base-font-size - 1;
 		text-align: right;
 		color: #666;
 	}
@@ -515,7 +521,7 @@ th[aria-selected=true] {
 
  .ui-jqgrid .ui-jqgrid-view {
 	input, select, textarea, button {
-		font-size: @baseFontSize;
+		font-size: @base-font-size;
 	}
  }
 
@@ -548,7 +554,7 @@ th[aria-selected=true] {
  
  .add-group , .add-rule , .delete-group {
 	margin-left: 4px !important;
-	font-size: @baseFontSize + 2 !important;
+	font-size: @base-font-size + 2 !important;
  }
 
  .delete-rule {
@@ -600,7 +606,7 @@ th[aria-selected=true] {
     padding: 6px 10px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 	
-	font-size:@baseFontSize;
+	font-size:@base-font-size;
 }
 
 
@@ -646,7 +652,7 @@ th[aria-selected=true] {
 	color: #FFFFFF ;
 	cursor: pointer;
 	display: inline-block;
-	font-size: @baseFontSize;
+	font-size: @base-font-size;
 	line-height: 28px;padding: 0 12px 1px;
 	margin: 0 8px;
 	position: relative;
@@ -760,6 +766,45 @@ th[aria-selected=true] {
  }
 }
 
+
+
+
+@media only screen and (max-width: @screen-xs-max) {
+
+ .ui-jqgrid .ui-jqgrid-pager {
+    height: 90px;
+    > .ui-pager-control {
+		height: 85px;
+		padding-top: 9px;
+		
+		> .ui-pg-table {
+			> tbody > tr > td { 
+				vertical-align: top; 
+				
+				//move the center one a bit down
+				&#grid-pager_center {
+					width: 0 !important;
+					position: static;
+					
+					> .ui-pg-table {
+						margin: 36px auto 0;
+						position: absolute;
+						right: 0;
+						left: 0;
+						text-align: center;
+					}
+				}
+			}
+		}
+    }
+ }
+}
+
+@media only screen and (max-width: @screen-xs-max) and (-webkit-min-device-pixel-ratio:0) {
+ .ui-jqgrid .ui-jqgrid-pager > .ui-pager-control > .ui-pg-table > tbody > tr > td#grid-pager_center > .ui-pg-table {
+	width: 300px;//required by chrome to put the table at center
+ }
+}
 
 
 }

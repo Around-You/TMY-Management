@@ -8,25 +8,17 @@
  .nav-list li.highlight li.active > a,
  .nav-list li li.highlight.active > a {
 	&:after , &:before {
-		display: none !important;
+		display: none;// !important;
 	}
  }
 
  //show first-level active item caret
  .nav-list > li.highlight.active > a {
 	&:after, &:before {
-		display: block !important;
+		display: block;// !important;
 	}
  }
- 
- //hide active item caret inside scrollbars
- .sidebar-scroll {
-   .nav-list > li.active.highlight > a {
-	&:after, &:before {
-		display: none !important;
-	}
-   }
- }
+
  
 
 
@@ -150,7 +142,7 @@
 		-moz-border-bottom-colors: @highlight-h-sidebar-color;
 	 }
 	 
-	 .nav-list > li.highlight.active:hover > a {
+	 .nav-list > li.highlight.active:hover > a,  .nav-list > li.highlight.active.hover-show > a {
 		&:after, &:before {
 			display: none;
 		}
@@ -165,10 +157,17 @@
 
 
 .enable_compact_menu_highlight_no_skin() when (@enable-compact-menu = true) {
- .sidebar.compact .nav-list li.highlight.active > a {
+ @media (min-width: @screen-compact-menu) {
+  .sidebar.compact .nav-list li.highlight.active > a {
 	&:after , &:before {
-		display: none !important;
+		display: none;// !important;
 	}
+  }
+  .sidebar.compact.menu-min .nav-list li.highlight.active > a {
+	&:after , &:before {
+		display: block;// !important;
+	}
+  }
  }
 
  .enable_horizontal_menu_highlight_compact() when(@enable-horizontal-menu = true) {
@@ -176,10 +175,10 @@
    .sidebar.h-sidebar {
 	.nav-list li.highlight.active > a {
 		&:after , &:before {
-			display: block !important;
+			display: block;// !important;
 			border-width: 8px !important;//to override .rtl .menu-min
 			
-			-moz-border-left-colors: none !important;//~
+			-moz-border-left-colors: none !important;//
 			-moz-border-right-colors: none !important;
 			
 			border-left-color: transparent !important;
@@ -204,7 +203,7 @@
 .menu_min_highlight_no_skin() {
 	.nav-list > li.highlight.active > a {
 		&:after , &:before {
-			display: block !important;//to override .compact
+			display: block;
 			top: -1px;
 			border-width: ceil(@nav-item-height / 2) 0 ceil(@nav-item-height / 2)+1 ceil(@nav-item-height / 4);
 		}
@@ -213,20 +212,31 @@
 
 
 .enable_sidebar_collapse_highlight_no_skin() when (@enable-sidebar-collapse = true) {
- .sidebar.menu-min {
+ .sidebar.menu-min, .sidebar.menu-min.compact {
 	.menu_min_highlight_no_skin();
  }
 }
-.enable_sidebar_collapse_highlight_no_skin();
+//.enable_sidebar_collapse_highlight_no_skin();
 
 .enable_minimized_responsive_menu_highlight_no_skin() when (@enable-minimized-responsive-menu = true) {
  @media (max-width: @grid-float-breakpoint-max) {
-	.sidebar.responsive-min {
+	.sidebar.responsive-min, .sidebar.responsive-min.compact {
 		.menu_min_highlight_no_skin();
 	}
  }
 }
-.enable_minimized_responsive_menu_highlight_no_skin();
+//.enable_minimized_responsive_menu_highlight_no_skin();
+
+
+ 
+ //hide active item caret inside scrollbars
+ .sidebar-scroll {
+   .nav-list > li.active.highlight > a {
+	&:after, &:before {
+		display: none !important;
+	}
+   }
+ }
 
 }
 

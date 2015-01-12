@@ -15,11 +15,14 @@
 	position:absolute;
 	left:0;
 	
-	> img {
+	> img, > .img {
 		border-radius:100%;
-		border:2px solid #5293C4;
-		max-width:40px;
-		position:relative;
+		border: 2px solid #5293C4;
+		max-width: 40px;
+		position: relative;
+	}
+	> .img {
+		padding: 2px;
 	}
   }
 
@@ -264,10 +267,10 @@
 		display:inline-block;
 	}
 	label {
-		font-size: @baseFontSize;
+		font-size: @base-font-size;
 	}
 	.percentage {
-		font-size: @baseFontSize - 2;
+		font-size: @base-font-size - 2;
 		font-weight: bold;
 		color: #777;
 	}

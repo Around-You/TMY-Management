@@ -37,10 +37,15 @@
  }
 
  //don't display when there's no submenu
- &:hover > a + .arrow {
+ &:hover > a + .arrow , &.hover-show > a + .arrow {
 	display: none;
  }
- &.hover:hover > a.dropdown-toggle + .arrow {
+ 
+ @media only screen and (min-width: @screen-hover-menu) {
+  &.hover:hover > a.dropdown-toggle + .arrow,
+  &.hover.hover-show > a.dropdown-toggle + .arrow
+  {
 	display: block;
+  }
  }
 }

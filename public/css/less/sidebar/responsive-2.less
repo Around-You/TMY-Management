@@ -1,6 +1,5 @@
 //sidebar is automatically minimized in smaller views
 
-
 .enable_minimized_responsive_menu() when(@enable-minimized-responsive-menu = true) {
 
 	.sidebar-toggle.sidebar-expand {
@@ -31,6 +30,10 @@
 
 		+ .main-content {
 			margin-left: @sidebar-min-width !important;
+			.rtl & {
+				margin-left: auto !important;
+				margin-right: @sidebar-min-width !important;
+			}
 			.breadcrumb {
 				margin-left: @breadcrumb-margin-left;
 			}
@@ -44,6 +47,12 @@
 		margin-left: -(@sidebar-width);
 
 		z-index: @zindex-sidebar-fixed;
+		
+		.box-shadow(~"2px 1px 2px 0 rgba(0,0,0,0.15)");
+		
+		&:before {
+			display: none;
+		}
 
 		.sidebar-toggle {
 			&.sidebar-collapse {
@@ -51,6 +60,7 @@
 			}
 			&.sidebar-expand {
 				display: block;
+				z-index: 1;//to go above ul:before, etc when scrolled
 			}
 		}
 

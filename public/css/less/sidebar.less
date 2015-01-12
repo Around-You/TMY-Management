@@ -192,9 +192,12 @@
 	
 	@media only screen and (min-width: @grid-float-breakpoint) {
 		.main-container.container .sidebar:not(.h-sidebar) & {
-			//left: -3px;
 			left: -2px;
 		}
+	}
+	.main-container.container .sidebar.sidebar-fixed:not(.h-sidebar) & {
+	//.main-container.container .sidebar.sidebar-scroll:not(.h-sidebar) & {
+		left: 0;
 	}
  }
  &:hover:before {
@@ -234,8 +237,10 @@
 
  //submenu
  &.active .submenu {
-	display:block;
+	display: block;
  }
+ 
+ 
  .submenu {
 	display: none;
 	list-style: none;
@@ -339,6 +344,10 @@
  }
 }
 
+.nav-list li.open > .submenu {
+  display: block;
+}
+
 
 //override opera only
 no_such_element:-o-prefocus, .nav-list > li > a > .menu-icon {
@@ -402,7 +411,7 @@ no_such_element:-o-prefocus, .nav-list > li > a > .menu-icon {
 		}
 
 		a {
-			//font-size: @baseFontSize;
+			//font-size: @base-font-size;
 			.menu-icon , .arrow {
 				color: inherit;
 			}
@@ -429,7 +438,7 @@ no_such_element:-o-prefocus, .nav-list > li > a > .menu-icon {
 	right: 10px;
 
 	opacity: 0.88;
-	font-size: @baseFontSize - 1;
+	font-size: @base-font-size - 1;
 
 	padding-left: 6px;
 	padding-right: 6px;
@@ -482,16 +491,10 @@ no_such_element:-o-prefocus, .nav-list > li > a > .menu-icon {
 //minimized sidebar mode
 @import "sidebar/min.less";
 
-//hover highlight
-@import "sidebar/highlight.less";
+
 
 //horizontal sidebar style
 @import "sidebar/horizontal.less";
-
-
-//default sidebar color
-//you can import a different skin
-@import "skins/no-skin.less";
 
 
 
@@ -502,7 +505,7 @@ no_such_element:-o-prefocus, .nav-list > li > a > .menu-icon {
 @import "sidebar/responsive-2.less";//like minimized sidebar
 @import "sidebar/responsive-3.less";//bootstrap style
 
-
+@import "sidebar/multiple.less";//when 2 sidebars are used!
 
 
 
@@ -528,7 +531,7 @@ no_such_element:-o-prefocus, .nav-list > li > a > .menu-icon {
 		min-height: @breadcrumb-height - 1;
 		border-bottom-width: 0;
 		
-		+ .nav-list  > li:first-child {
+		+ .nav-list  > li:first-child , + .nav-wrap-up .nav-list  > li:first-child {
 			border-top-width: 1px;
 		}
 	}	
@@ -553,4 +556,13 @@ no_such_element:-o-prefocus, .nav-list > li > a > .menu-icon {
  .nav-wrap + .scrollout {
 	right: -8px;
  }
+}
+
+
+
+.sidebar .submenu.sub-scroll {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+	//-webkit-transform: translate3d(0,0,0);
 }

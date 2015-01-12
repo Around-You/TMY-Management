@@ -1,7 +1,7 @@
 .enable_progressbar() when(@enable-progressbar = true) {
 
 //progressbar
-@progress-bg: #DADADA;
+@progress-bg: #e9e9e9;
 
 .progress {
  .border-radius(0);
@@ -29,7 +29,7 @@
 		 line-height: 16px;
 		 
 		 text-align: center;
-		 font-size: @baseFontSize - 1;
+		 font-size: @base-font-size - 1;
 		 //font-family: Verdana;
 	}
  }
@@ -42,11 +42,11 @@
 	height: 12px;
 	.progress-bar {
 		line-height: 10px;
-		font-size: @baseFontSize - 2;
+		font-size: @base-font-size - 2;
 	}
 	&[data-percent]:after {
 		line-height: 10px;
-		font-size: @baseFontSize - 2;
+		font-size: @base-font-size - 2;
 	}
  }
 
@@ -55,11 +55,11 @@
 	height: 9px;
 	.progress-bar {
 		line-height: 8px;
-		font-size: @baseFontSize - 2;
+		font-size: @base-font-size - 2;
 	}
 	&[data-percent]:after {
 		line-height: 8px;
-		font-size: @baseFontSize - 2;
+		font-size: @base-font-size - 2;
 	}
  }
 }
@@ -97,7 +97,7 @@
 
 
 
-
+/**
 .progress {
   position: relative;
 }
@@ -113,7 +113,7 @@
  
   background: radial-gradient(9px 9px 0deg, circle cover, aqua 0%, rgba(0, 0, 255, 0) 100%, blue 95%);
 }
-
+*/
 
 
 }

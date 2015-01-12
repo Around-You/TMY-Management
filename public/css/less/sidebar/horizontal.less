@@ -17,14 +17,24 @@
 	 .sidebar.h-sidebar {
 		position: relative;
 		float: none !important;
-		width: auto !important;
+		width: auto;// !important;
 		margin-top: 17px;
 
 		border-width: 0 !important;
 		box-shadow: none;
+		
+		&.menu-min, &.compact {
+			width: auto;
+		}
 
 		&.sidebar-fixed {
 			position: fixed;
+		}
+		&.no-gap {
+			margin-top: auto;
+			.nav-list {
+				padding-top: 3px;
+			}
 		}
 
 		&:before {
@@ -45,7 +55,10 @@
 			border-bottom-color: inherit;
 		}
 
-		&.hide-before .nav-list > li:before {
+		&.lower-highlight .nav-list > li:before {
+			top: 0;
+		}
+		.main-content & .nav-list > li:before {
 			top: 0;
 		}
 
@@ -56,8 +69,12 @@
 		.nav-list > li {
 			float: left;
 
-			border-width: 0 1px;
-			margin-left: -1px;
+			border-width: 0 0 0 1px;
+			margin-left: 0;
+			
+			&:last-child {
+				border-right-width: 1px;
+			}
 
 			//the hover highlight line
 			&:before {
@@ -79,12 +96,12 @@
 				display: none;
 			}
 
-			&:hover {
-				z-index: @zindex-submenu;
-			}
-			&.active {
-				z-index: @zindex-submenu + 1;
-			}
+			//&:hover, &.hover-show {
+				//z-index: @zindex-submenu;
+			//}
+			//&.active {
+				//z-index: @zindex-submenu + 1;
+			//}
 		}
 	
 		.nav-list > li:first-child {
@@ -98,22 +115,25 @@
 
 		//!importants are for overriding .menu-min and .compact
 		.nav-list > li > a {
-			line-height: 22px !important;
-			height: auto !important;
+			line-height: 22px;
+			height: auto;
 
-			padding: 10px 14px !important;
+			padding: 10px 14px;
 			
 			> .menu-icon {
-				display: block !important;;
+				display: block;
 				margin: 1px 0 4px;
 				line-height: inherit;
 				width: auto;
 			}
+			
 			> .arrow {
 				display: none;
 			}
 		}
-		
+
+
+
 
 		//hover submenu
 		.nav-list > li.hover {
@@ -180,13 +200,44 @@
 				}
 
 
-			&:hover > a ~ .arrow {
+			&:hover > a ~ .arrow , &.hover-show > a ~ .arrow {
 				display: none;
 			}
-			&:hover > a.dropdown-toggle ~ .arrow {
+			&:hover > a.dropdown-toggle ~ .arrow , &.hover-show > a.dropdown-toggle ~ .arrow {
 				display: block;
 			}
 		}	
+		
+		
+		//hover flip is when horizontal menu is shown on opposite direction so that it doesn't go out of window!
+		.nav-list > li.hover-flip > .submenu {
+			left: auto;
+			right: 1px;
+			
+			margin-left: auto;
+			margin-right: -2px;
+		}
+		.nav-list > li.hover-flip > .arrow {
+			left: auto;
+			right: 24px;
+		}
+		
+		.nav-list li li.hover-flip > .submenu {
+			left: auto;
+			right: 100%;
+			
+			margin-left: auto;
+			margin-right: -2px;
+		}
+		.nav-list li li.hover-flip > .arrow {
+			filter: ~"progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
+			.transform(~"scale(-1, 1)");
+			left: 0;
+			right: auto;
+		}
+		
+
+		
 
 		//add an arrow to shortcuts dropdown like //-li > .arrow
 		.sidebar-shortcuts-large {
@@ -221,7 +272,11 @@
 
 		
 		.sidebar-toggle {
-			display: none;
+			position: absolute;
+			top: 12px;
+			right: 6px;
+			background-color: transparent;
+			border-width: 0;
 		}
 		.sidebar-shortcuts {
 			float: left;
@@ -235,7 +290,7 @@
 	 
 			background-color: transparent;
 			
-			&:hover .sidebar-shortcuts-large {
+			&:hover .sidebar-shortcuts-large, &.hover-show .sidebar-shortcuts-large {
 				display: block;
 			}
 		}
@@ -245,7 +300,7 @@
 			height: auto;
 
 			position: absolute;
-			z-index: 15;
+			z-index: @zindex-submenu - 1;
 			top: 100%;
 			margin-top: -5px;
 			left: 10px;
@@ -264,10 +319,10 @@
 			padding-bottom: 5px; // for .sidebar-shortcuts-large:"margin-top: -5px" to work, so that as soon as mouse is inside .sidebar-shortcuts, ".sidebar-shortcuts-large" is displayed
 
 			> .btn {
-				margin: 1px;
-				padding: 9px !important;
+				padding: 9px;
 			}
 		}
+		
 
 
 		.nav-list a .badge, .nav-list a .label {
@@ -321,8 +376,21 @@
 			border-width: 0;
 		}
 	 }
-	 .h-sidebar.sidebar-fixed  + .main-content {
-		padding-top: 88px;
+	 
+	 .h-sidebar.sidebar-fixed {
+		+ .main-content {
+			padding-top: 88px;
+		}
+		&.no-gap + .main-content {
+			padding-top: 74px;
+		}
+		
+		&.menu-min + .main-content {
+			padding-top: 63px;
+		}
+		&.menu-min.no-gap + .main-content {
+			padding-top: 49px;
+		}
 	 }
 	}//@media
 
@@ -331,43 +399,43 @@
 
 	.enable_container_horizontal_menu() when(@enable-container = true) {
 	//inside .container
-	.main-container.container .h-sidebar.sidebar-fixed.navbar-collapse  {
-		left: 0 !important;
-		right: 0 !important;
-		width: auto !important;
+	.main-container.container .h-sidebar.sidebar-fixed  {
+		left: 0;// !important;
+		right: 0;// !important;
+		width: auto;// !important;
 	}
 
 	@media (min-width: @screen-sm-min) {
-	 .main-container.container .h-sidebar.sidebar-fixed.navbar-collapse {
+	 .main-container.container .h-sidebar.sidebar-fixed {
 		left: auto !important;
 		right: auto !important;
-		width: @container-sm !important;
+		width: @container-sm;// !important;
 	 }
 	}
 	@media (min-width: @screen-md-min) {
-	 .main-container.container .h-sidebar.sidebar-fixed.navbar-collapse {
-		width: @container-md !important;
+	 .main-container.container .h-sidebar.sidebar-fixed {
+		width: @container-md;// !important;
 	 }
 	}
 	@media (min-width: @screen-lg-min) {
-	 .main-container.container .h-sidebar.sidebar-fixed.navbar-collapse {
-		width: @container-lg !important;
+	 .main-container.container .h-sidebar.sidebar-fixed {
+		width: @container-lg;// !important;
 	 }
 	}
 
 	/**
 	@media (min-width: @screen-sm-min) and (max-width: @grid-float-breakpoint-max) {
-	 .main-container.container .sidebar.sidebar-fixed.navbar-collapse
+	 .main-container.container .sidebar.sidebar-fixed
 	 {
-		left: auto !important;
-		right: auto !important;
-		width: @container-sm !important;
+		left: auto;// !important;
+		right: auto;// !important;
+		width: @container-sm;// !important;
 	 }
 	}
 
 
 	@media (max-width: @grid-float-breakpoint-max) {
-		.main-container.container .sidebar.sidebar-fixed.navbar-collapse {
+		.main-container.container .sidebar.sidebar-fixed {
 			.sidebar-shortcuts {
 				max-height: none;
 				border-bottom-width: 0;
@@ -384,91 +452,60 @@
   @media (min-width: @grid-float-breakpoint) {
 	
 	.sidebar.h-sidebar {
-		//reset .compact & .menu-min		
-		.nav-list > li > a > .menu-text {
-			background-color: transparent !important;
-			border-width: 0 !important;
-			.box-shadow(none) !important;
-			display: inline !important;
+		
+		&.menu-min {
+			&, &.compact {//compact here to override RTL's
+				.nav.nav-list > li > a {
+					padding: 9px 12px;
+				}
+			}
+			.nav-list > li > a > .menu-text {
+				left: -1px;
+				top: 100%;
+				width: @hover-submenu-width;
+			}
+			.nav-list > li > a > .menu-icon {
+				margin: 2px 0;
+			}
+			.nav-list > li.hover > .submenu {
+				top: 100%;
+				margin-top: @sidebar-menu-min-text-height;
+			}
+			.nav-list > li.hover {
+			  &:hover > a ~ .arrow , &.hover-show > a ~ .arrow {
+				display: block;
+			  }
+			}
 			
-			margin: auto !important;
-			padding: 0 !important;
-			
-			position: static !important;
-			
-			font-size: inherit;
-			line-height: inherit;
-			text-align: inherit;
-		}
-		.nav-list > li > a > .menu-icon {
-			height: auto;
-			font-size: @nav-item-icon-size;
-		}
-	/**
-		&.compact {
-			margin-top: 0 !important;
-			&:before {
-				display: none;
+			.sidebar-toggle {
+				top: 6px;
 			}
 			.sidebar-shortcuts {
-				padding-top: 9px;
-			}
-			.sidebar-shortcuts-large {
-				margin-top: -1px;
+				padding: 0;
 			}
 			.sidebar-shortcuts-mini {
-				max-height: 22px;
-				overflow: hidden;
+				padding-bottom: 4px;
+				padding-top: 4px;
+				> .btn {
+					padding: 8px;
+				}
 			}
-			.nav-list > li:before {
-				top: 0;
+			.sidebar-shortcuts-large {
+				left: 1px;
+				margin-top: 4px;
 			}
-			.nav-list > li > a .badge, .nav-list > li > a .label {
-				position: relative;
-				top: -1px;
-				left: auto;
-				margin: auto;
-				display: inline;
-			}
-
-			.nav-list > li > a > .menu-text {
-				position: absolute !important;
-				top: 0;
-				bottom: 0;
-				left: 0;
-				min-width: 120%;
-				
-				text-align: center;
-				
-				padding-left: 8px !important;
-				padding-right: 8px !important;
-				border-right: 1px solid #79B0CE;
-				
-				line-height: 42px;
-				background-color: #FFFFFF !important;
-				white-space: nowrap;
-
-				.opacity(0);
-				.transition(~"opacity 0.2s");
-				z-index: -1;
-			}
-			.nav-list > li:hover > a > .menu-text {
-				.opacity(1);
-				z-index: 2;
-			}
-
+		}
+		
+		&.compact {
 			.nav-list > li > a > .menu-icon {
-				position: static;
-				height: 18px;
-
-				.opacity(1);
-				.transition(~"opacity 0.2s");
+				font-size: @nav-item-icon-size;
+				height: auto;
 			}
-			
-			.nav-list > li:hover > a > .menu-icon {
-				.opacity(0);
+			&.menu-min .nav-list > li > a {
+				height: auto;
+				line-height: 22px;
 			}
-		}*/
+		}
 	}
   }
 

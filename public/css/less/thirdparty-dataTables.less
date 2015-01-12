@@ -15,7 +15,7 @@
 .dataTables_filter {
  // margin-right:8px;
   text-align:right;
-  input[type=text] {
+  input[type=text], input[type=search] {
 	width: 125px;
 	height: 18px;
 	line-height: 18px;
@@ -29,7 +29,7 @@
 
 .dataTables_info {
  // margin:0 0 0 12px;
-  font-size: @baseFontSize + 1;
+  font-size: @base-font-size + 1;
 }
 
 .dataTables_paginate {
@@ -46,9 +46,9 @@
 .dataTables_wrapper {
   label {
 	display: inline-block;
-	font-size: @baseFontSize;
+	font-size: @base-font-size;
   }
-  input[type=text] , select {
+  input[type=text] , input[type=search], select {
 	margin-bottom: 0 !important;
 	margin: 0 4px;
   }
@@ -96,7 +96,7 @@
 			
 			content: "\f0dc";
 			font-family: FontAwesome;
-			font-size: 13px;
+			font-size: @base-font-size;
 			font-weight: normal;
 			
 			color: #555;
@@ -212,6 +212,75 @@ div.dataTables_scrollFoot table {
 	margin-top: 0 !important;
 	border-top: none;
 }
+
+
+
+///
+//for tableTools printing
+.DTTT_Print .main-content {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.DTTT_Print .navbar-fixed-top + .main-container {
+  padding-top: 0;
+}
+
+
+//table Tools extension
+.tableTools-container {
+	margin-bottom: 8px;
+}
+
+.tableTools-alert.gritter-item-wrapper {
+	padding: 12px 11px 8px;
+	z-index: 1999;
+}
+
+//ColVis extension
+ul.ColVis_collection {
+	z-index: 2002;
+	
+	> li > a {
+		padding: 0;
+		&:focus {
+			outline: none;
+		}
+	}
+	
+	> li.ColVis_Special {
+		border-top: 1px solid #DDD;
+		> a {
+			padding: 6px 11px 7px;
+			text-align: center;
+		}
+	}
+	
+	label {
+		margin: auto;
+		padding: 6px 11px 7px;
+		display: block;
+		cursor: pointer;
+	}
+}
+
+div.ColVis_catcher {
+	position: absolute;
+	z-index: 1101;
+}
+div.ColVis_collectionBackground {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: black;
+	z-index: 1100;
+}
+
+
+
+
+
 
 
 }

@@ -6,7 +6,7 @@
  @sidebar-background: #222A2D;
 
  @nav-item-background: @sidebar-background;
- @nav-item-color: #B1BAC1;
+ @nav-item-color: lighten(#B1BAC1, 3%);
  @nav-item-border: #3F4E54;
 
  //different states
@@ -133,17 +133,20 @@
  }
 
  .nav-list li.active > a:after {
-	border-width: 16px 10px;
-
 	border-right-color: #FFF;
 	-moz-border-right-colors: #FFF;
 
-	top: 3px;
+	//border-width: 16px 10px;
+	//top: 3px;
+	
+	border-width: 11px 7px;
+	top: 8px;
 	right: 0;
  }
  .nav-list > li.active > .submenu li.active > a {
 	&:after {
-		top: 1px;
+		//top: 1px;
+		top: 5px;
 	}
  }
 
@@ -241,15 +244,16 @@
  ////////////
  //.active.highlight state
 .enable_highlight_active_skin_1() when(@enable-highlight-active = true) {
- .nav-list > li.active.highlight {
+ .sidebar {
+  .nav-list > li.active.highlight {
 	& , & + li {
 		border-color: @highlight-nav-item-border;
 	}
 	& + li:last-child {
 		border-bottom-color: @nav-item-border;
 	}
- }
- .nav-list > li.active.highlight > a:after {
+  }
+  .nav-list > li.active.highlight > a:after {
 	border-right-color: transparent;
 	-moz-border-right-colors: none;
 	
@@ -261,7 +265,27 @@
 	top: 0;
 	right: -10px;
 
-	display: block;
+	//display: block;
+  }
+ 
+  .nav-list > li.active.highlight > a:before {
+	border-left-color: @highlight-nav-item-border;
+    -moz-border-left-colors: @highlight-nav-item-border;
+    
+	border-style: solid;
+	border-color: transparent;
+    //border-width: 21px 0 21px 11px;
+	border-width: 20px 0 20px 10px;
+    	
+    content: "";
+    //display: block;
+	
+	position: absolute;
+    right: -11px;
+    //top: -1px;
+	top: 0;
+    z-index: 1;
+  }
  }
 }
  .enable_highlight_active_skin_1();
@@ -303,12 +327,15 @@
 
 
  @media only screen and (max-width: @grid-float-breakpoint-max) {
-  .sidebar {
+  .sidebar.responsive {
 	border-width: 0;
 	.box-shadow(none);
-  }
-  .nav-list li.active > a:after {
-	display: none;
+	.nav-list li.active > a:after {
+		display: none;
+	}
+	.nav-list > li.active.highlight > a:after {
+		display: block;
+	}
   }
  }
 
@@ -320,10 +347,15 @@
 		color: @nav-item-color;
 	}	
 	
-	nav-list > li.active > a:after {
-		border-width: 10px 6px;
-		top: 8px;
+	.nav-list > li.active > a:after {
+		border-width: 9px 6px;
+		top: 10px;
 	}
+	.nav-list > li.active.highlight > a:after {
+		border-width: 20px 0 20px 10px;
+		top: 0;
+	}
+	
 	.nav-list > li.active:hover > a:after {
 		border-right-color: @menumin-item-active-background;
 	}
@@ -341,6 +373,17 @@
 	}
 	.nav-list > li.active > a > .menu-text {
 		background-color: @menumin-item-active-background;
+		
+		border: 0px solid @menumin-active-submenu-border-top;//for it to become visible when there are two menus and it overlaps the other
+		border-width: 1px 1px 0;
+		
+		border-left-color: @active-border-highlight;
+	}
+	.nav-list > li.active > a:not(.dropdown-toggle) > .menu-text {
+		border-width: 1px;
+		border-top-color: lighten(@nav-item-border , 5%);
+		border-bottom-color: lighten(@nav-item-border , 5%);
+		border-right-color: lighten(@nav-item-border , 5%);
 	}
 
 	.nav-list > li.active:hover > a,
@@ -356,9 +399,6 @@
 		border-width: 0;
 		border-left: 1px solid @menumin-submenu-border-left;
 		.box-shadow(none);
-	}
-	.nav-list > li.active > a > .menu-text {
-		border-left-color: @active-border-highlight;
 	}
 
 	.nav-list > li > .submenu {
@@ -408,7 +448,8 @@
 	.sidebar-shortcuts-large {
 		background-color: @shortcuts-background;
 		.box-shadow(none);
-		border-width: 0;
+		border: 1px solid lighten(@nav-item-border , 5%);
+		border-width: 0 1px 1px 0;
 		top: 0;
 	}
  }
@@ -424,16 +465,40 @@
   @media (max-width: @grid-float-breakpoint-max) {
 	.sidebar.responsive-min {
 		.menu_min_skin_1();
+		
+		.nav-list > li.active > a:after {
+			display: block;
+		}
 	}
+	.sidebar.responsive-max {
+		.nav-list li.active > a:after {
+			display: none;
+		}
+		.nav-list > li.highlight.active > a:after {
+			display: block;
+		}
+    }
   }
  }
  .enable_minimized_responsive_menu_skin_1();
 
  
  
- 
+  //highlight .hover menus when mouse is in submenus
+ .hover_highlight_skin_1() {
+	.nav-list > li {
+		.submenu > li.hover:hover > a {
+			background-color: @submenu-item-hover-background;
+		}
+		&.active .submenu > li.hover:hover > a {
+			background-color: @submenu-item-background-active-hover;
+		}
+	}
+ }
+
 .enable_submenu_hover_skin_1() when(@enable-submenu-hover = true) {
  //.hover submenu
+ @media only screen and (min-width: @screen-hover-menu) {
  .nav-list li.hover > .submenu {
 	padding-left: 0;
 	padding-bottom: 2px;
@@ -467,23 +532,14 @@
  .nav-list > li.active > .submenu li.hover > .submenu {
 	background-color: @hover-submenu-active-background;
  }
+}//@media
 
- //highlight .hover menus when mouse is in submenus
- .hover_highlight_skin_1() {
-	.nav-list > li {
-		.submenu > li.hover:hover > a {
-			background-color: @submenu-item-hover-background;
-		}
-		&.active .submenu > li.hover:hover > a {
-			background-color: @submenu-item-background-active-hover;
-		}
-	}
- }
+
 
 
  //sometimes .hover items are opened in small view, and back in large view we reset the highlight state
  .enable_collpasible_responsive_menu_skin_1_tmp() when(@enable-collapsible-responsive-menu = true) {
- @media only screen and (min-width: @grid-float-breakpoint) {
+ @media only screen and (min-width: max(@screen-hover-menu, @grid-float-breakpoint)) {
   .sidebar.navbar-collapse {
 	.nav-list > li.open.hover:not(:hover):not(:focus):not(.active) > a {
 		color: @nav-item-color;
@@ -507,7 +563,7 @@
 
 
  //navbar-collapse
-@media only screen and (max-width: @grid-float-breakpoint-max) {
+@media only screen and (min-width: @screen-hover-menu) and (max-width: @grid-float-breakpoint-max) {
  .sidebar.navbar-collapse {
 	//.nav-list li li.hover.active.open > a {
 	//	background-color: @submenu-item-background-active;
@@ -566,8 +622,10 @@
 }
 .enable_collpasible_responsive_menu_skin_1_tmp();
 
- .sidebar:not(.navbar-collapse) {
+ @media only screen and (min-width: @screen-hover-menu) {
+  .sidebar:not(.navbar-collapse) {
 	.hover_highlight_skin_1();
+  }
  }
 
 
@@ -575,8 +633,7 @@
  .enable_submenu_hover_skin_1();
 
 
- 
- 
+
  //-li > .arrow
  //the submenu li > .arrow 
  .sub_arrow1_skin_1() {
@@ -674,17 +731,20 @@
 
 
   .navbar .navbar-toggle {
-	transition: background-color 0.1s ease 0s;
 	background-color: #4D9DCC;
 	
 	&:focus {
 		background-color: #4D9DCC;
+		border-color: transparent;
 	}
 	&:hover {
 		background-color: darken(#4D9DCC , 5%);
+		border-color: rgba(255,255,255,0.1);
 	}
 	&.display, &[data-toggle=collapse]:not(.collapsed) {
 		background-color: darken(#4D9DCC , 10%);
+		box-shadow: inset 1px 1px 2px 0 rgba(0, 0, 0, 0.25);
+			border-color: rgba(255, 255, 255, 0.35);
 	}
   }
 
@@ -731,7 +791,7 @@
 		content: "";
 		display: block;
 	}
-	.nav-list > li.hover.active:hover > a:after {
+	.nav-list > li.hover.active:hover > a:after, .nav-list > li.hover.active.hover-show > a:after {
 		display: none;
 	}
 	
@@ -742,11 +802,18 @@
 
 
 	.nav-list > li {
-		&:hover {
-			border-color: @h-nav-item-border-hover;
+		border-color: @nav-item-border;
+		&:hover , &:hover + li {
+			border-left-color: @h-nav-item-border-hover;
 		}
-		&.active {
-			border-color: @h-nav-item-border-active;
+		&:last-child:hover {
+			border-right-color: @h-nav-item-border-hover;
+		}
+		&.active , &.active + li , &:hover + li.active {
+			border-left-color: @h-nav-item-border-active;
+		}
+		&.active:last-child {
+			border-right-color: @h-nav-item-border-active;
 		}
 	}
 
@@ -813,9 +880,69 @@
 		display: none;
 	}
 	
+	
+	&.menu-min {
+		.nav-list > li > a > .menu-text {
+			border-width: 1px 0 0;
+			border-top-color: @menumin-submenu-border-left;
+		}
+		.nav-list > li.active > a > .menu-text {
+			border-top-color: @active-border-highlight;
+		}
+		.nav-list > li.active > .submenu {
+			border-top-color: @menumin-active-submenu-border-top;
+		}
+		
+		.nav-list > li > .arrow {
+			&:after {
+				border-bottom-color: @nav-item-background-hover;
+				-moz-border-bottom-colors: @nav-item-background-hover;
+			}
+			&:before {
+				border-bottom-color: darken(@menumin-item-active-background , 8%);
+				-moz-border-bottom-colors: @menumin-item-active-background;
+			}
+		}
+		.nav-list > li.active > .arrow {
+			&:after {
+				border-bottom-color: @menumin-item-active-background;
+				-moz-border-bottom-colors: @menumin-item-active-background;
+			}
+			&:before {
+				border-bottom-color: darken(@nav-item-color-active, 10%);
+				-moz-border-bottom-colors: darken(@nav-item-color-active, 10%);
+			}
+		}
+		
+
+	}
+	
+ }
+ 
+
+ .h-sidebar.sidebar-fixed {
+	+ .main-content {
+		padding-top: 86px;
+	}
+	&.no-gap + .main-content {
+		padding-top: 72px;
+	}
+	
+	&.menu-min + .main-content {
+		padding-top: 61px;
+	}
+	&.menu-min.no-gap + .main-content {
+		padding-top: 47px;
+	}
  }
 
-}
+
+
+ .main-content .h-sidebar.sidebar .nav-list {
+	border-left: 1px solid lighten(@nav-item-border , 5%);
+ }
+
+}//@media
 }
 .enable_horizontal_menu_skin_1();
 
@@ -829,13 +956,6 @@
 	border-top-color: lighten(@nav-item-border , 5%);
  }
 
- .scroll-track {
-	background-color: transparent;
- }
- .scroll-bar {
-	background-color: #CCC;
-	background-color: rgba(255,255,255,0.45);
- }
 }
 .scrollout .scroll-track {
 	background-color: transparent;
@@ -855,6 +975,29 @@
  }
 }
 
+
+
+
+	.nav-list > li.disabled:before {
+		display: none !important;
+	}
+	.nav-list > li.disabled > a {
+		background-color: #333 !important;
+		color: #AAA !important;
+	}
+	
+	.nav-list li .submenu > li.disabled > a,
+	.nav-list li.disabled .submenu > li > a {
+		background-color: #444 !important;
+		color: #A0A0A0 !important;
+		cursor: not-allowed !important;
+		> .menu-icon {
+			display: none;
+		}
+	}
+	.nav-list > li.disabled .submenu > li > a {
+		border-top-color: #505050;
+	}
 
 
 }//.skin-1
