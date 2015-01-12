@@ -7,7 +7,7 @@
 	<div class="navbar-container" id="navbar-container">
 
 		<!-- #section:basics/sidebar.mobile.toggle -->
-		<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
+		<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
 			<span class="sr-only">Toggle sidebar</span>
 
 			<span class="icon-bar"></span>
@@ -35,7 +35,7 @@
 		</div>
 		<!-- /.navbar-header -->
 
-		<div class="navbar-header pull-right">
+		<div class="navbar-buttons navbar-header pull-right" role="navigation">
 			<ul class="nav ace-nav">
 
 			<?php if (App::isGuest()) :?>
@@ -43,11 +43,11 @@
                     <a href="/account/login" >登陆 </a>
                 </li>
             <?php else :?>
-				<li class="light-blue ">
-    				<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+				<li class="light-blue">
+					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
     				    <span class="user-info"> <small>欢迎</small><?=App::getUser()->staff_name?> </span> <i class="ace-icon fa fa-caret-down"></i>
     				</a>
-    				<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+    				<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
      					<li>
      					  <a href="#"> <i class="ace-icon fa fa-cog"></i> Settings</a>
      					</li>
