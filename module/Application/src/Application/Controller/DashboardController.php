@@ -26,7 +26,33 @@ class DashboardController extends AbstractActionController
 
     public function indexAction()
     {
-    	$today = $this->getDailyReportTable()->getOneByDate();
-    	return array('today'=>$today);
+        $today = $this->getDailyReportTable()->getOneByDate();
+        $last30 = $this->getLast30Report();
+        return array(
+            'today' => $today,
+            'last30' => json_encode($last30)
+        );
+    }
+
+    protected function getLast30Report()
+    {
+        $resultSet = $this->getDailyReportTable()->fetchAll(array(), 0, 30, 'id DESC');
+        $returnArr = array(
+            'sale' => array(),
+            'member' => array()
+        );
+        foreach ($resultSet as $day) {
+            $returnArr['sale'][] = array(
+                strtotime($day->date),
+                $day->sale_count
+            );
+            $returnArr['member'][] = array(
+                strtotime($day->date),
+                $day->member_count
+            );
+        }
+        $returnArr['sale'] = array_reverse($returnArr['sale']);
+        $returnArr['member'] = array_reverse($returnArr['member']);
+        return $returnArr;
     }
 }

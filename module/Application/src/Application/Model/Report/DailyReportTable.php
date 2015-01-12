@@ -4,7 +4,6 @@ namespace Application\Model\Report;
 use SamFramework\Model\AbstractModelMapper;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
-
 class DailyReportTable extends AbstractModelMapper
 {
 
@@ -37,17 +36,18 @@ class DailyReportTable extends AbstractModelMapper
         return $row['rownum'];
     }
 
-    public function fetchAll($where = array(), $offset = 0, $limit = 99999)
+    public function fetchAll($where = array(), $offset = 0, $limit = 99999, $order = '')
     {
         $offset = (int) $offset;
         $limit = (int) $limit;
 
         $table = $this;
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where)
+        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where, $order)
         {
             $table->buildSqlSelect($select, $where);
             $select->offset($offset)
-                ->limit($limit);
+                ->limit($limit)
+                ->order($order);
         });
         return $resultSet;
     }
@@ -129,5 +129,6 @@ class DailyReportTable extends AbstractModelMapper
         $report->sale_count++;
         $this->save($report);
     }
+
 }
 
