@@ -227,8 +227,9 @@
 					case 'foreColor':
 					case 'backColor':
 						toolbar += ' <select class="hide wysiwyg_colorpicker" title="'+button.title+'"> ';
-						for(var color in button.values)
-							toolbar += ' <option value="'+button.values[color]+'">'+button.values[color]+'</option> ';
+						$.each(button.values, function (_, color) {
+                            toolbar += ' <option value="' + color + '">' + color + '</option> ';
+                        });
 						toolbar += ' </select> ';
 						toolbar += ' <input style="display:none;" disabled class="hide" type="text" data-edit="'+button.name+'" /> ';
 					break;

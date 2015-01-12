@@ -1,34 +1,7 @@
 /**
  <b>Widget boxes</b>
 */
-ace.widget_boxes = function($) {
-	//bootstrap collapse component icon toggle
-	$(document).on('hide.bs.collapse show.bs.collapse', function (ev) {
-		var hidden_id = ev.target.getAttribute('id')
-		$('[href*="#'+ hidden_id+'"]').find(ace.vars['.icon']).each(function(){
-			var $icon = $(this)
-
-			var $match
-			var $icon_down = null
-			var $icon_up = null
-			if( ($icon_down = $icon.attr('data-icon-show')) ) {
-				$icon_up = $icon.attr('data-icon-hide')
-			}
-			else if( $match = $icon.attr('class').match(/fa\-(.*)\-(up|down)/) ) {
-				$icon_down = 'fa-'+$match[1]+'-down'
-				$icon_up = 'fa-'+$match[1]+'-up'
-			}
-
-			if($icon_down) {
-				if(ev.type == 'show') $icon.removeClass($icon_down).addClass($icon_up)
-					else $icon.removeClass($icon_up).addClass($icon_down)
-					
-				return false;//ignore other icons that match, one is enough
-			}
-
-		});
-	})
-
+(function($ , undefined) {
 
 	var Widget_Box = function(box, options) {
 		this.$box = $(box);
@@ -62,7 +35,7 @@ ace.widget_boxes = function($) {
 		
 		this.toggle = function(type, button) {
 			var $box = this.$box;
-			var $body = $box.find('.widget-body');
+			var $body = $box.find('.widget-body').eq(0);
 			var $icon = null;
 			
 			var event_name = typeof type !== 'undefined' ? type : ($box.hasClass('collapsed') ? 'show' : 'hide');
@@ -88,23 +61,17 @@ ace.widget_boxes = function($) {
 				}
 			}
 
-			var $body_inner = $body.find('.widget-body-inner')
-			if($body_inner.length == 0) {
-				$body = $body.wrapInner('<div class="widget-body-inner"></div>').find(':first-child').eq(0);
-			} else $body = $body_inner.eq(0);
-
-
-			var expandSpeed   = 300;
+			var expandSpeed   = 250;
 			var collapseSpeed = 200;
 
 			if( event_name == 'show' ) {
 				if($icon) $icon.removeClass($icon_down).addClass($icon_up);
+
+				$body.hide();
 				$box.removeClass('collapsed');
-				$body.slideUp(0 , function(){//do it once
-					$body.slideDown(expandSpeed, function(){
-						$box.trigger(event_complete_name+'.ace.widget')})
-					}
-				)
+				$body.slideDown(expandSpeed, function(){
+					$box.trigger(event_complete_name+'.ace.widget')
+				})
 			}
 			else {
 				if($icon) $icon.removeClass($icon_up).addClass($icon_down);
@@ -140,10 +107,14 @@ ace.widget_boxes = function($) {
 			if(!this.$box.hasClass('fullscreen')) {
 				$icon.removeClass($icon_expand).addClass($icon_compress);
 				this.$box.addClass('fullscreen');
+				
+				applyScrollbars(this.$box, true);
 			}
 			else {
 				$icon.addClass($icon_expand).removeClass($icon_compress);
 				this.$box.removeClass('fullscreen');
+				
+				applyScrollbars(this.$box, false);
 			}
 			
 			this.$box.trigger('fullscreened.ace.widget')
@@ -216,5 +187,72 @@ ace.widget_boxes = function($) {
 		}
 
 	});
+	
+		
+	function applyScrollbars($widget, enable) {
+		var $main = $widget.find('.widget-main').eq(0);
+		$(window).off('resize.widget.scroll');
+		
+		//IE8 has an unresolvable issue!!! re-scrollbaring with unknown values?!
+		var nativeScrollbars = ace.vars['old_ie'] || ace.vars['touch'];
+		
+		if(enable) {
+			var ace_scroll = $main.data('ace_scroll');
+			if( ace_scroll ) {
+				$main.data('save_scroll', {size: ace_scroll['size'], lock: ace_scroll['lock'], lock_anyway: ace_scroll['lock_anyway']});
+			}
+			
+			var size = $widget.height() - $widget.find('.widget-header').height() - 10;//extra paddings
+			size = parseInt(size);
+			
+			$main.css('min-height', size);
+			if( !nativeScrollbars ) {
+				if( ace_scroll ) {
+					$main.ace_scroll('update', {'size': size, 'mouseWheelLock': true, 'lockAnyway': true});
+				}
+				else {
+					$main.ace_scroll({'size': size, 'mouseWheelLock': true, 'lockAnyway': true});
+				}
+				$main.ace_scroll('enable').ace_scroll('reset');
+			}
+			else {
+				if( ace_scroll ) $main.ace_scroll('disable');
+				$main.css('max-height', size).addClass('overflow-scroll');
+			}
+			
+			
+			$(window)
+			.on('resize.widget.scroll', function() {
+				var size = $widget.height() - $widget.find('.widget-header').height() - 10;//extra paddings
+				size = parseInt(size);
+				
+				$main.css('min-height', size);
+				if( !nativeScrollbars ) {
+					$main.ace_scroll('update', {'size': size}).ace_scroll('reset');
+				}
+				else {
+					$main.css('max-height', size).addClass('overflow-scroll');
+				}
+			});
+		}
+		
+		else  {
+			$main.css('min-height', '');
+			var saved_scroll = $main.data('save_scroll');
+			if(saved_scroll) {
+				$main
+				.ace_scroll('update', {'size': saved_scroll['size'], 'mouseWheelLock': saved_scroll['lock'], 'lockAnyway': saved_scroll['lock_anyway']})
+				.ace_scroll('enable')
+				.ace_scroll('reset');
+			}
+			
+			if( !nativeScrollbars ) {				
+				if(!saved_scroll) $main.ace_scroll('disable');				
+			}
+			else {
+				$main.css('max-height', '').removeClass('overflow-scroll');
+			}
+		}
+	}
 
-}
+})(window.jQuery);

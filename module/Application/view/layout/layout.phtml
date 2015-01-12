@@ -30,26 +30,26 @@ echo $this->doctype();
 
 		<!--[if !IE]> -->
 		<script type="text/javascript">
-			window.jQuery || document.write("<script src='<?=$this->basepath('js/jquery.min.js')?>'>"+"<"+"/script>");
+			window.jQuery || document.write("<script src='<?=$this->basepath('js/jquery.js')?>'>"+"<"+"/script>");
 		</script>
 
 		<!-- <![endif]-->
 
 		<!--[if IE]>
 <script type="text/javascript">
- window.jQuery || document.write("<script src='<?=$this->basepath('js/jquery1x.min.js')?>'>"+"<"+"/script>");
+ window.jQuery || document.write("<script src='<?=$this->basepath('js/jquery1x.js')?>'>"+"<"+"/script>");
 </script>
 <![endif]-->
 
 		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='<?=$this->basepath('js/jquery.mobile.custom.min.js')?>'>"+"<"+"/script>");
+			if('ontouchstart' in document.documentElement) document.write("<script src='<?=$this->basepath('js/jquery.mobile.custom.js')?>'>"+"<"+"/script>");
 		</script>
-		<script src="<?=$this->basepath('js/bootstrap.min.js')?>"></script>
-		<script src="<?=$this->basepath('js/jquery-ui.min.js')?>"></script>
+		<script src="<?=$this->basepath('js/bootstrap.js')?>"></script>
+		<script src="<?=$this->basepath('js/jquery-ui.js')?>"></script>
 
 		<!-- ace scripts -->
-		<script src="<?=$this->basepath('js/ace.min.js')?>"></script>
-		<script src="<?=$this->basepath('js/ace-elements.min.js')?>"></script>
+		<script src="<?=$this->basepath('js/ace.js')?>"></script>
+		<script src="<?=$this->basepath('js/ace-elements.js')?>"></script>
 
 		<!-- inline scripts related to this page -->
 

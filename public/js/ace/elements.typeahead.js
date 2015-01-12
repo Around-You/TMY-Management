@@ -33,7 +33,7 @@
 
   var Typeahead = function (element, options) {
     this.$element = $(element)
-    this.options = $.extend({}, $.fn.typeahead.defaults, options)
+    this.options = $.extend({}, $.fn.bs_typeahead.defaults, options)
     this.matcher = this.options.matcher || this.matcher
     this.sorter = this.options.sorter || this.sorter
     this.highlighter = this.options.highlighter || this.highlighter
@@ -296,19 +296,19 @@
   /* TYPEAHEAD PLUGIN DEFINITION
    * =========================== */
 
-  var old = $.fn.typeahead
+  var old = $.fn.bs_typeahead
 
-  $.fn.typeahead = function (option) {
+  $.fn.bs_typeahead = function (option) {
     return this.each(function () {
       var $this = $(this)
-        , data = $this.data('typeahead')
+        , data = $this.data('bs_typeahead')
         , options = typeof option == 'object' && option
-      if (!data) $this.data('typeahead', (data = new Typeahead(this, options)))
+      if (!data) $this.data('bs_typeahead', (data = new Typeahead(this, options)))
       if (typeof option == 'string') data[option]()
     })
   }
 
-  $.fn.typeahead.defaults = {
+  $.fn.bs_typeahead.defaults = {
     source: []
   , items: 8
   , menu: '<ul class="typeahead dropdown-menu"></ul>'
@@ -316,14 +316,14 @@
   , minLength: 1
   }
 
-  $.fn.typeahead.Constructor = Typeahead
+  $.fn.bs_typeahead.Constructor = Typeahead
 
 
  /* TYPEAHEAD NO CONFLICT
   * =================== */
 
-  $.fn.typeahead.noConflict = function () {
-    $.fn.typeahead = old
+  $.fn.bs_typeahead.noConflict = function () {
+    $.fn.bs_typeahead = old
     return this
   }
 
@@ -331,10 +331,10 @@
  /* TYPEAHEAD DATA-API
   * ================== */
 
-  $(document).on('focus.typeahead.data-api', '[data-provide="typeahead"]', function (e) {
+  $(document).on('focus.bs_typeahead.data-api', '[data-provide="bs_typeahead"]', function (e) {
     var $this = $(this)
-    if ($this.data('typeahead')) return
-    $this.typeahead($this.data())
+    if ($this.data('bs_typeahead')) return
+    $this.bs_typeahead($this.data())
   })
 
 }(window.jQuery);

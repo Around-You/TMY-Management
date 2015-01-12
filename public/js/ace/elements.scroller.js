@@ -4,9 +4,14 @@
 (function($ , undefined) {
 	var Ace_Scroll = function(element , _settings) {
 		var self = this;
-		var settings = $.extend({}, $.fn.ace_scroll.defaults, _settings);
 		
+		var attrib_values = ace.helper.getAttrSettings(element, $.fn.ace_scroll.defaults);
+		var settings = $.extend({}, $.fn.ace_scroll.defaults, _settings, attrib_values);
+	
 		this.size = 0;
+		this.lock = false;
+		this.lock_anyway = false;
+		
 		this.$element = $(element);
 		this.element = element;
 		
@@ -22,6 +27,10 @@
 		
 		var bar_size = 0, bar_pos = 0, bar_max_pos = 0, bar_size_2 = 0, move_bar = true;
 		var reset_once = false;
+		
+		var styleClass = '';
+		var trackFlip = false;//vertical on left or horizontal on top
+		var trackSize = 0;
 
 		var css_pos,
 			css_size,
@@ -37,7 +46,19 @@
 		var dragEvent = settings.dragEvent || false;
 		
 		var trigger_scroll = _settings.scrollEvent || false;
-
+		
+		
+		var detached = settings.detached || false;//when detached, hideOnIdle as well?
+		var updatePos = settings.updatePos || false;//default is true
+		
+		var hideOnIdle = settings.hideOnIdle || false;
+		var hideDelay = settings.hideDelay || 1500;
+		var insideTrack = false;//used to hide scroll track when mouse is up and outside of track
+		var observeContent = settings.observeContent || false;
+		var prevContentSize = 0;
+		
+		var is_dirty = true;//to prevent consecutive 'reset' calls
+		
 		this.create = function(_settings) {
 			if(created) return;
 			//if(disabled) return;
@@ -56,29 +77,57 @@
 
 
 
-			this.$element.addClass('ace-scroll '+((vertical? '' : ' scroll-hz') + (settings.styleClass ? ' '+settings.styleClass : '')));
+			this.$element.addClass('ace-scroll');
 			if(this.$element.css('position') == 'static') {
 				inline_style = this.element.style.position;
 				this.element.style.position = 'relative';
 			} else inline_style = false;
+
+			var scroll_bar = null;
+			if(!detached) {
+				this.$element.wrapInner('<div class="scroll-content" />');
+				this.$element.prepend('<div class="scroll-track"><div class="scroll-bar"></div></div>');
+			}
+			else {
+				scroll_bar = $('<div class="scroll-track scroll-detached"><div class="scroll-bar"></div></div>').appendTo('body');
+			}
+
+
+			$content_wrap = this.$element;
+			if(!detached) $content_wrap = this.$element.find('.scroll-content').eq(0);
 			
-			this.$element.wrapInner('<div class="scroll-content" />');
-			this.$element.prepend('<div class="scroll-track"><div class="scroll-bar"></div></div>');
-
-			$content_wrap = this.$element.find('.scroll-content').eq(0);
 			if(!vertical) $content_wrap.wrapInner('<div />');
-
+			
 			content_wrap = $content_wrap.get(0);
-
-			$track = this.$element.find('.scroll-track').eq(0);
+			if(detached) {
+				//set position for detached scrollbar
+				$track = scroll_bar;
+				setTrackPos();
+			}
+			else $track = this.$element.find('.scroll-track').eq(0);
+			
 			$bar = $track.find('.scroll-bar').eq(0);
 			track = $track.get(0);
 			bar = $bar.get(0);
 			bar_style = bar.style;
 
+			//add styling classes and horizontalness
+			if(!vertical) $track.addClass('scroll-hz');
+			if(settings.styleClass) {
+				styleClass = settings.styleClass;
+				$track.addClass(styleClass);
+				trackFlip = !!styleClass.match(/scroll\-left|scroll\-top/);
+			}
+			
+			//calculate size of track!
+			if(trackSize == 0) {
+				$track.show();
+				getTrackSize();
+			}
+			
 			$track.hide();
 			
-			
+
 			//if(!touchDrag) {
 			$track.on('mousedown', mouse_down_track);
 			$bar.on('mousedown', mouse_down_bar);
@@ -93,13 +142,17 @@
 				if(trigger_scroll) this.$element.trigger('scroll', [content_wrap]);
 			})
 
-			if(settings.mouseWheel) {
-				var lock = settings.mouseWheelLock;
-				var lock_anyway = !settings.lockAnyway;
 
-				this.$element.on('mousewheel.ace_scroll DOMMouseScroll.ace_scroll', function(event) {
+			if(settings.mouseWheel) {
+				this.lock = settings.mouseWheelLock;
+				this.lock_anyway = settings.lockAnyway;
+
+				//mousewheel library available?
+				this.$element.on(!!$.event.special.mousewheel ? 'mousewheel.ace_scroll' : 'mousewheel.ace_scroll DOMMouseScroll.ace_scroll', function(event) {
 					if(disabled) return;
-					if(!active) return lock_anyway;
+					checkContentChanges(true);
+
+					if(!active) return !self.lock_anyway;
 
 					if(mouse_track) {
 						mouse_track = false;
@@ -107,22 +160,30 @@
 						$(mouse_release_target).off('.ace_scroll');
 						if(dragEvent) self.$element.trigger('drag.end');
 					}
+					
 
-					var delta = event.originalEvent.detail < 0 || event.originalEvent.wheelDelta > 0 ? 1 : -1
+					event.deltaY = event.deltaY || 0;
+					var delta = (event.deltaY > 0 || event.originalEvent.detail < 0 || event.originalEvent.wheelDelta > 0) ? 1 : -1
 					var scrollEnd = false//have we reached the end of scrolling?
 					
 					var clientSize = content_wrap[client_size], scrollAmount = content_wrap[scroll_direction];
-					if( !lock ) {
+					if( !self.lock ) {
 						if(delta == -1)	scrollEnd = (content_wrap[scroll_size] <= scrollAmount + clientSize);
 						else scrollEnd = (scrollAmount == 0);
 					}
 
 					self.move_bar(true);
 
-					var step = parseInt(Math.round(Math.min(Math.max(clientSize / 8 , 54)) , self.size )) + 1;
+					//var step = parseInt( Math.min(Math.max(parseInt(clientSize / 8) , 80) , self.size) ) + 1;
+					var step = parseInt(clientSize / 8);
+					if(step < 80) step = 80;
+					if(step > self.size) step = self.size;
+					step += 1;
+					
 					content_wrap[scroll_direction] = scrollAmount - (delta * step);
 
-					return scrollEnd && lock_anyway;
+
+					return scrollEnd && !self.lock_anyway;
 				})
 			}
 			
@@ -133,6 +194,17 @@
 			if(touchDrag/** || ($.fn.swipe && settings.touchSwipe)*/) {
 				var dir = '', event_name = touchDrag ? 'ace_drag' : 'swipe';
 				this.$element.on(event_name + '.ace_scroll', function(event) {
+					if(disabled) {
+						event.retval.cancel = true;
+						return;
+					}
+					checkContentChanges(true);
+					
+					if(!active) {
+						event.retval.cancel = this.lock_anyway;
+						return;
+					}
+
 					dir = event.direction;
 					if( (vertical && (dir == 'up' || dir == 'down'))
 						||
@@ -147,20 +219,42 @@
 							self.move_bar(true);
 							content_wrap[scroll_direction] = content_wrap[scroll_direction] + distance;
 						}
-						
-						//if(event.retval) event.retval['cancel'] = true;//prevents document scroll
 					}
-					//else if(event.retval) event.retval['cancel'] = false;//allows document scroll
 					
 				})
 			}
-
-			if(settings.hoverReset) {
-				//some mobile browsers don't have mouseenter
-				this.$element.on('mouseenter.ace_scroll touchstart.ace_scroll', function() {
-					self.reset();
-				})
+			
+			
+			/////////////////////////////////
+			
+			if(hideOnIdle) {
+				$track.addClass('idle-hide');
 			}
+			if(observeContent) {
+				$track.on('mouseenter.ace_scroll', function() {
+					insideTrack = true;
+					checkContentChanges(false);
+				}).on('mouseleave.ace_scroll', function() {
+					insideTrack = false;
+					if(mouse_track == false) hideScrollbars();
+				});
+			}
+
+
+			
+			//some mobile browsers don't have mouseenter
+			this.$element.on('mouseenter.ace_scroll touchstart.ace_scroll', function(e) {
+				//if(ace.vars['old_ie']) return;//IE8 has a problem triggering event two times and strangely wrong values for this.size especially in fullscreen widget!
+				
+				is_dirty = true;
+				if(observeContent) checkContentChanges(true);
+				else if(settings.hoverReset) self.reset(true);
+				
+				$track.addClass('scroll-hover');
+			}).on('mouseleave.ace_scroll touchend.ace_scroll', function() {
+				$track.removeClass('scroll-hover');
+			});
+			//
 
 			if(!vertical) $content_wrap.children(0).css(css_size, this.size);//the extra wrapper
 			$content_wrap.css(max_css_size , this.size);
@@ -177,24 +271,40 @@
 		this.move_bar = function($move) {
 			move_bar = $move;
 		}
+		
+		this.get_track = function() {
+			return track;
+		}
 
-		this.reset = function() {
+		this.reset = function(innert_call) {
 			if(disabled) return;// this;
 			if(!created) this.create();
+			/////////////////////
+			var size = this.size;
 			
-			var content_size   = vertical ? content_wrap[scroll_size] : this.size;
+			if(innert_call && !is_dirty) {
+				return;
+			}
+			is_dirty = false;
+
+			if(detached) {
+				var border_size = parseInt(Math.round( (parseInt($content_wrap.css('border-top-width')) + parseInt($content_wrap.css('border-bottom-width'))) / 2.5 ));//(2.5 from trial?!)
+				size -= border_size;//only if detached
+			}
+	
+			var content_size   = vertical ? content_wrap[scroll_size] : size;
 			if( (vertical && content_size == 0) || (!vertical && this.element.scrollWidth == 0) ) {
-				//elemen is hidden
+				//element is hidden
 				//this.$element.addClass('scroll-hidden');
-				this.$element.removeClass('scroll-active')
+				$track.removeClass('scroll-active')
 				return;// this;
 			}
-			
 
-			var available_space = vertical ? this.size : content_wrap.clientWidth;
+			var available_space = vertical ? size : content_wrap.clientWidth;
 
-			if(!vertical) $content_wrap.children(0).css(css_size, this.size);//the extra wrapper
+			if(!vertical) $content_wrap.children(0).css(css_size, size);//the extra wrapper
 			$content_wrap.css(max_css_size , this.size);
+			
 
 			if(content_size > available_space) {
 				active = true;
@@ -211,7 +321,11 @@
 				bar_style[css_size] = bar_size + 'px';
 				bar_style[css_pos] = bar_pos + 'px';
 				
-				this.$element.addClass('scroll-active')
+				$track.addClass('scroll-active');
+				
+				if(trackSize == 0) {
+					getTrackSize();
+				}
 
 				if(!reset_once) {
 					//this.$element.removeClass('scroll-hidden');
@@ -222,10 +336,12 @@
 					}
 					reset_once = true;
 				}
+				
+				if(detached) setTrackPos();
 			} else {
 				active = false;
 				$track.hide();
-				this.$element.removeClass('scroll-active');
+				$track.removeClass('scroll-active');
 				$content_wrap.css(max_css_size , '');
 			}
 
@@ -239,51 +355,77 @@
 			active = false;
 			$track.hide();
 			
-			this.$element.removeClass('scroll-active');
+			this.$element.addClass('scroll-disabled');
+			
+			$track.removeClass('scroll-active');
 			$content_wrap.css(max_css_size , '');
-
-			return this;
 		}
 		this.enable = function() {
 			disabled = false;
-			this.reset();
-
-			return this;
+			this.$element.removeClass('scroll-disabled');
 		}
 		this.destroy = function() {
 			active = false;
 			disabled = false;
 			created = false;
 			
-			this.$element.removeClass('ace-scroll scroll-hz'+(settings.extraClass ? ' '+settings.extraClass : ''));
+			this.$element.removeClass('ace-scroll scroll-disabled scroll-active');
 			this.$element.off('.ace_scroll')
 
-			if(!vertical) {
-				//remove the extra wrapping div
-				$content_wrap.find('> div').children().unwrap();
+			if(!detached) {
+				if(!vertical) {
+					//remove the extra wrapping div
+					$content_wrap.find('> div').children().unwrap();
+				}
+				$content_wrap.children().unwrap();
+				$content_wrap.remove();
 			}
-			$content_wrap.children().unwrap();
-			$content_wrap.remove();
 			
 			$track.remove();
 			
 			if(inline_style !== false) this.element.style.position = inline_style;
 			
-			return this;
+			if(idleTimer != null) {
+				clearTimeout(idleTimer);
+				idleTimer = null;
+			}
 		}
 		this.modify = function(_settings) {
-			if(_settings) settings = $.extend({}, $.fn.ace_scroll.defaults, _settings);
+			if(_settings) settings = $.extend({}, settings, _settings);
 			
 			this.destroy();
 			this.create();
-			this.reset();
-			
-			return this;
+			is_dirty = true;
+			this.reset(true);
 		}
 		this.update = function(_settings) {
-			//if(_settings) settings = $.extend({}, $.fn.ace_scroll.defaults, _settings);
-			this.size = _settings.size;
-			return this;
+			if(_settings) settings = $.extend({}, settings, _settings);
+		
+			this.size = _settings.size || this.size;
+			
+			this.lock = _settings.mouseWheelLock || this.lock;
+			this.lock_anyway = _settings.lockAnyway || this.lock_anyway;
+			
+			if(_settings.styleClass != undefined) {
+				if(styleClass) $track.removeClass(styleClass);
+				styleClass = _settings.styleClass;
+				if(styleClass) $track.addClass(styleClass);
+				trackFlip = !!styleClass.match(/scroll\-left|scroll\-top/);
+			}
+		}
+		
+		this.start = function() {
+			content_wrap[scroll_direction] = 0;
+		}
+		this.end = function() {
+			content_wrap[scroll_direction] = content_wrap[scroll_size];
+		}
+		
+		this.hide = function() {
+			$track.hide();
+		}
+		this.show = function() {
+			$track.show();
 		}
 
 		
@@ -372,10 +514,95 @@
 
 			$track.removeClass('active');
 			if(dragEvent) self.$element.trigger('drag.end');
+			
+			if(active && hideOnIdle && !insideTrack) hideScrollbars();
+		}
+		
+		
+		var idleTimer = null;
+		var prevCheckTime = 0;
+		function checkContentChanges(hideSoon) {
+			//check if content size has been modified since last time?
+			//and with at least 1s delay
+			var newCheck = +new Date();
+			if(observeContent && newCheck - prevCheckTime > 1000) {
+				var newSize = content_wrap[scroll_size];
+				if(prevContentSize != newSize) {
+					prevContentSize = newSize;
+					is_dirty = true;
+					self.reset(true);
+				}
+				prevCheckTime = newCheck;
+			}
+			
+			//show scrollbars when not idle anymore i.e. triggered by mousewheel, dragging, etc
+			if(active && hideOnIdle) {
+				if(idleTimer != null) {
+					clearTimeout(idleTimer);
+					idleTimer = null;
+				}
+				$track.addClass('not-idle');
+			
+				if(!insideTrack && hideSoon == true) {
+					//hideSoon is false when mouse enters track
+					hideScrollbars();
+				}
+			}
 		}
 
+		function hideScrollbars() {
+			if(idleTimer != null) {
+				clearTimeout(idleTimer);
+				idleTimer = null;
+			}
+			idleTimer = setTimeout(function() {
+				idleTimer = null;
+				$track.removeClass('not-idle');
+			} , hideDelay);
+		}
+		
+		//for detached scrollbars
+		function getTrackSize() {
+			$track.css('visibility', 'hidden').addClass('scroll-hover');
+			if(vertical) trackSize = parseInt($track.outerWidth()) || 0;
+			 else trackSize = parseInt($track.outerHeight()) || 0;
+			$track.css('visibility', '').removeClass('scroll-hover');
+		}
+		this.track_size = function() {
+			if(trackSize == 0) getTrackSize();
+			return trackSize;
+		}
+		
+		//for detached scrollbars
+		function setTrackPos() {
+			if(updatePos === false) return;
+		
+			var off = $content_wrap.offset();//because we want it relative to parent not document
+			var left = off.left;
+			var top = off.top;
+
+			if(vertical) {
+				if(!trackFlip) {
+					left += ($content_wrap.outerWidth() - trackSize)
+				}
+			}
+			else {
+				if(!trackFlip) {
+					top += ($content_wrap.outerHeight() - trackSize)
+				}
+			}
+			
+			if(updatePos === true) $track.css({top: parseInt(top), left: parseInt(left)});
+			else if(updatePos === 'left') $track.css('left', parseInt(left));
+			else if(updatePos === 'top') $track.css('top', parseInt(top));
+		}
+		
+
+
 		this.create();
-		this.reset();
+		is_dirty = true;
+		this.reset(true);
+		prevContentSize = content_wrap[scroll_size];
 
 		return this;
 	}
@@ -405,7 +632,11 @@
 		'mouseWheelLock': false,
 		'lockAnyway': false,
 		'styleClass' : false,
-
+		
+		'observeContent': false,
+		'hideOnIdle': false,
+		'hideDelay': 1500,
+		
 		'hoverReset': true //reset scrollbar sizes on mouse hover because of possible sizing changes
 		,
 		'reset': false //true= set scrollTop = 0
@@ -417,6 +648,11 @@
 		'touchSwipe': false
 		,
 		'scrollEvent': false //trigger scroll event
+
+		,
+		'detached': false
+		,
+		'updatePos': true
 		/**
 		,		
 		'track' : true,

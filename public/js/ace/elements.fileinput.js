@@ -9,7 +9,9 @@
 
 	var Ace_File_Input = function(element , settings) {
 		var self = this;
-		this.settings = $.extend({}, $.fn.ace_file_input.defaults, settings);
+		
+		var attrib_values = ace.helper.getAttrSettings(element, $.fn.ace_file_input.defaults);
+		this.settings = $.extend({}, $.fn.ace_file_input.defaults, settings, attrib_values);
 
 		this.$element = $(element);
 		this.element = element;
@@ -20,6 +22,8 @@
 		this.$element
 		.off('change.ace_inner_call')
 		.on('change.ace_inner_call', function(e , ace_inner_call){
+			if(self.disabled) return;
+		
 			if(ace_inner_call === true) return;//this change event is called from above drop event and extra checkings are taken care of there
 			return handle_on_change.call(self);
 			//if(ret === false) e.preventDefault();
@@ -79,12 +83,12 @@
 		}
 	}
 
-	Ace_File_Input.prototype.show_file_list = function($files) {
+	Ace_File_Input.prototype.show_file_list = function($files , inner_call) {
 		var files = typeof $files === "undefined" ? this.$element.data('ace_input_files') : $files;
 		if(!files || files.length == 0) return;
-
+		
 		//////////////////////////////////////////////////////////////////
-
+		
 		if(this.well_style) {
 			this.$label.find('.ace-file-name').remove();
 			if(!this.settings.btn_change) this.$label.addClass('hide-placeholder');
@@ -92,54 +96,68 @@
 		this.$label.attr('data-title', this.settings.btn_change).addClass('selected');
 		
 		for (var i = 0; i < files.length; i++) {
-			var filename = typeof files[i] === "string" ? files[i] : $.trim( files[i].name );
+			var filename = '', format = false;
+			if(typeof files[i] === "string") filename = files[i];
+			else if(hasFile && files[i] instanceof File) filename = $.trim( files[i].name );
+			else if(files[i] instanceof Object && files[i].hasOwnProperty('name')) {
+				//format & name specified by user (pre-displaying name, etc)
+				filename = files[i].name;
+				if(files[i].hasOwnProperty('type')) format = files[i].type;
+				if(!files[i].hasOwnProperty('path')) files[i].path = files[i].name;
+			}
+			else continue;
+			
 			var index = filename.lastIndexOf("\\") + 1;
 			if(index == 0)index = filename.lastIndexOf("/") + 1;
 			filename = filename.substr(index);
 			
-			var fileIcon = 'fa fa-file';
-			var format = 'file';
+			if(format == false) {
+				if((/\.(jpe?g|png|gif|svg|bmp|tiff?)$/i).test(filename)) {				
+					format = 'image';
+				}
+				else if((/\.(mpe?g|flv|mov|avi|swf|mp4|mkv|webm|wmv|3gp)$/i).test(filename)) {
+					format = 'video';
+				}
+				else if((/\.(mp3|ogg|wav|wma|amr|aac)$/i).test(filename)) {
+					format = 'audio';
+				}
+				else format = 'file';
+			}
 			
-			if((/\.(jpe?g|png|gif|svg|bmp|tiff?)$/i).test(filename)) {
-				fileIcon = 'fa fa-picture-o file-image';
-				format = 'image';
-			}
-			else if((/\.(mpe?g|flv|mov|avi|swf|mp4|mkv|webm|wmv|3gp)$/i).test(filename)) {
-				fileIcon = 'fa fa-film file-video';
-				format = 'video';
-			}
-			else if((/\.(mp3|ogg|wav|wma|amr|aac)$/i).test(filename)) {
-				fileIcon = 'fa fa-music file-audio';
-				format = 'audio';
-			}
-
-
+			var fileIcons = {
+				'file' : 'fa fa-file',
+				'image' : 'fa fa-picture-o file-image',
+				'video' : 'fa fa-film file-video',
+				'audio' : 'fa fa-music file-audio'
+			};
+			var fileIcon = fileIcons[format];
+			
+			
 			if(!this.well_style) this.$label.find('.ace-file-name').attr({'data-title':filename}).find(ace.vars['.icon']).attr('class', ace.vars['icon'] + fileIcon);
 			else {
 				this.$label.append('<span class="ace-file-name" data-title="'+filename+'"><i class="'+ ace.vars['icon'] + fileIcon+'"></i></span>');
-				var type = $.trim(files[i].type);
+				var type = (inner_call === true && hasFile && files[i] instanceof File) ? $.trim(files[i].type) : '';
 				var can_preview = hasFileReader && this.settings.thumbnail 
 						&&
-						( (type.length > 0 && type.match('image')) || (type.length == 0 && format == 'image') )//the second one is for Android's default browser which gives an empty text for file.type
+						( (type.length > 0 && type.match('image')) || (type.length == 0 && format == 'image') )//the second one is for older Android's default browser which gives an empty text for file.type
 				if(can_preview) {
 					var self = this;
 					$.when(preview_image.call(this, files[i])).fail(function(result){
 						//called on failure to load preview
 						if(self.settings.preview_error) self.settings.preview_error.call(self, filename, result.code);
-					});
+					})
 				}
 			}
-
 		}
-
+		
 		return true;
 	}
-
+	
 	Ace_File_Input.prototype.reset_input = function() {
 	    this.reset_input_ui();
 		this.reset_input_field();
 	}
-
+	
 	Ace_File_Input.prototype.reset_input_ui = function() {
 		 this.$label.attr({'data-title':this.settings.btn_choose, 'class':'ace-file-container'})
 			.find('.ace-file-name:first').attr({'data-title':this.settings.no_file , 'class':'ace-file-name'})
@@ -150,12 +168,14 @@
 		this.$label.find('.ace-file-name').not(':first').remove();
 		
 		this.reset_input_data();
+		
+		//if(ace.vars['old_ie']) ace.helper.redraw(this.$container[0]);
 	}
 	Ace_File_Input.prototype.reset_input_field = function() {
 		//http://stackoverflow.com/questions/1043957/clearing-input-type-file-using-jquery/13351234#13351234
 		this.$element.wrap('<form>').parent().get(0).reset();
 		this.$element.unwrap();
-
+		
 		//strangely when reset is called on this temporary inner form
 		//only **IE9/10** trigger 'reset' on the outer form as well
 		//and as we have mentioned to reset input on outer form reset
@@ -222,6 +242,7 @@
 
 	var enable_drop_functionality = function() {
 		var self = this;
+		
 		var dropbox = this.$element.parent();
 		dropbox
 		.off('dragenter')
@@ -239,6 +260,8 @@
 			e.preventDefault();
 			e.stopPropagation();
 
+			if(self.disabled) return;
+		
 			var dt = e.originalEvent.dataTransfer;
 			var file_list = dt.files;
 			if(!self.multi && file_list.length > 1) {//single file upload, but dragged multiple files
@@ -254,7 +277,7 @@
 			self.$element.data('ace_input_method', 'drop');
 			self.$element.data('ace_input_files', file_list);//save files data to be used later by user
 
-			self.show_file_list(file_list);
+			self.show_file_list(file_list , true);
 			
 			self.$element.triggerHandler('change' , [true]);//true means ace_inner_call
 			return true;
@@ -271,7 +294,7 @@
 		this.$element.data('ace_input_method', 'select');
 		this.$element.data('ace_input_files', file_list);
 		
-		this.show_file_list(file_list);
+		this.show_file_list(file_list , true);
 		
 		return true;
 	}
@@ -282,49 +305,67 @@
 		var self = this;
 		var $span = self.$label.find('.ace-file-name:last');//it should be out of onload, otherwise all onloads may target the same span because of delays
 		
-		var deferred = new $.Deferred
-		var reader = new FileReader();
-		reader.onload = function (e) {
+		var deferred = new $.Deferred;
+		
+		var getImage = function(src) {
 			$span.prepend("<img class='middle' style='display:none;' />");
 			var img = $span.find('img:last').get(0);
-
+		
 			$(img).one('load', function() {
-				//if image loaded successfully
-				var size = 50;
-				if(self.settings.thumbnail == 'large') size = 150;
-				else if(self.settings.thumbnail == 'fit') size = $span.width();
-				$span.addClass(size > 50 ? 'large' : '');
-
-				var thumb = get_thumbnail(img, size, file.type);
-				if(thumb == null) {
-					//if making thumbnail fails
-					$(this).remove();
-					deferred.reject({code:Ace_File_Input.error['THUMBNAIL_FAILED']});
-					return;
-				}
-
-				var w = thumb.w, h = thumb.h;
-				if(self.settings.thumbnail == 'small') {w=h=size;};
-				$(img).css({'background-image':'url('+thumb.src+')' , width:w, height:h})									
-						.data('thumb', thumb.src)
-						.attr({src:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=='})
-						.show()
-
-				///////////////////
-				deferred.resolve();
+				imgLoaded.call(null, img);
 			}).one('error', function() {
-				//for example when a file has image extenstion, but format is something else
-				$span.find('img').remove();
-				deferred.reject({code:Ace_File_Input.error['IMAGE_LOAD_FAILED']});
+				imgFailed.call(null, img);
 			});
 
-			img.src = e.target.result;
+			img.src = src;
 		}
-		reader.onerror = function (e) {
-			deferred.reject({code:Ace_File_Input.error['FILE_LOAD_FAILED']});
-		}
-		reader.readAsDataURL(file);
+		var imgLoaded = function(img) {
+			//if image loaded successfully
+			var size = 50;
+			if(self.settings.thumbnail == 'large') size = 150;
+			else if(self.settings.thumbnail == 'fit') size = $span.width();
+			$span.addClass(size > 50 ? 'large' : '');
 
+			var thumb = get_thumbnail(img, size/**, file.type*/);
+			if(thumb == null) {
+				//if making thumbnail fails
+				$(this).remove();
+				deferred.reject({code:Ace_File_Input.error['THUMBNAIL_FAILED']});
+				return;
+			}
+
+			var w = thumb.w, h = thumb.h;
+			if(self.settings.thumbnail == 'small') {w=h=size;};
+			$(img).css({'background-image':'url('+thumb.src+')' , width:w, height:h})
+					.data('thumb', thumb.src)
+					.attr({src:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=='})
+					.show()
+
+			///////////////////
+			deferred.resolve();
+		}
+		var imgFailed = function(img) {
+			//for example when a file has image extenstion, but format is something else
+			$span.find('img').remove();
+			deferred.reject({code:Ace_File_Input.error['IMAGE_LOAD_FAILED']});
+		}
+		
+		if(hasFile && file instanceof File) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				getImage(e.target.result);
+			}
+			reader.onerror = function (e) {
+				deferred.reject({code:Ace_File_Input.error['FILE_LOAD_FAILED']});
+			}
+			reader.readAsDataURL(file);
+		}
+		else {
+			if(file instanceof Object && file.hasOwnProperty('path')) {
+				getImage(file.path);//file is a file name (path) --- this is used to pre-show user-selected image
+			}
+		}
+		
 		return deferred.promise();
 	}
 
@@ -511,7 +552,7 @@
 
 
 	///////////////////////////////////////////
-	$.fn.ace_file_input = function (option,value) {
+	$.fn.aceFileInput = $.fn.ace_file_input = function (option,value) {
 		var retval;
 
 		var $set = this.each(function () {

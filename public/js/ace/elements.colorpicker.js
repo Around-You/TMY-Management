@@ -2,8 +2,11 @@
  <b>Custom color picker element</b>. Converts html select elements to a dropdown color picker.
 */
 (function($ , undefined) {
-	var Ace_Colorpicker = function(element, option) {
-		var options = $.extend({}, $.fn.ace_colorpicker.defaults, option);
+	var Ace_Colorpicker = function(element, _options) {
+
+		var attrib_values = ace.helper.getAttrSettings(element, $.fn.ace_colorpicker.defaults);
+		var options = $.extend({}, $.fn.ace_colorpicker.defaults, _options, attrib_values);
+
 
 		var $element = $(element);
 		var color_list = '';

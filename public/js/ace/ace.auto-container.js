@@ -3,9 +3,10 @@
  In Bootstrap you should stick with fixed width breakpoints.
  You can use this feature to enable fixed container only when window size is above 1140px
 */
-ace.auto_container = function($) {
+(function($ , undefined) {
+
  $(window).on('resize.auto_container', function() {
-	var enable = ace.vars.window['width'] > 1140 ? true : false;
+	var enable = $(window).width() > 1140;
 	try {
 		ace.settings.main_container_fixed(enable, false, false);
 	} catch(e) {
@@ -14,4 +15,5 @@ ace.auto_container = function($) {
 		$(document).trigger('settings.ace', ['main_container_fixed' , enable]);
 	}
  }).triggerHandler('resize.auto_container');
-}
+
+})(window.jQuery);

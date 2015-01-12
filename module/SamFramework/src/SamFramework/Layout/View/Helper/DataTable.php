@@ -126,9 +126,9 @@ class DataTable extends AbstractHelper
     {
         $inlineScriptHelper = $this->getInlineScriptHelper();
         $inlineScriptHelper->appendFile($this->getView()
-            ->basePath('js/jquery.dataTables.min.js'));
+            ->basePath('js/dataTables/jquery.dataTables.js'));
         $inlineScriptHelper->appendFile($this->getView()
-            ->basePath('js/jquery.dataTables.bootstrap.js'));
+            ->basePath('js/dataTables/jquery.dataTables.bootstrap.js'));
         $inlineScriptHelper->captureStart();
         echo <<<JS
 $('#{$this->defaultTableName}').dataTable( {

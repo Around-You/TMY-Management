@@ -3,14 +3,16 @@
  It's just a wrapper so you still need to include FuelUX wizard script first.
 */
 (function($ , undefined) {
-	$.fn.ace_wizard = function(options) {
+	$.fn.aceWizard = $.fn.ace_wizard = function(options) {
 
 		this.each(function() {
 			var $this = $(this);
 			$this.wizard();
+			
+			if(ace.vars['old_ie']) $this.find('ul.steps > li').last().addClass('last-child');
 
-			var buttons = $this.siblings('.wizard-actions').eq(0);
-			var $wizard = $this.data('wizard');
+			var buttons = (options && options['buttons']) ? $(options['buttons']) : $this.siblings('.wizard-actions').eq(0);
+			var $wizard = $this.data('fu.wizard');
 			$wizard.$prevBtn.remove();
 			$wizard.$nextBtn.remove();
 			
