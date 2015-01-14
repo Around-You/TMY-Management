@@ -160,7 +160,7 @@ class SaleController extends AbstractActionController
         return array(
             'member' => $member,
             'usedGoods' => $usedGoods,
-            'memberGoodsList' => $memberGoods
+            'memberGoodsList' => $memberGoods->toArray()
         );
     }
 
