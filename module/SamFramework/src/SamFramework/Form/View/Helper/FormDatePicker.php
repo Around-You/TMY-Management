@@ -120,9 +120,11 @@ class FormDatePicker extends FormText
         $headLinkHelper = $this->getHeadLinkHelper();
         $headLinkHelper->appendStylesheet($this->getView()->basePath('css/datepicker.css'));
         $inlineScriptHelper->appendFile($this->getView()->basePath('js/date-time/bootstrap-datepicker.js'));
+        $inlineScriptHelper->appendFile($this->getView()->basePath('js/date-time/bootstrap-datepicker.zh.js'));
         $inlineScriptHelper->captureStart();
         echo <<<JS
 		$('.date-picker').datepicker({
+            language: 'zh',
 			autoclose: true,
 			todayHighlight: true
 		}).next().on('click', function(){
