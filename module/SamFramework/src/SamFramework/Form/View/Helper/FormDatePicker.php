@@ -89,7 +89,7 @@ class FormDatePicker extends FormText
         $attributes['name']  = $name;
         $attributes['type']  = $this->getType($element);
         $attributes['value'] = $element->getValue();
-
+        $attributes['data-date-format'] = 'yyyy-mm-dd';
         $this->renderScript($name);
 
         return sprintf(
@@ -119,7 +119,7 @@ class FormDatePicker extends FormText
         $inlineScriptHelper = $this->getInlineScriptHelper();
         $headLinkHelper = $this->getHeadLinkHelper();
         $headLinkHelper->appendStylesheet($this->getView()->basePath('css/datepicker.css'));
-        $inlineScriptHelper->appendFile($this->getView()->basePath('js/date-time/bootstrap-datepicker.min.js'));
+        $inlineScriptHelper->appendFile($this->getView()->basePath('js/date-time/bootstrap-datepicker.js'));
         $inlineScriptHelper->captureStart();
         echo <<<JS
 		$('.date-picker').datepicker({

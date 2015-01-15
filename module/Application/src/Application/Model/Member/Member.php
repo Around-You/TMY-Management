@@ -16,7 +16,7 @@ class Member extends AbstractModel
 
     public $code = '';
 
-    public $phone = 0;
+    public $phone = '';
 
     public $address = '';
 
@@ -24,11 +24,11 @@ class Member extends AbstractModel
 
     public $id_code = '';
 
-    public $point = '';
+    public $point = 0;
 
     public $parent_name = '';
 
-    public $gender = '';
+    public $gender = '男';
 
     public $dob= null;
 
@@ -45,10 +45,12 @@ class Member extends AbstractModel
     public $goods = 0;
 
 
+    public function __construct(){
+        $this->created_time = date('Y-m-d');
+    }
 
 
-
-    protected $exclude = array( 'created_time');
+    protected $exclude = array( );
 
     public function getInputFilter()
     {
@@ -68,18 +70,18 @@ class Member extends AbstractModel
                 )
             ));
 
-            $inputFilter->add(array(
-                'name' => 'dob',
-                'required' => true,
-                'filters' => array(
-                    array(
-                        'name' => 'StripTags'
-                    ),
-                    array(
-                        'name' => 'StringTrim'
-                    )
-                )
-            ));
+//             $inputFilter->add(array(
+//                 'name' => 'dob',
+//                 'required' => true,
+//                 'filters' => array(
+//                     array(
+//                         'name' => 'StripTags'
+//                     ),
+//                     array(
+//                         'name' => 'StringTrim'
+//                     )
+//                 )
+//             ));
 
             $this->inputFilter = $inputFilter;
         }
@@ -121,7 +123,7 @@ class Member extends AbstractModel
             'point' => $this->point,
             'parent_name' => $this->parent_name,
             'gender' => $this->gender,
-            'dob' => $this->dob,
+            'dob' => !empty($this->dob)?$this->dob:NULL,
             'created_at_store' => $this->created_at_store,
             'created_by_user' => $this->created_by_user,
             'created_time' => $this->created_time,

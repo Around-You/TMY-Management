@@ -108,14 +108,14 @@ class MemberController extends AbstractActionController
         $form = MemberForm::getInstance($this->getServiceLocator());
         $form->setMemberGoods($this->getGoodsUseForMember());
         $request = $this->getRequest();
+        $member = new Member();
+        $form->bind($member);
         if ($request->isPost()) {
-            $member = new Member();
             $form->setInputFilter($member->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $member->exchangeArray($form->getData());
                 $memberTable = $this->getMemberTable();
-                $member = $memberTable->saveMember($member);
+                $member = $memberTable->saveMember($form->getData());
 
                 if ($member->goods > 0) {
                     $goods = $this->getGoodsTable()->getOneById($member->goods);

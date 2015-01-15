@@ -53,30 +53,7 @@ class MemberForm extends Form
                 'label' => '手机/电话'
             )
         ));
-        $this->add(array(
-            'name' => 'address',
-            'type' => 'Text',
-            'options' => array(
-                'label' => '联系地址'
-            )
-        ));
-        $this->add(array(
-            'name' => 'id_type',
-            'type' => 'Select',
-            'options' => array(
-                'label' => '证件类型',
-                'value_options' => array(
-                    '身份证' => '身份证'
-                )
-            )
-        ));
-        $this->add(array(
-            'name' => 'id_code',
-            'type' => 'Text',
-            'options' => array(
-                'label' => '证件号码'
-            )
-        ));
+
         $this->add(array(
             'name' => 'parent_name',
             'type' => 'Text',
@@ -125,19 +102,19 @@ class MemberForm extends Form
             )
         ));
         $this->add(array(
+            'name' => 'created_time',
+            'type' => 'DatePicker',
+            'options' => array(
+                'label' => '办卡日期'
+            )
+        ));
+        $this->add(array(
             'name' => 'submit',
             'type' => 'submitButton',
             'options' => array(
                 'label' => '保存'
             )
         ));
-//         $this->add(array(
-//             'name' => 'cancel',
-//             'type' => 'cancelButton',
-//             'options' => array(
-//                 'label' => '重设'
-//             )
-//         ));
     }
 
     public function setMemberGoods($memberGoods){

@@ -11,19 +11,17 @@ echo $this->formHidden($form->get('id'));
 <?php
 echo $this->formRow($form->get('code'));
 echo $this->formRow($form->get('gender'));
-echo $this->formRow($form->get('id_type'));
 echo $this->formRow($form->get('point'));
-echo $this->formRow($form->get('address'));
 if ( $form->get('id')->getValue() == 0 ){
     echo $this->formRow($form->get('goods'));
 }
+echo $this->formRow($form->get('created_time'));
 ?>
 </div>
 <div class="col-md-6">
 <?php
 echo $this->formRow($form->get('name'));
 echo $this->formRow($form->get('dob'));
-echo $this->formRow($form->get('id_code'));
 echo $this->formRow($form->get('phone'));
 echo $this->formRow($form->get('parent_name'));
 ?>
