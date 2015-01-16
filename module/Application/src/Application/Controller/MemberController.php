@@ -175,4 +175,9 @@ class MemberController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage($member->name . ' 已禁用');
         return $this->redirect()->toUrl('/member');
     }
+
+    public function profileAction()
+    {
+        return array();
+    }
 }
