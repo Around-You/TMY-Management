@@ -92,4 +92,12 @@ class DataTableResult implements ArraySerializableInterface
     {
         throw new \Exception('not used');
     }
+
+    public static function getOrderString($request)
+    {
+        $columns = $request['columns'];
+        $order = $request['order'];
+        $orderString = $columns[$order[0]['column']]['data'] . ' ' . $order[0]['dir'];
+        return $orderString;
+    }
 }

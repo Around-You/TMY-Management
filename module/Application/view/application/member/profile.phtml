@@ -3,6 +3,52 @@ $title = '会员信息';
 $this->layout()->currentItem = $title;
 $this->headTitle($title);
 
+$memberGoodsTableOptions = array(
+    'cols' => array(
+        array(
+            'title' => '商品代码',
+            'key' => 'goods_code'
+        ),
+        array(
+            'title' => '商品名称',
+            'key' => 'goods_title'
+        ),
+        array(
+            'title' => '详情',
+            'key' => 'detail'
+        ),
+        array(
+            'title' => '备注',
+            'key' => 'description'
+        )
+    ),
+    'getListDataUrl' => '/member/getMemberGoodsListData',
+    'operatingCol' => false
+);
+$memberActionTableOptions = array(
+    'dataTableName' => 'memberAction',
+    'cols' => array(
+        array(
+            'title' => '商品代码',
+            'key' => 'goods_code'
+        ),
+        array(
+            'title' => '商品名称',
+            'key' => 'goods_title'
+        ),
+        array(
+            'title' => '动作',
+            'key' => 'action'
+        ),
+        array(
+            'title' => '时间',
+            'key' => 'create_time'
+        )
+    ),
+    'getListDataUrl' => '/member/getMemberLogListData',
+    'operatingCol' => false
+)
+
 ?>
 
 <div class="page-header">
@@ -19,37 +65,37 @@ $this->headTitle($title);
 					<div class="profile-info-row">
 						<div class="profile-info-name">姓名</div>
 
-						<div class="profile-info-value">alexdoe</div>
+						<div class="profile-info-value"><?=$member->name?></div>
 						<div class="profile-info-name">会员卡号</div>
 
-						<div class="profile-info-value">alexdoe</div>
+						<div class="profile-info-value"><?=$member->code?></div>
 					</div>
 
 					<div class="profile-info-row">
 						<div class="profile-info-name">性别</div>
 
-						<div class="profile-info-value">alexdoe</div>
+						<div class="profile-info-value"><?=$member->gender?></div>
 						<div class="profile-info-name">生日</div>
 
-						<div class="profile-info-value">alexdoe</div>
+						<div class="profile-info-value"><?=$member->dob?></div>
 					</div>
 
 					<div class="profile-info-row">
 						<div class="profile-info-name">监护人姓名</div>
 
-						<div class="profile-info-value">alexdoe</div>
+						<div class="profile-info-value"><?=$member->parent_name?></div>
 						<div class="profile-info-name">电话</div>
 
-						<div class="profile-info-value">alexdoe</div>
+						<div class="profile-info-value"><?=$member->phone?></div>
 					</div>
 
 					<div class="profile-info-row">
 						<div class="profile-info-name">办卡日期</div>
 
-						<div class="profile-info-value">alexdoe</div>
+						<div class="profile-info-value"><?=$member->created_time?></div>
 						<div class="profile-info-name">积分</div>
 
-						<div class="profile-info-value">alexdoe</div>
+						<div class="profile-info-value"><?=$member->point?></div>
 					</div>
 				</div>
 			</div>
@@ -71,43 +117,24 @@ $this->headTitle($title);
 					</ul>
 
 					<div class="tab-content no-border padding-24">
-						<div id="member-goods" class="tab-pane in active"></div>
-						<div id="history" class="tab-pane">
-							<div class="row">
-								<div class="col-xs-12">
-									<table id="simple-table"
-										class="table table-striped table-bordered table-hover">
-										<thead>
-											<tr>
 
-												<th>Domain</th>
-												<th>Price</th>
-												<th class="hidden-480">Clicks</th>
+						<div id="member-goods" class="tab-pane in active">
+    						<div class="row">
+        			            <div class="col-xs-12">
+            			            <button class="btn btn-yellow btn-sm pull-right" id="buy-button">
+                                        <i class="ace-icon fa fa-plus"></i>续卡
+            						</button>
 
-												<th><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
-													Update</th>
-												<th class="hidden-480">Status</th>
-
-
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-
-
-												<td><a href="#">ace.com</a></td>
-												<td>$45</td>
-												<td class="hidden-480">3,330</td>
-												<td>Feb 12</td>
-
-												<td class="hidden-480"><span
-													class="label label-sm label-warning">Expiring</span></td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
+        			            </div>
+    			            </div>
+    			            <div class="space"></div>
+                            <div class="row">
+        			            <div class="col-xs-12">
+    						      <?=$this->dataTable($memberGoodsTableOptions)?>
+                                </div>
+    			            </div>
 						</div>
+						<div id="history" class="tab-pane"><?=$this->dataTable($memberActionTableOptions)?></div>
 					</div>
 				</div>
 			</div>

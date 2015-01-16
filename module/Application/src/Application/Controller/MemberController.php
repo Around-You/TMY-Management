@@ -27,6 +27,8 @@ class MemberController extends AbstractActionController
 
     protected $memberGoodsTable;
 
+    protected $memberLogTable;
+
     protected $sellLogTable;
 
     public function getMemberTable()
@@ -53,6 +55,14 @@ class MemberController extends AbstractActionController
             $this->memberGoodsTable = $this->getServiceLocator()->get('Application\Model\Goods\MemberGoodsTable');
         }
         return $this->memberGoodsTable;
+    }
+
+    public function getMemberLogTable()
+    {
+        if (! $this->memberLogTable) {
+            $this->memberLogTable = $this->getServiceLocator()->get('Application\Model\Logs\MemberLogTable');
+        }
+        return $this->memberLogTable;
     }
 
     public function getSellLogTable()
@@ -96,7 +106,6 @@ class MemberController extends AbstractActionController
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
         } catch (\Exception $e) {
-            var_dump($e);
             $returnJson = DataTableResult::buildResult();
         }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
@@ -178,6 +187,49 @@ class MemberController extends AbstractActionController
 
     public function profileAction()
     {
-        return array();
+        $id = (int) $this->params('id', 0);
+        try {
+            $member = $this->getMemberTable()->getOneById($id);
+        } catch (\Exception $ex) {
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            return $this->redirect()->toUrl('/member');
+        }
+
+        return array(
+            'member' => $member
+        );
+    }
+
+    public function getMemberGoodsListDataAction()
+    {
+        try {
+            $where = array(
+                'member.enable' => 1
+            );
+            $count = $this->getMemberGoodsTable()->getFetchAllCounts($where);
+            $memberGoods = $this->getMemberGoodsTable()->fetchAll($where, $_GET['start'], $_GET['length']);
+
+            $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $memberGoods);
+        } catch (\Exception $e) {
+            $returnJson = DataTableResult::buildResult();
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
+    public function getMemberLogListDataAction()
+    {
+        try {
+            $where = array();
+            $count = $this->getMemberLogTable()->getFetchAllCounts($where);
+            $memberGoods = $this->getMemberLogTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
+
+            $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $memberGoods);
+        } catch (\Exception $e) {
+            print_r($e->getMessage());
+            $returnJson = DataTableResult::buildResult();
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
     }
 }

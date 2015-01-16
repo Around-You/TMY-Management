@@ -36,7 +36,7 @@ class DailyReportTable extends AbstractModelMapper
         return $row['rownum'];
     }
 
-    public function fetchAll($where = array(), $offset = 0, $limit = 99999, $order = '')
+    public function fetchAll($where = array(), $offset = 0, $limit = 99999, $order = array())
     {
         $offset = (int) $offset;
         $limit = (int) $limit;

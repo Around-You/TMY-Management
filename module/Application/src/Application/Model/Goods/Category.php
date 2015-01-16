@@ -13,7 +13,7 @@ class Category extends AbstractModel
 
     public $title = '';
 
-    public $enable = '';
+    public $enable = 1;
 
     public $parent_id = 0;
 
