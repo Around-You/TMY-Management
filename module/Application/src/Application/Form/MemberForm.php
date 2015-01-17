@@ -109,6 +109,23 @@ class MemberForm extends Form
             )
         ));
         $this->add(array(
+            'name' => 'description',
+            'type' => 'TextArea',
+            'options' => array(
+                'label' => '备注'
+            )
+        ));
+        $this->add(array(
+            'name' => 'referral',
+            'type' => 'Select',
+            'options' => array(
+                'label' => '经办人',
+                'value_options' => array(
+                    0 => '请选择初始卡类别'
+                )
+            )
+        ));
+        $this->add(array(
             'name' => 'submit',
             'type' => 'submitButton',
             'options' => array(
@@ -119,6 +136,10 @@ class MemberForm extends Form
 
     public function setMemberGoods($memberGoods){
         $this->get('goods')->setValueOptions($memberGoods);
+    }
+
+    public function setStaff($staffs){
+        $this->get('referral')->setValueOptions($staffs);
     }
 
 }

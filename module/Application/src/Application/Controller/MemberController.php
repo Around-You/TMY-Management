@@ -31,6 +31,8 @@ class MemberController extends AbstractActionController
 
     protected $sellLogTable;
 
+    protected $staffTable;
+
     public function getMemberTable()
     {
         if (! $this->memberTable) {
@@ -73,7 +75,15 @@ class MemberController extends AbstractActionController
         return $this->sellLogTable;
     }
 
-    public function getGoodsUseForMember()
+    public function getStaffTable()
+    {
+        if (! $this->staffTable) {
+            $this->staffTable = $this->getServiceLocator()->get('Application\Model\Account\StaffTable');
+        }
+        return $this->staffTable;
+    }
+
+    public function getGoodsForMemberForm()
     {
         $table = $this->getGoodsTable();
         $resultSet = $table->fetchAll(array(
@@ -89,6 +99,18 @@ class MemberController extends AbstractActionController
         return $returnArray;
     }
 
+    public function getStaffForMemberForm()
+    {
+        $resultSet = $this->getStaffTable()->fetchAll(array(
+            'enable' => 1
+        ));
+        $returnArray = array();
+        foreach ($resultSet as $staff) {
+            $returnArray[$staff->id] = $staff->staff_name;
+        }
+        return $returnArray;
+    }
+
     public function indexAction()
     {
         return array();
@@ -97,12 +119,11 @@ class MemberController extends AbstractActionController
     public function getMemberListDataAction()
     {
         try {
-            $count = $this->getMemberTable()->getFetchAllCounts(array(
+            $where = array(
                 'member.enable' => 1
-            ));
-            $products = $this->getMemberTable()->fetchAll(array(
-                'member.enable' => 1
-            ), $_GET['start'], $_GET['length']);
+            );
+            $count = $this->getMemberTable()->getFetchAllCounts($where);
+            $products = $this->getMemberTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
         } catch (\Exception $e) {
@@ -115,7 +136,8 @@ class MemberController extends AbstractActionController
     public function addAction()
     {
         $form = MemberForm::getInstance($this->getServiceLocator());
-        $form->setMemberGoods($this->getGoodsUseForMember());
+        $form->setMemberGoods($this->getGoodsForMemberForm());
+        $form->setStaff($this->getStaffForMemberForm());
         $request = $this->getRequest();
         $member = new Member();
         $form->bind($member);
@@ -207,7 +229,7 @@ class MemberController extends AbstractActionController
                 'member.enable' => 1
             );
             $count = $this->getMemberGoodsTable()->getFetchAllCounts($where);
-            $memberGoods = $this->getMemberGoodsTable()->fetchAll($where, $_GET['start'], $_GET['length']);
+            $memberGoods = $this->getMemberGoodsTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $memberGoods);
         } catch (\Exception $e) {

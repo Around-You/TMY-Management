@@ -31,6 +31,7 @@ return array(
             'WYSIWYG' => 'SamFramework\Form\Element\WYSIWYG',
             'password' => 'SamFramework\Form\Element\Password',
             'text' => 'SamFramework\Form\Element\Text',
+            'textarea' => 'SamFramework\Form\Element\Textarea',
             'select' => 'SamFramework\Form\Element\Select',
             'radio' => 'SamFramework\Form\Element\Radio',
             'datepicker' => 'SamFramework\Form\Element\DatePicker',

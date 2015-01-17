@@ -12,10 +12,11 @@ echo $this->formHidden($form->get('id'));
 echo $this->formRow($form->get('code'));
 echo $this->formRow($form->get('gender'));
 echo $this->formRow($form->get('point'));
+echo $this->formRow($form->get('created_time'));
 if ( $form->get('id')->getValue() == 0 ){
     echo $this->formRow($form->get('goods'));
 }
-echo $this->formRow($form->get('created_time'));
+echo $this->formRow($form->get('description'));
 ?>
 </div>
 <div class="col-md-6">
@@ -24,6 +25,9 @@ echo $this->formRow($form->get('name'));
 echo $this->formRow($form->get('dob'));
 echo $this->formRow($form->get('phone'));
 echo $this->formRow($form->get('parent_name'));
+if ( $form->get('id')->getValue() == 0 ){
+    echo $this->formRow($form->get('referral'));
+}
 ?>
 </div>
 <div class="form-group">
