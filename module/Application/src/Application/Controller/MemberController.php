@@ -185,7 +185,6 @@ class MemberController extends AbstractActionController
         if ($request->isPost()) {
             $data = $request->getPost();
             $data['goods'] = 0;
-            $data['referral'] = $member->referral;
             $form->setInputFilter($member->getInputFilter());
             $form->setData($data);
             if ($form->isValid()) {
@@ -194,7 +193,6 @@ class MemberController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage('会员 ' . $member->name . ' 已编辑');
                 return $this->redirect()->toUrl('/member');
             }else {
-                var_dump($form->getMessages());
                 $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
         }
