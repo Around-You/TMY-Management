@@ -6,6 +6,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class MemberForm extends Form
 {
+
     /**
      *
      * @param ServiceLocatorInterface $sl
@@ -66,7 +67,7 @@ class MemberForm extends Form
             'name' => 'point',
             'type' => 'Text',
             'options' => array(
-                'label' => '初始积分',
+                'label' => '初始积分'
             ),
             'attributes' => array(
                 'value' => 0
@@ -134,12 +135,13 @@ class MemberForm extends Form
         ));
     }
 
-    public function setMemberGoods($memberGoods){
+    public function setMemberGoods($memberGoods)
+    {
         $this->get('goods')->setValueOptions($memberGoods);
     }
 
-    public function setStaff($staffs){
+    public function setStaff($staffs)
+    {
         $this->get('referral')->setValueOptions($staffs);
     }
-
 }
