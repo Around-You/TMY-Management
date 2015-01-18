@@ -48,7 +48,7 @@ var main_sale_use = {
 	        		var item = result.data[key];
 	        		var row = '<tr data-id="' + item.id + '" data-title="' + item.goods_title + '"><td class="center">' + rownum + '</td>';
 		        	row += '<td>' + item.goods_title + '</td>';
-		        	row += '<td>'+ item.description + '</td>';
+		        	row += '<td>'+ item.detail + '</td>';
 		        	row += '<td><a href="javascript:void(0)" class="use-goods-btn green"> <i class="ace-icon glyphicon glyphicon-check green"></i>扣次</a></td>';
 		        	row += '</tr>';
 		            $('#goods-tbl tbody').append(row);
