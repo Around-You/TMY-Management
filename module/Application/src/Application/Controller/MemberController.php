@@ -94,7 +94,13 @@ class MemberController extends AbstractActionController
         ));
         $returnArray = array();
         foreach ($resultSet as $good) {
-            $returnArray[$good->id] = $good->title . ' - ' . $good->priceString;
+            $returnArray[$good->id] = array(
+                'value' => $good->id,
+                'label' => $good->title . ' - ' . $good->priceString,
+                'attributes' => array(
+                    'data-goods-type' => $good->type
+                )
+            );
         }
         return $returnArray;
     }
@@ -192,7 +198,7 @@ class MemberController extends AbstractActionController
                 $member = $memberTable->saveMember($member);
                 $this->flashMessenger()->addSuccessMessage('会员 ' . $member->name . ' 已编辑');
                 return $this->redirect()->toUrl('/member');
-            }else {
+            } else {
                 $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
         }
@@ -213,6 +219,7 @@ class MemberController extends AbstractActionController
     public function profileAction()
     {
         $id = (int) $this->params('id', 0);
+        $goods = $this->getGoodsForMemberForm();
         try {
             $member = $this->getMemberTable()->getOneById($id);
         } catch (\Exception $ex) {
@@ -221,7 +228,8 @@ class MemberController extends AbstractActionController
         }
 
         return array(
-            'member' => $member
+            'member' => $member,
+            'goods' => $goods
         );
     }
 
