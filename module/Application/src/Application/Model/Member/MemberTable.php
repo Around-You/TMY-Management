@@ -56,6 +56,12 @@ class MemberTable extends AbstractModelMapper
         return $resultSet;
     }
 
+    /**
+     *
+     * @param unknown $id
+     * @throws \Exception
+     * @return Member
+     */
     public function getOneById($id)
     {
         $tableGateway = $this->getTableGateway();
