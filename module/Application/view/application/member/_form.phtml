@@ -25,9 +25,7 @@ echo $this->formRow($form->get('name'));
 echo $this->formRow($form->get('dob'));
 echo $this->formRow($form->get('phone'));
 echo $this->formRow($form->get('parent_name'));
-if ( $form->get('id')->getValue() == 0 ){
-    echo $this->formRow($form->get('referral'));
-}
+echo $this->formRow($form->get('referral'));
 ?>
 </div>
 <div class="form-group">
