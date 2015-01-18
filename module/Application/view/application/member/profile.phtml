@@ -1,0 +1,144 @@
+<?php
+$title = '会员信息';
+$this->layout()->currentItem = $title;
+$this->headTitle($title);
+
+$memberGoodsTableOptions = array(
+    'cols' => array(
+        array(
+            'title' => '商品代码',
+            'key' => 'goods_code'
+        ),
+        array(
+            'title' => '商品名称',
+            'key' => 'goods_title'
+        ),
+        array(
+            'title' => '详情',
+            'key' => 'detail'
+        ),
+        array(
+            'title' => '备注',
+            'key' => 'description'
+        )
+    ),
+    'getListDataUrl' => '/member/getMemberGoodsListData',
+    'operatingCol' => false
+);
+$memberActionTableOptions = array(
+    'dataTableName' => 'memberAction',
+    'cols' => array(
+        array(
+            'title' => '商品代码',
+            'key' => 'goods_code'
+        ),
+        array(
+            'title' => '商品名称',
+            'key' => 'goods_title'
+        ),
+        array(
+            'title' => '动作',
+            'key' => 'action'
+        ),
+        array(
+            'title' => '时间',
+            'key' => 'create_time'
+        )
+    ),
+    'getListDataUrl' => '/member/getMemberLogListData',
+    'operatingCol' => false
+)
+
+?>
+
+<div class="page-header">
+	<h1>
+    <?= $this->escapeHtml($title); ?>
+</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+        <?=$this->flashMessenger()->render();?>
+        <div class="row">
+			<div class="col-xs-12">
+				<div class="profile-user-info profile-user-info-striped">
+					<div class="profile-info-row">
+						<div class="profile-info-name">姓名</div>
+
+						<div class="profile-info-value"><?=$member->name?></div>
+						<div class="profile-info-name">会员卡号</div>
+
+						<div class="profile-info-value"><?=$member->code?></div>
+					</div>
+
+					<div class="profile-info-row">
+						<div class="profile-info-name">性别</div>
+
+						<div class="profile-info-value"><?=$member->gender?></div>
+						<div class="profile-info-name">生日</div>
+
+						<div class="profile-info-value"><?=$member->dob?></div>
+					</div>
+
+					<div class="profile-info-row">
+						<div class="profile-info-name">监护人姓名</div>
+
+						<div class="profile-info-value"><?=$member->parent_name?></div>
+						<div class="profile-info-name">电话</div>
+
+						<div class="profile-info-value"><?=$member->phone?></div>
+					</div>
+
+					<div class="profile-info-row">
+						<div class="profile-info-name">办卡日期</div>
+
+						<div class="profile-info-value"><?=$member->created_time?></div>
+						<div class="profile-info-name">积分</div>
+
+						<div class="profile-info-value"><?=$member->point?></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="hr dotted"></div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="tabbable">
+					<ul class="nav nav-tabs padding-18">
+						<li class="active"><a data-toggle="tab" href="#member-goods"> <i
+								class="purple ace-icon fa fa-credit-card bigger-120"></i> 消费卡管理
+						</a></li>
+
+						<li><a data-toggle="tab" href="#history"> <i
+								class="orange ace-icon fa fa-history bigger-120"></i> 卡消费明细
+						</a></li>
+
+
+					</ul>
+
+					<div class="tab-content no-border padding-24">
+
+						<div id="member-goods" class="tab-pane in active">
+    						<div class="row">
+        			            <div class="col-xs-12">
+            			            <button class="btn btn-yellow btn-sm pull-right" id="buy-button">
+                                        <i class="ace-icon fa fa-plus"></i>续卡
+            						</button>
+
+        			            </div>
+    			            </div>
+    			            <div class="space"></div>
+                            <div class="row">
+        			            <div class="col-xs-12">
+    						      <?=$this->dataTable($memberGoodsTableOptions)?>
+                                </div>
+    			            </div>
+						</div>
+						<div id="history" class="tab-pane"><?=$this->dataTable($memberActionTableOptions)?></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

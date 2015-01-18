@@ -35,7 +35,7 @@ class DataTable extends AbstractHelper
 
     protected $options;
 
-    protected $defaultTableName = 'defaultDataTable';
+    protected $dataTableName = 'defaultDataTable';
 
     /**
      *
@@ -109,7 +109,10 @@ class DataTable extends AbstractHelper
     protected function renderHtml()
     {
         $options = $this->getOptions();
-        $html = '<table id="' . $this->defaultTableName . '" class="table table-striped table-bordered table-hover">';
+        if (isset($options['dataTableName'])){
+            $this->dataTableName = $options['dataTableName'];
+        }
+        $html = '<table id="' . $this->dataTableName . '" class="table table-striped table-bordered table-hover">';
         $html .= '<thead><tr>';
         foreach ($options['cols'] as $col) {
             $html .= '<th>' . $col['title'] . '</th>';
@@ -131,7 +134,7 @@ class DataTable extends AbstractHelper
             ->basePath('js/dataTables/jquery.dataTables.bootstrap.js'));
         $inlineScriptHelper->captureStart();
         echo <<<JS
-$('#{$this->defaultTableName}').dataTable( {
+$('#{$this->dataTableName}').dataTable( {
     processing: false,
     serverSide: true,
     bAutoWidth: false,

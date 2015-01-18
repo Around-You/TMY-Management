@@ -44,13 +44,19 @@ class Member extends AbstractModel
 
     public $goods = 0;
 
+    public $description = '';
+
+    public $referral = NULL;
+
+    public $referral_staff_name = '';
+
 
     public function __construct(){
         $this->created_time = date('Y-m-d');
     }
 
 
-    protected $exclude = array( );
+    protected $exclude = array( 'referral_staff_name' );
 
     public function getInputFilter()
     {
@@ -69,20 +75,6 @@ class Member extends AbstractModel
                     )
                 )
             ));
-
-//             $inputFilter->add(array(
-//                 'name' => 'dob',
-//                 'required' => true,
-//                 'filters' => array(
-//                     array(
-//                         'name' => 'StripTags'
-//                     ),
-//                     array(
-//                         'name' => 'StringTrim'
-//                     )
-//                 )
-//             ));
-
             $this->inputFilter = $inputFilter;
         }
 
@@ -108,6 +100,9 @@ class Member extends AbstractModel
         $this->created_time = (isset($array['created_time'])) ? $array['created_time'] : $this->created_time;
         $this->update_time = (isset($array['update_time'])) ? $array['update_time'] : $this->update_time;
         $this->enable = (isset($array['enable'])) ? $array['enable'] : $this->enable;
+        $this->description = (isset($array['description'])) ? $array['description'] : $this->description;
+        $this->referral = (isset($array['referral'])) ? $array['referral'] : $this->referral;
+        $this->referral_staff_name = (isset($array['referral_staff_name'])) ? $array['referral_staff_name'] : $this->referral_staff_name;
     }
 
     public function getArrayCopy()
@@ -128,7 +123,10 @@ class Member extends AbstractModel
             'created_by_user' => $this->created_by_user,
             'created_time' => $this->created_time,
             'update_time' => $this->update_time,
-            'enable'=> $this->enable
+            'enable'=> $this->enable,
+            'description'=> $this->description,
+            'referral'=> $this->referral,
+            'referral_staff_name' => $this->referral_staff_name
         );
         return $data;
     }

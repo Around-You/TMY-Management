@@ -5,7 +5,7 @@ use SamFramework\Model\AbstractModel;
 
 /**
  *
- * @property string description
+ * @property string detail
  * @property string status
  *
  */
@@ -30,9 +30,13 @@ class MemberGoods extends AbstractModel
 
     public $create_time = '';
 
+    public $goods_code = '';
+
     public $goods_title = '';
 
     public $goods_type = '';
+
+    public $description = '';
 
     protected $_status = NULL;
 
@@ -42,10 +46,12 @@ class MemberGoods extends AbstractModel
     protected $exclude = array(
         'create_time',
         'goods_title',
+        'detail',
         'description',
         'member_name',
         'member_code',
         'goods_type',
+        'goods_code',
         'status'
     );
 
@@ -59,8 +65,10 @@ class MemberGoods extends AbstractModel
         $this->member_code = (isset($array['member_code'])) ? $array['member_code'] : $this->member_code;
         $this->count = (isset($array['count'])) ? $array['count'] : $this->count;
         $this->goods_id = (isset($array['goods_id'])) ? $array['goods_id'] : $this->goods_id;
+        $this->goods_code = (isset($array['goods_code'])) ? $array['goods_code'] : $this->goods_code;
         $this->goods_title = (isset($array['goods_title'])) ? $array['goods_title'] : $this->goods_title;
         $this->goods_type = (isset($array['goods_type'])) ? $array['goods_type'] : $this->goods_type;
+        $this->description = (isset($array['description'])) ? $array['description'] : $this->description;
         $this->create_time = (isset($array['create_time'])) ? $array['create_time'] : $this->create_time;
     }
 
@@ -75,9 +83,11 @@ class MemberGoods extends AbstractModel
             'member_code' => $this->member_code,
             'count' => $this->count,
             'goods_id' => $this->goods_id,
+            'goods_code' => $this->goods_code,
             'goods_title' => $this->goods_title,
             'goods_type' => $this->goods_type,
-            'description' => $this->getDescription(),
+            'description' => $this->description,
+            'detail' => $this->detail,
             'create_time' => $this->create_time,
             'status' => $this->status
         );
@@ -90,7 +100,7 @@ class MemberGoods extends AbstractModel
         return $this->_status;
     }
 
-    public function getDescription()
+    public function getDetail()
     {
         $description = '';
         switch ($this->goods_type) {

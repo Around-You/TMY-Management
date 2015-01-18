@@ -18,6 +18,9 @@ class MemberTable extends AbstractModelMapper
 
     public function buildSqlSelect(Select $select, $where)
     {
+        $select->join('staff', 'staff.id=referral', array(
+            'referral_staff_name' => 'staff_name'
+        ), Select::JOIN_LEFT);
         $select->where($where);
     }
 
@@ -37,17 +40,18 @@ class MemberTable extends AbstractModelMapper
         return $row['rownum'];
     }
 
-    public function fetchAll($where = array(), $offset = 0, $limit = 99999)
+    public function fetchAll($where = array(), $offset = 0, $limit = 99999, $order = array())
     {
         $offset = (int) $offset;
         $limit = (int) $limit;
 
         $table = $this;
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where)
+        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where, $order)
         {
             $table->buildSqlSelect($select, $where);
             $select->offset($offset)
-                ->limit($limit);
+                ->limit($limit)
+                ->order($order);
         });
         return $resultSet;
     }

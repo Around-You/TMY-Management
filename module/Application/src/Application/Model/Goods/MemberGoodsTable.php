@@ -20,7 +20,8 @@ class MemberGoodsTable extends AbstractModelMapper
     {
         $select->join('goods', 'goods.id=goods_id', array(
             'goods_title' => 'title',
-            'goods_type' => 'type'
+            'goods_type' => 'type',
+            'goods_code' => 'code'
         ));
         $select->join('member', 'member.id=member_id', array(
             'memeber_name' => 'name',
@@ -45,17 +46,18 @@ class MemberGoodsTable extends AbstractModelMapper
         return $row['rownum'];
     }
 
-    public function fetchAll($where = array(), $offset = 0, $limit = 99999)
+    public function fetchAll($where = array(), $offset = 0, $limit = 99999, $order = array())
     {
         $offset = (int) $offset;
         $limit = (int) $limit;
 
         $table = $this;
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where)
+        $resultSet = $this->getTableGateway()->select(function (Select $select) use($offset, $limit, $table, $where, $order)
         {
             $table->buildSqlSelect($select, $where);
             $select->offset($offset)
-                ->limit($limit);
+                ->limit($limit)
+                ->order($order);
         });
         return $resultSet;
     }
