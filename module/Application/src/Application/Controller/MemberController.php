@@ -9,7 +9,6 @@
  */
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use SamFramework\Core\App;
 use Zend\View\Model\JsonModel;
 use Application\Form\MemberForm;
@@ -22,68 +21,6 @@ use Zend\Db\Sql\Predicate\Expression;
 
 class MemberController extends AbstractActionController
 {
-
-    protected $memberTable;
-
-    protected $goodsTable;
-
-    protected $memberGoodsTable;
-
-    protected $memberLogTable;
-
-    protected $sellLogTable;
-
-    protected $staffTable;
-
-    public function getMemberTable()
-    {
-        if (! $this->memberTable) {
-            $this->memberTable = $this->getServiceLocator()->get('Application\Model\Member\MemberTable');
-            $this->memberTable->currentUserId = App::getUser()->id;
-            $this->memberTable->currentStoreId = App::getUser()->store_id;
-        }
-        return $this->memberTable;
-    }
-
-    public function getGoodsTable()
-    {
-        if (! $this->goodsTable) {
-            $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
-        }
-        return $this->goodsTable;
-    }
-
-    public function getMemberGoodsTable()
-    {
-        if (! $this->memberGoodsTable) {
-            $this->memberGoodsTable = $this->getServiceLocator()->get('Application\Model\Goods\MemberGoodsTable');
-        }
-        return $this->memberGoodsTable;
-    }
-
-    public function getMemberLogTable()
-    {
-        if (! $this->memberLogTable) {
-            $this->memberLogTable = $this->getServiceLocator()->get('Application\Model\Logs\MemberLogTable');
-        }
-        return $this->memberLogTable;
-    }
-
-    public function getSellLogTable()
-    {
-        if (! $this->sellLogTable) {
-            $this->sellLogTable = $this->getServiceLocator()->get('Application\Model\Logs\SellLogTable');
-        }
-        return $this->sellLogTable;
-    }
-
-    public function getStaffTable()
-    {
-        if (! $this->staffTable) {
-            $this->staffTable = $this->getServiceLocator()->get('Application\Model\Account\StaffTable');
-        }
-        return $this->staffTable;
-    }
 
     public function getGoodsForMemberForm()
     {
@@ -130,7 +67,7 @@ class MemberController extends AbstractActionController
             $search = $_GET['search']['value'];
             $where = function (Where $where) use($search)
             {
-                $where->addPredicate(new Expression( "member.enable = 1 and (member.code like '{$search}%' or member.phone like '{$search}%' or member.name like '{$search}%')" ));
+                $where->addPredicate(new Expression("member.enable = 1 and (member.code like '{$search}%' or member.phone like '{$search}%' or member.name like '{$search}%')"));
             };
             $count = $this->getMemberTable()->getFetchAllCounts($where);
             $products = $this->getMemberTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
