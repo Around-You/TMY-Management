@@ -21,7 +21,7 @@ class DataTableResult implements ArraySerializableInterface
      *
      * @var Array
      */
-    protected $data;
+    protected $data = array();
 
     /**
      *
