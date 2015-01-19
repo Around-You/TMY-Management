@@ -17,6 +17,8 @@ use Application\Model\Goods\Goods;
 use Application\Model\Member\Member;
 use Application\Model\Goods\MemberGoods;
 use Application\Model\Json\DataTableResult;
+use Zend\Db\Sql\Where;
+use Zend\Db\Sql\Predicate\Expression;
 
 class MemberController extends AbstractActionController
 {
@@ -119,9 +121,11 @@ class MemberController extends AbstractActionController
     public function getMemberListDataAction()
     {
         try {
-            $where = array(
-                'member.enable' => 1
-            );
+            $search = $_GET['search']['value'];
+            $where = function (Where $where) use($search)
+            {
+                $where->addPredicate(new Expression( "member.enable = 1 and (member.code like '{$search}%' or member.phone like '{$search}%' or member.name like '{$search}%')" ));
+            };
             $count = $this->getMemberTable()->getFetchAllCounts($where);
             $products = $this->getMemberTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 
@@ -192,7 +196,7 @@ class MemberController extends AbstractActionController
                 $member = $memberTable->saveMember($member);
                 $this->flashMessenger()->addSuccessMessage('会员 ' . $member->name . ' 已编辑');
                 return $this->redirect()->toUrl('/member');
-            }else {
+            } else {
                 $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
         }

@@ -135,10 +135,13 @@ class DataTable extends AbstractHelper
         $inlineScriptHelper->captureStart();
         echo <<<JS
 $('#{$this->dataTableName}').dataTable( {
+    language: {
+        search: "查询: "
+    },
     processing: false,
     serverSide: true,
     bAutoWidth: false,
-	searching: false,
+	searching: true,
 	lengthChange: false,
 	info: true,
 	ajax: "{$this->getOptions()['getListDataUrl']}",
