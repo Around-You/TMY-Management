@@ -47,7 +47,6 @@ class MemberGoods extends AbstractModel
         'create_time',
         'goods_title',
         'detail',
-        'description',
         'member_name',
         'member_code',
         'goods_type',
@@ -58,8 +57,8 @@ class MemberGoods extends AbstractModel
     public function exchangeArray(array $array)
     {
         $this->id = (isset($array['id'])) ? $array['id'] : $this->id;
-        $this->start_date = (isset($array['start_date'])) ? $array['start_date'] : $this->start_date;
-        $this->end_date = (isset($array['end_date'])) ? $array['end_date'] : $this->end_date;
+        $this->start_date = (isset($array['start_date']) && ! empty($array['start_date'])) ? $array['start_date'] : $this->start_date;
+        $this->end_date = (isset($array['end_date']) && ! empty($array['end_date'])) ? $array['end_date'] : $this->end_date;
         $this->member_id = (isset($array['member_id'])) ? $array['member_id'] : $this->member_id;
         $this->member_name = (isset($array['member_name'])) ? $array['member_name'] : $this->member_name;
         $this->member_code = (isset($array['member_code'])) ? $array['member_code'] : $this->member_code;

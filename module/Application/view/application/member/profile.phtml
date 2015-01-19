@@ -19,7 +19,8 @@ $memberGoodsTableOptions = array(
         ),
         array(
             'title' => '详情',
-            'key' => 'detail'
+            'key' => 'detail',
+            'orderable' => 'false'
         ),
         array(
             'title' => '备注',
@@ -27,6 +28,9 @@ $memberGoodsTableOptions = array(
         )
     ),
     'getListDataUrl' => '/member/getMemberGoodsListData',
+    'getListDataParams' => array(
+        'member_id' => $member->id
+    ),
     'operatingCol' => false
 );
 $memberActionTableOptions = array(
@@ -50,9 +54,16 @@ $memberActionTableOptions = array(
         )
     ),
     'getListDataUrl' => '/member/getMemberLogListData',
+    'getListDataParams' => array(
+        'member_id' => $member->id
+    ),
     'operatingCol' => false
 )?>
-
+<style>
+<!--
+.date-picker { z-index: 1151 !important;  }
+-->
+</style>
 
 <div class="page-header">
 	<h1>
@@ -160,12 +171,13 @@ $memberActionTableOptions = array(
 					<div class="col-xs-12">
 						<form action="" method="POST" name="buy_goods_form"
 							class="form-horizontal" role="form" id="buy_goods_form">
+							<input type="hidden" name="member_id" value="<?=$member->id?>">
 							<div class="form-group ">
 								<label for="form-field-select-3"
 									class="col-sm-3 control-label no-padding-right">商品卡</label>
 								<div class="col-sm-7">
 									<select class="chosen-select form-control goods-chosen-select"
-										data-placeholder="请选择商品">
+										data-placeholder="请选择商品" name="goods_id">
 										<option value="" data-goods-type=""></option>
 										<?php foreach ($goods as $goodsItem):?>
 										<option value="<?=$goodsItem['value']?>"
@@ -179,8 +191,9 @@ $memberActionTableOptions = array(
 								<label class="col-sm-3 control-label no-padding-right"
 									for="form-field-1">是否开卡</label>
 								<div class="col-sm-7" style="padding-top: 7px;">
-									<label> <input name="form-field-checkbox" type="checkbox"
-										class="ace" checked="checked" /> <span class="lbl">现在开卡</span>
+									<label> <input id="checkbox-start" name="checkbox-start"
+										type="checkbox" class="ace" checked="checked" /> <span
+										class="lbl">现在开卡</span>
 									</label>
 								</div>
 							</div>
@@ -191,7 +204,7 @@ $memberActionTableOptions = array(
 								<div class="col-sm-7">
 									<div class="input-group">
 										<input type="text" id="form-field-1" placeholder="开始时间"
-											class="form-control date-picker" /><span
+											name="start_date" class="form-control date-picker" /><span
 											class="input-group-addon"> <i
 											class="fa fa-calendar bigger-110"></i>
 										</span>
@@ -206,7 +219,7 @@ $memberActionTableOptions = array(
 								<div class="col-sm-7">
 									<div class="input-group">
 										<input type="text" id="form-field-1" placeholder="结束时间"
-											class="form-control date-picker" /><span
+											name="end_date" class="form-control date-picker" /><span
 											class="input-group-addon"> <i
 											class="fa fa-calendar bigger-110"></i>
 										</span>
@@ -219,7 +232,7 @@ $memberActionTableOptions = array(
 									for="form-field-1">次数</label>
 								<div class="col-sm-7">
 									<input type="text" id="form-field-1" placeholder="次数"
-										class="form-control" />
+										name="count" class="form-control" />
 								</div>
 							</div>
 
@@ -227,7 +240,8 @@ $memberActionTableOptions = array(
 								<label class="col-sm-3 control-label no-padding-right"
 									for="form-field-1">备注</label>
 								<div class="col-sm-7">
-									<textarea rows="" cols="" class="form-control" placeholder="备注"></textarea>
+									<textarea rows="" cols="" class="form-control" placeholder="备注"
+										name="description"></textarea>
 								</div>
 							</div>
 						</form>

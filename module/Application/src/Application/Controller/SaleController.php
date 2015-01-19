@@ -20,6 +20,28 @@ use Application\Model\Logs\MemberLog;
 class SaleController extends AbstractActionController
 {
 
+    public function buyMemberCardAction()
+    {
+        $request = $this->getRequest();
+
+//             try {
+                $memberId = $_GET['member_id'];
+                $goodsId = $_GET['goods_id'];
+                $member = $this->getMemberTable()->getOneById($memberId);
+                $goods = $this->getGoodsTable()->getOneById($goodsId);
+                $memberGoods = new MemberGoods();
+                $memberGoods->exchangeArray($_GET);
+                $this->getMemberGoodsTable()->save($memberGoods);
+                $this->getDailyReportTable()->addSaleCount();
+                $this->getSellLogTable()->addSellLog($goods, $member);
+                $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+//             } catch (\Exception $e) {
+//                 $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
+//             }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
     public function quickAction()
     {
         $request = $this->getRequest();
