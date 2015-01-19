@@ -178,7 +178,7 @@ class MemberController extends AbstractActionController
     {
         try {
             $where = array(
-                'member.enable' => 1
+                'member_id' => $_GET['member_id']
             );
             $count = $this->getMemberGoodsTable()->getFetchAllCounts($where);
             $memberGoods = $this->getMemberGoodsTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
@@ -194,7 +194,7 @@ class MemberController extends AbstractActionController
     public function getMemberLogListDataAction()
     {
         try {
-            $where = array();
+            $where = array( 'member_id' => $_GET['member_id']);
             $count = $this->getMemberLogTable()->getFetchAllCounts($where);
             $memberGoods = $this->getMemberLogTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 

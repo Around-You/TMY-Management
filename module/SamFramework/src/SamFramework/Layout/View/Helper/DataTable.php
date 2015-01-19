@@ -109,7 +109,7 @@ class DataTable extends AbstractHelper
     protected function renderHtml()
     {
         $options = $this->getOptions();
-        if (isset($options['dataTableName'])){
+        if (isset($options['dataTableName'])) {
             $this->dataTableName = $options['dataTableName'];
         }
         $html = '<table id="' . $this->dataTableName . '" class="table table-striped table-bordered table-hover">';
@@ -132,6 +132,12 @@ class DataTable extends AbstractHelper
             ->basePath('js/dataTables/jquery.dataTables.js'));
         $inlineScriptHelper->appendFile($this->getView()
             ->basePath('js/dataTables/jquery.dataTables.bootstrap.js'));
+        $option = $this->getOptions();
+        $ajaxOption = array(
+            'url' => $option['getListDataUrl'],
+            'data' => isset($option['getListDataParams']) ? $option['getListDataParams'] : array()
+        );
+        $ajaxOption = json_encode($ajaxOption);
         $inlineScriptHelper->captureStart();
         echo <<<JS
 $('#{$this->dataTableName}').dataTable( {
@@ -144,22 +150,23 @@ $('#{$this->dataTableName}').dataTable( {
 	searching: true,
 	lengthChange: false,
 	info: true,
-	ajax: "{$this->getOptions()['getListDataUrl']}",
+	ajax: {$ajaxOption},
 	columns: [
 JS;
-        foreach ($this->getOptions()['cols'] as $col) {
+        foreach ($option['cols'] as $col) {
+            $orderable = isset($col['orderable'])? $col['orderable']:true;
             if (isset($col['linkTarget'])) {
                 switch ($col['linkTarget']) {
                     case 'editLink':
                         echo '{
-                        data: "' . $col['key'] . '",
+                        data: "' . $col['key'] . '", orderable: ' . $orderable . ',
                         render: function ( data, type, row ){
-    				        return "<a href=\"' . $this->getOptions()['operatingCol']['editUrl'] . '" + row.DT_RowId + "\">" + data + "</a>";
+    				        return "<a href=\"' . $option['operatingCol']['editUrl'] . '" + row.DT_RowId + "\">" + data + "</a>";
     				    } },';
                         break;
                     case 'none':
                     case false:
-                        echo '{ data: "' . $col['key'] . '" },';
+                        echo '{ data: "' . $col['key'] . '", orderable: ' . $orderable . ' },';
                         break;
                     default:
                         $linkUrl = $col['linkTarget'];
@@ -168,23 +175,23 @@ JS;
                             $linkParme = '" + row.' . $col['linkDataCol'] . ' + "';
                         }
                         echo '{
-                        data: "' . $col['key'] . '",
+                        data: "' . $col['key'] . '", orderable: ' . $orderable . ',
                         render: function ( data, type, row ){
     				        return "<a href=\"' . $linkUrl . $linkParme . '\">" + data + "</a>";
     				    } },';
                 }
             } else {
-                echo '{ data: "' . $col['key'] . '" },';
+                echo '{ data: "' . $col['key'] . '", orderable: ' . $orderable . ' },';
             }
         }
-        if (isset($this->getOptions()['operatingCol']) && $this->getOptions()['operatingCol'] !== false) {
+        if (isset($option['operatingCol']) && $option['operatingCol'] !== false) {
             echo <<<JS
         {
             data: null,
             orderable: false,
             render: function ( data, type, row ) {
-                var editString = '<a href="{$this->getOptions()['operatingCol']['editUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-pencil"></i>编辑</a>';
-                var deleteString = '<a href="{$this->getOptions()['operatingCol']['deleteUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-remove"></i>删除</a>';
+                var editString = '<a href="{$option['operatingCol']['editUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-pencil"></i>编辑</a>';
+                var deleteString = '<a href="{$option['operatingCol']['deleteUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-remove"></i>删除</a>';
                 return editString + ' ' + deleteString;
             }
         }
