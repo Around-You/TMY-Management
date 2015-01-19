@@ -48,7 +48,7 @@ class GoodsController extends AbstractActionController
                 'goods.enable' => 1
             );
             $count = $this->getGoodsTable()->getFetchAllCounts($where);
-            $products = $this->getGoodsTable()->fetchAll($where, $_GET['start'], $_GET['length']);
+            $products = $this->getGoodsTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
         } catch (\Exception $e) {
