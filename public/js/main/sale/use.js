@@ -5,10 +5,13 @@ var main_sale_use = {
 	},
 	bindEvent: function(){
 	    var me = this;
-	    $('#member-code').on('blur', function(){
-	        me.getMember($(this).val());
-	        me.getMemberGoods($(this).val());
-	    });
+        $("#member-code").autocomplete({
+            source: '/sale/getMemberByCode',
+            select: function( event, ui ) {
+                 me.getMember(ui.item.id);
+                 me.getMemberGoods(ui.item.id);
+            }
+        });
 		$("#goods-tbl").on(ace.click_event,'.use-goods-btn', function() {
 			var tr = $(this).closest('tr');
 			var showText = '是否对' + $(tr).data('title') + '进行 扣次/使用 操作？';
