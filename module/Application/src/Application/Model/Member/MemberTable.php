@@ -88,6 +88,7 @@ class MemberTable extends AbstractModelMapper
         $resultSet = $this->getTableGateway()->select(function (Select $select) use($code)
         {
             $select->where->like('code', $code . '%');
+            $select->where->equalTo('enable', 1);
         });
 
         return $resultSet;
