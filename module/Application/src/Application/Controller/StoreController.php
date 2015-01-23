@@ -9,9 +9,10 @@
  */
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Application\Model\Json\DataTableResult;
+use Zend\Db\Sql\Where;
+use Zend\Db\Sql\Predicate\Expression;
 
 class StoreController extends AbstractActionController
 {
@@ -34,8 +35,39 @@ class StoreController extends AbstractActionController
     public function getSellLogListDataAction()
     {
         try {
-            $count = $this->getSellLogTable()->getFetchAllCounts();
-            $logs = $this->getSellLogTable()->fetchAll(array(), $_GET['start'], $_GET['length']);
+            $search = $_GET['search']['value'];
+            $where = function (Where $where) use($search)
+            {
+                if (! empty($search)) {
+                    $where->addPredicate(new Expression(" goods.code like '{$search}%' or member.code like '{$search}%' "));
+                }
+            };
+            $count = $this->getSellLogTable()->getFetchAllCounts($where);
+            $logs = $this->getSellLogTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
+
+            $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $logs);
+        } catch (\Exception $e) {
+            $returnJson = DataTableResult::buildResult();
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
+    public function memberLogAction()
+    {
+        return array();
+    }
+
+    public function getMemberLogListDataAction()
+    {
+        try {
+            $search = $_GET['search']['value'];
+            $where = function (Where $where) use($search)
+            {
+                $where->addPredicate(new Expression(" goods.code like '{$search}%' or member.code like '{$search}%' "));
+            };
+            $count = $this->getMemberLogTable()->getFetchAllCounts($where);
+            $logs = $this->getMemberLogTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $logs);
         } catch (\Exception $e) {

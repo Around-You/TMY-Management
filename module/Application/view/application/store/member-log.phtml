@@ -1,0 +1,52 @@
+<?php
+$title = '会员扣次记录';
+$this->layout()->currentItem = $title;
+$this->headTitle($title);
+$memberActionTableOptions = array(
+    'dataTableName' => 'memberAction',
+    'cols' => array(
+        array(
+            'title' => '会员代码',
+            'key' => 'member_code'
+        ),
+        array(
+            'title' => '会员名称',
+            'key' => 'member_name'
+        ),
+        array(
+            'title' => '商品代码',
+            'key' => 'goods_code'
+        ),
+        array(
+            'title' => '商品名称',
+            'key' => 'goods_title'
+        ),
+        array(
+            'title' => '动作',
+            'key' => 'action'
+        ),
+        array(
+            'title' => '时间',
+            'key' => 'create_time'
+        )
+    ),
+    'getListDataUrl' => '/store/getMemberLogListData',
+    'operatingCol' => false
+)?>
+
+<div class="page-header">
+	<h1>
+    <?= $this->escapeHtml($title); ?>
+</h1>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+        <?=$this->flashMessenger()->render();?>
+        <div class="row">
+			<div class="col-xs-12">
+                <?=$this->dataTable($memberActionTableOptions)?>
+            </div>
+		</div>
+	</div>
+</div>
+

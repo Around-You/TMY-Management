@@ -9,7 +9,6 @@
  */
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use SamFramework\Core\App;
 use Zend\View\Model\JsonModel;
 use Application\Model\Json\JsonResult;
@@ -21,64 +20,26 @@ use Application\Model\Logs\MemberLog;
 class SaleController extends AbstractActionController
 {
 
-    protected $memberTable;
-
-    protected $goodsTable;
-
-    protected $sellLogTable;
-
-    protected $memberLogTable;
-
-    protected $memberGoodsTable;
-
-    protected $dailyReportTalbe;
-
-    public function getMemberTable()
+    public function buyMemberCardAction()
     {
-        if (! $this->memberTable) {
-            $this->memberTable = $this->getServiceLocator()->get('Application\Model\Member\MemberTable');
-        }
-        return $this->memberTable;
-    }
+        $request = $this->getRequest();
 
-    public function getGoodsTable()
-    {
-        if (! $this->goodsTable) {
-            $this->goodsTable = $this->getServiceLocator()->get('Application\Model\Goods\GoodsTable');
-        }
-        return $this->goodsTable;
-    }
-
-    public function getSellLogTable()
-    {
-        if (! $this->sellLogTable) {
-            $this->sellLogTable = $this->getServiceLocator()->get('Application\Model\Logs\SellLogTable');
-        }
-        return $this->sellLogTable;
-    }
-
-    public function getMemberLogTable()
-    {
-        if (! $this->memberLogTable) {
-            $this->memberLogTable = $this->getServiceLocator()->get('Application\Model\Logs\MemberLogTable');
-        }
-        return $this->memberLogTable;
-    }
-
-    public function getMemberGoodsTable()
-    {
-        if (! $this->memberGoodsTable) {
-            $this->memberGoodsTable = $this->getServiceLocator()->get('Application\Model\Goods\MemberGoodsTable');
-        }
-        return $this->memberGoodsTable;
-    }
-
-    public function getDailyReportTable()
-    {
-        if (! $this->dailyReportTalbe) {
-            $this->dailyReportTalbe = $this->getServiceLocator()->get('Application\Model\Report\DailyReportTable');
-        }
-        return $this->dailyReportTalbe;
+//             try {
+                $memberId = $_GET['member_id'];
+                $goodsId = $_GET['goods_id'];
+                $member = $this->getMemberTable()->getOneById($memberId);
+                $goods = $this->getGoodsTable()->getOneById($goodsId);
+                $memberGoods = new MemberGoods();
+                $memberGoods->exchangeArray($_GET);
+                $this->getMemberGoodsTable()->save($memberGoods);
+                $this->getDailyReportTable()->addSaleCount();
+                $this->getSellLogTable()->addSellLog($goods, $member);
+                $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+//             } catch (\Exception $e) {
+//                 $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
+//             }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
     }
 
     public function quickAction()
@@ -222,10 +183,10 @@ class SaleController extends AbstractActionController
         $code = $_GET['term'];
         $members = $this->getMemberTable()->getMembersByCode($code);
         $memberArr = array();
-        foreach ($members as $member){
+        foreach ($members as $member) {
             $memberArr[] = array(
                 'id' => $member->code,
-                'value' => $member->code . ' - ' .$member->name
+                'value' => $member->code . ' - ' . $member->name
             );
         }
         $viewModel = new JsonModel($memberArr);
@@ -237,16 +198,15 @@ class SaleController extends AbstractActionController
         $code = $_GET['term'];
         $resultSet = $this->getGoodsTable()->getAllGoodsLikeCode($code);
         $goodsArr = array();
-        foreach ($resultSet as $goods){
+        foreach ($resultSet as $goods) {
             $goodsArr[] = array(
                 'id' => $goods->code,
-                'value' => $goods->code . ' - ' .$goods->title
+                'value' => $goods->code . ' - ' . $goods->title
             );
         }
         $viewModel = new JsonModel($goodsArr);
         return $viewModel;
     }
-
 
     public function addToMemberGoods(Goods $goods, Member $member)
     {
