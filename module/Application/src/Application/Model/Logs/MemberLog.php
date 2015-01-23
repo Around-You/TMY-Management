@@ -17,6 +17,10 @@ class MemberLog extends AbstractModel
 
     public $member_id = 0;
 
+    public $member_name = '';
+
+    public $member_code = '';
+
     public $user_id = 0;
 
     public $goods_id = 0;
@@ -36,7 +40,9 @@ class MemberLog extends AbstractModel
         'create_time',
         'goods_code',
         'goods_title',
-        'staff_name'
+        'staff_name',
+        'member_code',
+        'member_name'
     );
 
     public function exchangeArray(array $array)
@@ -44,6 +50,8 @@ class MemberLog extends AbstractModel
         $this->id = (isset($array['id'])) ? $array['id'] : $this->id;
         $this->action = (isset($array['action'])) ? $array['action'] : $this->action;
         $this->member_id = (isset($array['member_id'])) ? $array['member_id'] : $this->member_id;
+        $this->member_code = (isset($array['member_code'])) ? $array['member_code'] : $this->member_code;
+        $this->member_name = (isset($array['member_name'])) ? $array['member_name'] : $this->member_name;
         $this->user_id = (isset($array['user_id'])) ? $array['user_id'] : $this->user_id;
         $this->goods_id = (isset($array['goods_id'])) ? $array['goods_id'] : $this->goods_id;
         $this->create_time = (isset($array['create_time'])) ? $array['create_time'] : $this->create_time;
@@ -58,6 +66,8 @@ class MemberLog extends AbstractModel
             'id' => $this->id,
             'action' => $this->action,
             'member_id' => $this->member_id,
+            'member_code' => $this->member_code,
+            'member_name' => $this->member_name,
             'user_id' => $this->user_id,
             'goods_id' => $this->goods_id,
             'create_time' => $this->create_time,
