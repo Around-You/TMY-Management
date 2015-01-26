@@ -22,8 +22,8 @@ var tmy_member_list = {
 		this.bindEvent();
 	},
 	bindEvent : function() {
-//		$(".time-card-only").hide();
-//		$(".count-card-only").hide();
+		$(".time-card-only").hide();
+		$(".count-card-only").hide();
 		$(".goods-chosen-select").on('change', function() {
 			var type = '';
 			$(".goods-chosen-select option:selected").each(function() {
@@ -41,7 +41,11 @@ var tmy_member_list = {
 		$("#btn-submit-buy-modal").on("click", function() {
 			var data = $("#buy_goods_form").serialize();
 			$.getJSON("/sale/buyMemberCard", data, function(result) {
-				console.log(result);
+				console.log(result.status == '1');
+				if(result.status == '1'){
+					$('#modal-form').modal('hide');
+					$memberGoods.draw();
+				}
 			});
 		});
 

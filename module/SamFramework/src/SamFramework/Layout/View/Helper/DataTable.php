@@ -140,7 +140,7 @@ class DataTable extends AbstractHelper
         $ajaxOption = json_encode($ajaxOption);
         $inlineScriptHelper->captureStart();
         echo <<<JS
-$('#{$this->dataTableName}').dataTable( {
+var \${$this->dataTableName} = $('#{$this->dataTableName}').DataTable( {
     language: {
         search: "查询: "
     },

@@ -104,7 +104,11 @@ class MemberGoods extends AbstractModel
         $description = '';
         switch ($this->goods_type) {
             case '时间卡':
-                $description = date('Y-m-d', strtotime($this->start_date)) . ' 至 ' . date('Y-m-d', strtotime($this->end_date));
+                if ( is_null($this->start_date )) {
+                	$description = "未开卡";
+                }else{
+                    $description = date('Y-m-d', strtotime($this->start_date)) . ' 至 ' . date('Y-m-d', strtotime($this->end_date));
+                }
                 break;
             case '次卡':
                 $description = '剩余 ' . $this->count . '次';
