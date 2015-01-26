@@ -9,10 +9,10 @@ class BaseTestCase extends PHPUnit_Extensions_Selenium2TestCase
     {
         if (! $this->config) {
             $localConfig = array();
-            if (file_exists(__DIR__ . '\config\config.local.php')) {
+            if (file_exists(__DIR__ . '/config/config.local.php')) {
                 $localConfig = require __DIR__ . '\config\config.local.php';
             }
-            $config = require __DIR__ . '\config\config.php';
+            $config = require __DIR__ . '/config/config.php';
             $this->config = array_merge($config, $localConfig);
         }
         return $this->config;
@@ -39,7 +39,7 @@ class BaseTestCase extends PHPUnit_Extensions_Selenium2TestCase
     public function login()
     {
         $config = $this->getConfig();
-        $this->url('/admin/account/logout');
+        $this->url('/account/login');
         $this->assertStringEndsWith('login', $this->url());
         $username = $this->byName('username');
         $username->value($config['username']);
