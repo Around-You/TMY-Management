@@ -53,6 +53,20 @@ class GoodsTable extends AbstractModelMapper
         });
         return $resultSet;
     }
+    public function getAllEnableGoods(){
+        return $this->fetchAll(array(
+            'goods.enable'=>1
+        ));
+    }
+    public function getAllEnableVirtualGoods(){
+        return $this->fetchAll(array(
+            'type' => array(
+                Goods::GOODS_TYPE_COUNT,
+                Goods::GOODS_TYPE_TIME
+            ),
+            'goods.enable'=>1
+        ));
+    }
 
     public function getOneById($id)
     {
@@ -69,21 +83,6 @@ class GoodsTable extends AbstractModelMapper
         return $row;
     }
 
-    /**
-     *
-     * @param string $code
-     * @throws \Exception
-     * @return Zend\Db\ResultSet\ResultSet
-     */
-    public function getAllGoodsLikeCode($code)
-    {
-        $resultSet = $this->getTableGateway()->select(function (Select $select) use($code)
-        {
-            $select->where->like('code', $code . '%');
-        });
-
-        return $resultSet;
-    }
 
     /**
      *
@@ -144,5 +143,19 @@ class GoodsTable extends AbstractModelMapper
 
     public function buyGoods($goodsArr, $memberCode = '')
     {}
+
+    public function formatGoodsResultSetToSelect($resultSet){
+        $returnArray = array();
+        foreach ($resultSet as $good) {
+            $returnArray[$good->id] = array(
+                'value' => $good->id,
+                'label' => $good->title . ' - ' . $good->priceString,
+                'attributes' => array(
+                    'data-goods-type' => $good->type
+                )
+            );
+        }
+        return $returnArray;
+    }
 }
 

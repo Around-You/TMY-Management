@@ -2,7 +2,9 @@
 $title = '快速消费';
 $this->layout()->currentItem = $title;
 $this->headTitle($title);
-$this->inlinescript()->appendFile( $this->basePath('js/main/sale/sale.js'));
+$this->inlinescript()
+    ->appendFile($this->basePath('js/chosen.jquery.js'))
+    ->appendFile( $this->basePath('js/main/sale/sale.js'));
 ?>
 
 <div class="page-header">
@@ -31,7 +33,14 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale/sale.js'));
                         		<label class="col-sm-2 control-label no-padding-right" for="form-field-1">商品条码</label>
 
                         		<div class="col-sm-10">
-                        			<input type="text" id="goods-code" placeholder="商品条码" class="col-sm-10">
+                                    <select class="goods-chosen-select col-sm-10"
+										data-placeholder="请选择商品" name="goods_id">
+										<option value="" data-goods-type=""></option>
+										<?php foreach ($goods as $goodsItem):?>
+										<option value="<?=$goodsItem['value']?>"
+											data-goods-type="<?=$goodsItem['attributes']['data-goods-type']?>"><?=$goodsItem['label']?></option>
+										<?php endforeach;?>
+									</select>
                         		</div>
                         	</div>
                         </form>

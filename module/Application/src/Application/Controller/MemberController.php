@@ -24,24 +24,8 @@ class MemberController extends AbstractActionController
 
     public function getGoodsForMemberForm()
     {
-        $table = $this->getGoodsTable();
-        $resultSet = $table->fetchAll(array(
-            'type' => array(
-                Goods::GOODS_TYPE_COUNT,
-                Goods::GOODS_TYPE_TIME
-            )
-        ));
-        $returnArray = array();
-        foreach ($resultSet as $good) {
-            $returnArray[$good->id] = array(
-                'value' => $good->id,
-                'label' => $good->title . ' - ' . $good->priceString,
-                'attributes' => array(
-                    'data-goods-type' => $good->type
-                )
-            );
-        }
-        return $returnArray;
+        $resultSet = $this->getGoodsTable()->getAllEnableVirtualGoods();
+        return $this->getGoodsTable()->formatGoodsResultSetToSelect($resultSet);
     }
 
     public function getStaffForMemberForm()

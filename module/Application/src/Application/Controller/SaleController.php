@@ -24,20 +24,20 @@ class SaleController extends AbstractActionController
     {
         $request = $this->getRequest();
 
-//             try {
-                $memberId = $_GET['member_id'];
-                $goodsId = $_GET['goods_id'];
-                $member = $this->getMemberTable()->getOneById($memberId);
-                $goods = $this->getGoodsTable()->getOneById($goodsId);
-                $memberGoods = new MemberGoods();
-                $memberGoods->exchangeArray($_GET);
-                $this->getMemberGoodsTable()->save($memberGoods);
-                $this->getDailyReportTable()->addSaleCount();
-                $this->getSellLogTable()->addSellLog($goods, $member);
-                $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
-//             } catch (\Exception $e) {
-//                 $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
-//             }
+        try {
+            $memberId = $_GET['member_id'];
+            $goodsId = $_GET['goods_id'];
+            $member = $this->getMemberTable()->getOneById($memberId);
+            $goods = $this->getGoodsTable()->getOneById($goodsId);
+            $memberGoods = new MemberGoods();
+            $memberGoods->exchangeArray($_GET);
+            $this->getMemberGoodsTable()->save($memberGoods);
+            $this->getDailyReportTable()->addSaleCount();
+            $this->getSellLogTable()->addSellLog($goods, $member);
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
+        }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
     }
@@ -45,7 +45,8 @@ class SaleController extends AbstractActionController
     public function quickAction()
     {
         $request = $this->getRequest();
-
+        $resultSet = $this->getGoodsTable()->getAllEnableGoods();
+        $goods = $this->getGoodsTable()->formatGoodsResultSetToSelect($resultSet);
         if ($request->isPost()) {
             $member = null;
             $memberCode = $this->params()->fromPost('member_code');
@@ -70,7 +71,9 @@ class SaleController extends AbstractActionController
                 throw new \Exception('no goods code');
             }
         }
-        return array();
+        return array(
+            'goods' => $goods
+        );
     }
 
     public function useAction()
@@ -142,9 +145,9 @@ class SaleController extends AbstractActionController
     public function getGoodsDataAction()
     {
         $table = $this->getGoodsTable();
-        $code = $_GET['goods_code'];
+        $id = $_GET['goods_id'];
         try {
-            $goods = $table->getGoodsByCode($code);
+            $goods = $table->getOneById($id);
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, $goods);
         } catch (\Exception $e) {
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
@@ -190,21 +193,6 @@ class SaleController extends AbstractActionController
             );
         }
         $viewModel = new JsonModel($memberArr);
-        return $viewModel;
-    }
-
-    public function getGoodsByCodeAction()
-    {
-        $code = $_GET['term'];
-        $resultSet = $this->getGoodsTable()->getAllGoodsLikeCode($code);
-        $goodsArr = array();
-        foreach ($resultSet as $goods) {
-            $goodsArr[] = array(
-                'id' => $goods->code,
-                'value' => $goods->code . ' - ' . $goods->title
-            );
-        }
-        $viewModel = new JsonModel($goodsArr);
         return $viewModel;
     }
 
