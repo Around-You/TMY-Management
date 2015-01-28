@@ -110,6 +110,7 @@ class GoodsForm extends Form
                 'value_options' => array(
                     '月卡' => '月卡',
                     '季卡' => '季卡',
+                    '半年卡' => '半年卡',
                     '年卡' => '年卡'
                 )
             )

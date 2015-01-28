@@ -151,7 +151,8 @@ class GoodsTable extends AbstractModelMapper
                 'value' => $good->id,
                 'label' => $good->title . ' - ' . $good->priceString,
                 'attributes' => array(
-                    'data-goods-type' => $good->type
+                    'data-goods-type' => $good->type,
+                    'data-goods-count' => $good->count
                 )
             );
         }

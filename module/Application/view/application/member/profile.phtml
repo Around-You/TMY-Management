@@ -178,7 +178,8 @@ $memberActionTableOptions = array(
 										<option value="" data-goods-type=""></option>
 										<?php foreach ($goods as $goodsItem):?>
 										<option value="<?=$goodsItem['value']?>"
-											data-goods-type="<?=$goodsItem['attributes']['data-goods-type']?>"><?=$goodsItem['label']?></option>
+											data-goods-type="<?=$goodsItem['attributes']['data-goods-type']?>"
+											data-goods-count="<?=$goodsItem['attributes']['data-goods-count']?>"><?=$goodsItem['label']?></option>
 										<?php endforeach;?>
 									</select>
 								</div>
@@ -228,7 +229,7 @@ $memberActionTableOptions = array(
 								<label class="col-sm-3 control-label no-padding-right"
 									for="form-field-1">次数</label>
 								<div class="col-sm-7">
-									<input type="text" id="form-field-1" placeholder="次数"
+									<input type="text" id="form-count" placeholder="次数"
 										name="count" class="form-control" value="0" />
 								</div>
 							</div>
