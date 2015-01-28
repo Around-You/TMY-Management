@@ -67,7 +67,7 @@ class MemberController extends AbstractActionController
     public function addAction()
     {
         $form = MemberForm::getInstance($this->getServiceLocator());
-        $form->setMemberGoods($this->getGoodsForMemberForm());
+//         $form->setMemberGoods($this->getGoodsForMemberForm());
         $form->setStaff($this->getStaffForMemberForm());
         $request = $this->getRequest();
         $member = new Member();
@@ -79,16 +79,16 @@ class MemberController extends AbstractActionController
                 $memberTable = $this->getMemberTable();
                 $member = $memberTable->saveMember($form->getData());
 
-                if ($member->goods > 0) {
-                    $goods = $this->getGoodsTable()->getOneById($member->goods);
-                    $this->getSellLogTable()->addSellLog($goods, $member);
-                    $memberGoods = new MemberGoods();
-                    $memberGoods->setGoods($goods);
-                    $memberGoods->member_id = $member->id;
-                    $this->getMemberGoodsTable()->save($memberGoods);
-                }
+//                 if ($member->goods > 0) {
+//                     $goods = $this->getGoodsTable()->getOneById($member->goods);
+//                     $this->getSellLogTable()->addSellLog($goods, $member);
+//                     $memberGoods = new MemberGoods();
+//                     $memberGoods->setGoods($goods);
+//                     $memberGoods->member_id = $member->id;
+//                     $this->getMemberGoodsTable()->save($memberGoods);
+//                 }
                 $this->flashMessenger()->addSuccessMessage($member->name . ' 已添加');
-                return $this->redirect()->toUrl('/member');
+                return $this->redirect()->toUrl('/member/profile/'.$member->id);
             } else {
                 $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
