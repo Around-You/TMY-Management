@@ -26,8 +26,10 @@ var tmy_member_list = {
 		$(".count-card-only").hide();
 		$(".goods-chosen-select").on('change', function() {
 			var type = '';
+			var count = 0;
 			$(".goods-chosen-select option:selected").each(function() {
 				type = $(this).data('goods-type');
+				count = $(this).data('goods-count');
 			});
 			if (type == '时间卡') {
 				$(".time-card-only").show();
@@ -36,6 +38,7 @@ var tmy_member_list = {
 			} else {
 				$(".time-card-only").hide();
 				$(".count-card-only").show();
+				$("#form-count").val(count);
 			}
 		});
 		$("#btn-submit-buy-modal").on("click", function() {
