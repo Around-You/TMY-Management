@@ -47,7 +47,7 @@ class Staff extends AbstractModel
 
             $inputFilter->add(array(
                 'name' => 'login_name',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -73,7 +73,7 @@ class Staff extends AbstractModel
             ));
             $inputFilter->add(array(
                 'name' => 'password',
-                'required' => $this->id > 0 ? false : true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -85,7 +85,7 @@ class Staff extends AbstractModel
             ));
             $inputFilter->add(array(
                 'name' => 'confirm_password',
-                'required' => $this->id > 0 ? false : true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
