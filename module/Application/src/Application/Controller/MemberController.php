@@ -24,24 +24,8 @@ class MemberController extends AbstractActionController
 
     public function getGoodsForMemberForm()
     {
-        $table = $this->getGoodsTable();
-        $resultSet = $table->fetchAll(array(
-            'type' => array(
-                Goods::GOODS_TYPE_COUNT,
-                Goods::GOODS_TYPE_TIME
-            )
-        ));
-        $returnArray = array();
-        foreach ($resultSet as $good) {
-            $returnArray[$good->id] = array(
-                'value' => $good->id,
-                'label' => $good->title . ' - ' . $good->priceString,
-                'attributes' => array(
-                    'data-goods-type' => $good->type
-                )
-            );
-        }
-        return $returnArray;
+        $resultSet = $this->getGoodsTable()->getAllEnableVirtualGoods();
+        return $this->getGoodsTable()->formatGoodsResultSetToSelect($resultSet);
     }
 
     public function getStaffForMemberForm()
@@ -83,7 +67,7 @@ class MemberController extends AbstractActionController
     public function addAction()
     {
         $form = MemberForm::getInstance($this->getServiceLocator());
-        $form->setMemberGoods($this->getGoodsForMemberForm());
+//         $form->setMemberGoods($this->getGoodsForMemberForm());
         $form->setStaff($this->getStaffForMemberForm());
         $request = $this->getRequest();
         $member = new Member();
@@ -95,16 +79,16 @@ class MemberController extends AbstractActionController
                 $memberTable = $this->getMemberTable();
                 $member = $memberTable->saveMember($form->getData());
 
-                if ($member->goods > 0) {
-                    $goods = $this->getGoodsTable()->getOneById($member->goods);
-                    $this->getSellLogTable()->addSellLog($goods, $member);
-                    $memberGoods = new MemberGoods();
-                    $memberGoods->setGoods($goods);
-                    $memberGoods->member_id = $member->id;
-                    $this->getMemberGoodsTable()->save($memberGoods);
-                }
+//                 if ($member->goods > 0) {
+//                     $goods = $this->getGoodsTable()->getOneById($member->goods);
+//                     $this->getSellLogTable()->addSellLog($goods, $member);
+//                     $memberGoods = new MemberGoods();
+//                     $memberGoods->setGoods($goods);
+//                     $memberGoods->member_id = $member->id;
+//                     $this->getMemberGoodsTable()->save($memberGoods);
+//                 }
                 $this->flashMessenger()->addSuccessMessage($member->name . ' 已添加');
-                return $this->redirect()->toUrl('/member');
+                return $this->redirect()->toUrl('/member/profile/'.$member->id);
             } else {
                 $this->flashMessenger()->addErrorMessage($form->getMessages());
             }

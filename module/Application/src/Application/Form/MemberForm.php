@@ -73,16 +73,16 @@ class MemberForm extends Form
                 'value' => 0
             )
         ));
-        $this->add(array(
-            'name' => 'goods',
-            'type' => 'Select',
-            'options' => array(
-                'label' => '初始卡类别',
-                'value_options' => array(
-                    0 => '请选择初始卡类别'
-                )
-            )
-        ));
+//         $this->add(array(
+//             'name' => 'goods',
+//             'type' => 'Select',
+//             'options' => array(
+//                 'label' => '初始卡类别',
+//                 'value_options' => array(
+//                     0 => '请选择初始卡类别'
+//                 )
+//             )
+//         ));
 
         $this->add(array(
             'name' => 'gender',
@@ -135,10 +135,10 @@ class MemberForm extends Form
         ));
     }
 
-    public function setMemberGoods($memberGoods)
-    {
-        $this->get('goods')->setValueOptions($memberGoods);
-    }
+//     public function setMemberGoods($memberGoods)
+//     {
+//         $this->get('goods')->setValueOptions($memberGoods);
+//     }
 
     public function setStaff($staffs)
     {

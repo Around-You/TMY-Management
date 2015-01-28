@@ -8,6 +8,7 @@ $this->inlinescript()
     ->appendFile($this->basePath('js/main/member/profile.js'));
 
 $memberGoodsTableOptions = array(
+    'dataTableName' => 'memberGoods',
     'cols' => array(
         array(
             'title' => '商品代码',
@@ -24,7 +25,8 @@ $memberGoodsTableOptions = array(
         ),
         array(
             'title' => '备注',
-            'key' => 'description'
+            'key' => 'description',
+            'orderable' => 'false'
         )
     ),
     'getListDataUrl' => '/member/getMemberGoodsListData',
@@ -62,6 +64,7 @@ $memberActionTableOptions = array(
 <style>
 <!--
 .date-picker { z-index: 1151 !important;  }
+.chosen-container .chosen-drop{ z-index: 1152 !important; }
 -->
 </style>
 
@@ -114,7 +117,7 @@ $memberActionTableOptions = array(
 				</div>
 			</div>
 			<div class="col-xs-2">
-				<a href="#" data-toggle="modal" role="button"
+				<a href="/member/edit/<?=$member->id?>" data-toggle="modal" role="button"
 					class="btn btn-info btn-block " id="buy-button"> <i
 					class="ace-icon glyphicon glyphicon-pencil"></i>编辑
 				</a> <a href="#modal-form" data-toggle="modal" role="button"
@@ -226,7 +229,7 @@ $memberActionTableOptions = array(
 									for="form-field-1">次数</label>
 								<div class="col-sm-7">
 									<input type="text" id="form-field-1" placeholder="次数"
-										name="count" class="form-control" />
+										name="count" class="form-control" value="0" />
 								</div>
 							</div>
 

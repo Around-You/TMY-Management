@@ -35,6 +35,7 @@ return array(
             'select' => 'SamFramework\Form\Element\Select',
             'radio' => 'SamFramework\Form\Element\Radio',
             'datepicker' => 'SamFramework\Form\Element\DatePicker',
+            'chosen' => 'SamFramework\Form\Element\Chosen',
         )
     ),
     'view_manager' => array(

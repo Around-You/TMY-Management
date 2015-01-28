@@ -11,17 +11,19 @@ var main_sale = {
 	        	 me.getMember(ui.item.id);
 	        }
 	    });
-	    $("#goods-code").autocomplete({
-	        source: '/sale/getGoodsByCode',
-	        select: function( event, ui ) {
-	        	 me.addGoods(ui.item.id);
-	        }
-	    });
+		$('.goods-chosen-select').chosen({
+			allow_single_deselect : true
+		});
 	    $('#goods-tbl').on('click', '.remove-goods-btn', function(){
 	        me.removeGoods(this);
 	    });
 	    $("#buy-button").on('click', function(){
 	    	me.buyGoods();
+	    });
+	    $(".goods-chosen-select").on('change', function() {
+	    	$(".goods-chosen-select option:selected").each(function() {
+	    		 me.addGoods($(this).val());
+			});
 	    });
 
 	},
@@ -38,8 +40,8 @@ var main_sale = {
 	       
 	    });
 	},
-	addGoods: function(goodsCode){
-	    $.get('/sale/getGoodsData',{goods_code: goodsCode}, function(result){
+	addGoods: function(goodsId){
+	    $.get('/sale/getGoodsData',{goods_id: goodsId}, function(result){
 	        if(result.status){
 	        	var goods = result.data;
 	        	var rownum = $("#goods-tbl").data("rownum") + 1;
@@ -68,6 +70,8 @@ var main_sale = {
 		var rownum = $("#goods-tbl").data("rownum") - 1;
 		var total = parseFloat($("#goods-tbl").data("total")) - parseFloat($(row).data("price"));
         $("#total-price").text(total);
+        $("#goods-tbl").data("total", total);
+        $("#goods-tbl").data("rownum", rownum);
         row.remove();
         for(var i=1; i<=rownum; i++){
         	console.log(i);
