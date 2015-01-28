@@ -22,7 +22,8 @@ class FormElement extends ZVHFormElement
         'Zend\Form\Element\DateTimeSelect' => 'formdatetimeselect',
         'Zend\Form\Element\DateSelect'     => 'formdateselect',
         'Zend\Form\Element\MonthSelect'    => 'formmonthselect',
-        'SamFramework\Form\Element\DatePicker' => 'formdatepicker'
+        'SamFramework\Form\Element\DatePicker' => 'formdatepicker',
+        'SamFramework\Form\Element\Chosen' => 'formchosen'
     );
 
     /**
