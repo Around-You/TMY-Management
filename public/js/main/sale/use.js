@@ -14,15 +14,21 @@ var main_sale_use = {
         });
 		$("#goods-tbl").on(ace.click_event,'.use-goods-btn', function() {
 			var tr = $(this).closest('tr');
-			var showText = '是否对' + $(tr).data('title') + '进行 扣次/使用 操作？';
-			$(".modal-body .col-xs-12").text(showText);
+			var showText = '是否对 ' + $(tr).data('title') + ' 进行 扣次/使用 操作？';
+			$(".modal-content #myModalLabel").text(showText);
 			$("#member_goods_code").val($(tr).data('id'));
 			$("#modal-confirm").modal();
 		});
 		$("#btn-use-submit").on(ace.click_event, function() {
 			$("#useGoodsForm").submit();
 		});
-
+		$('#use_count').ace_spinner({
+			value:1, min:0, max:10, step:1, on_sides: true, 
+			icon_up:'ace-icon fa fa-plus bigger-110', 
+			icon_down:'ace-icon fa fa-minus bigger-110', 
+			btn_up_class:'btn-success' , 
+			btn_down_class:'btn-danger'
+		});
 	},
 	showPopup: function(){
 		if($('#showpopup').val()!=''){

@@ -82,11 +82,12 @@ class SaleController extends AbstractActionController
 
         if ($request->isPost()) {
             $id = $this->params()->fromPost('member_goods_code');
+            $count = $this->params()->fromPost('use_count');
 
             if ($id > 0) {
                 // update MemberGoods
                 $memberGoods = $this->getMemberGoodsTable()->getOneById($id);
-                $memberGoods->useGoods();
+                $memberGoods->useGoods($count);
                 $this->getMemberGoodsTable()->save($memberGoods);
                 // add action log
                 $action = new MemberLog();
@@ -94,9 +95,10 @@ class SaleController extends AbstractActionController
                 $action->member_id = $memberGoods->member_id;
                 $action->user_id = App::getUser()->id;
                 $action->action = '扣次/使用';
+                $action->count = $count;
                 $this->getMemberLogTable()->save($action);
                 // add daily report
-                $this->getDailyReportTable()->addMemberCount();
+                $this->getDailyReportTable()->addMemberCount($count);
 
                 $this->flashMessenger()->addSuccessMessage('扣次/使用完成');
                 return array(
@@ -124,7 +126,8 @@ class SaleController extends AbstractActionController
         return array(
             'member' => $member,
             'usedGoods' => $usedGoods,
-            'memberGoodsList' => $memberGoods->toArray()
+            'memberGoodsList' => $memberGoods->toArray(),
+            'memberLog' => $memberLog
         );
     }
 

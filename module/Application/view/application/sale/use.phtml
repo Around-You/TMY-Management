@@ -2,7 +2,11 @@
 $title = '会员扣次';
 $this->layout()->currentItem = $title;
 $this->headTitle($title);
-$this->inlinescript()->appendFile( $this->basePath('js/main/sale/use.js'));
+
+$this->inlinescript()
+    ->appendFile( $this->basePath('js/fuelux/fuelux.spinner.js'))
+    ->appendFile( $this->basePath('js/ace/elements.spinner.js'))
+->appendFile( $this->basePath('js/main/sale/use.js'));
 ?>
 
 <div class="page-header">
@@ -54,10 +58,7 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale/use.js'));
         </div>
     </div>
 </div>
-<form id="useGoodsForm" method="post">
-<input type="hidden" id="showpopup" name="showpopup" value="<?=$ticketUrl?>">
-<input type="hidden" id="member_goods_code" name="member_goods_code">
-</form>
+
 
 <div id="modal-confirm" class="modal" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -67,9 +68,16 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale/use.js'));
 				<h4 class="blue" id="myModalLabel">确认</h4>
 			</div>
 
-			<div class="modal-body">
+			<div class="modal-body center">
 				<div class="row">
 					<div class="col-xs-12">
+                        <div class="modal-title">请选择扣次次数</div>
+		                <div class="space-6"></div>
+		                <form id="useGoodsForm" method="post">
+                            <input type="text" id="use_count" name="use_count" />
+                            <input type="hidden" id="showpopup" name="showpopup" value="<?=$ticketUrl?>">
+                            <input type="hidden" id="member_goods_code" name="member_goods_code">
+                        </form>
 					</div>
 				</div>
 			</div>
@@ -88,3 +96,4 @@ $this->inlinescript()->appendFile( $this->basePath('js/main/sale/use.js'));
 		</div>
 	</div>
 </div><!-- PAGE CONTENT ENDS -->
+
