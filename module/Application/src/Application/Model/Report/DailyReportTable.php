@@ -116,10 +116,10 @@ class DailyReportTable extends AbstractModelMapper
         return $row;
     }
 
-    public function addMemberCount()
+    public function addMemberCount( $count = 1)
     {
         $report = $this->getOneByDate();
-        $report->member_count++;
+        $report->member_count += $count;
         $this->save($report);
     }
 

@@ -5,7 +5,6 @@ use SamFramework\Model\AbstractModel;
 
 /**
  *
- * @property string priceString
  *
  */
 class MemberLog extends AbstractModel
@@ -33,6 +32,8 @@ class MemberLog extends AbstractModel
 
     public $staff_name = '';
 
+    public $count = 1;
+
     /**
      * exclude fields to save
      */
@@ -58,6 +59,7 @@ class MemberLog extends AbstractModel
         $this->goods_code = (isset($array['goods_code'])) ? $array['goods_code'] : $this->goods_code;
         $this->goods_title = (isset($array['goods_title'])) ? $array['goods_title'] : $this->goods_title;
         $this->staff_name = (isset($array['staff_name'])) ? $array['staff_name'] : $this->staff_name;
+        $this->count = (isset($array['count'])) ? $array['count'] : $this->count;
     }
 
     public function getArrayCopy()
@@ -73,7 +75,8 @@ class MemberLog extends AbstractModel
             'create_time' => $this->create_time,
             'goods_code' => $this->goods_code,
             'goods_title' => $this->goods_title,
-            'staff_name' => $this->staff_name
+            'staff_name' => $this->staff_name,
+            'count' => $this->count
         );
         return $data;
     }

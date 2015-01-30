@@ -146,10 +146,10 @@ class MemberGoods extends AbstractModel
         }
     }
 
-    public function useGoods()
+    public function useGoods($count = 1)
     {
         if ($this->count > 0) {
-            $this->count --;
+            $this->count -= $count;
         }
     }
 }
