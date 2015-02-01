@@ -3,8 +3,12 @@ $title = '会员信息';
 $this->layout()->currentItem = $title;
 $this->headTitle($title);
 
+
+$this->headlink()->appendStylesheet($this->basePath('css/datepicker.css'));
 $this->inlinescript()
     ->appendFile($this->basePath('js/chosen.jquery.js'))
+    ->appendFile($this->basePath('js/date-time/bootstrap-datepicker.js'))
+    ->appendFile($this->basePath('js/date-time/bootstrap-datepicker.zh.js'))
     ->appendFile($this->basePath('js/main/member/profile.js'));
 
 $memberGoodsTableOptions = array(
@@ -71,7 +75,7 @@ $memberActionTableOptions = array(
 )?>
 <style>
 <!--
-.date-picker { z-index: 1151 !important;  }
+.modal-dialog .input-group{  z-index: 1151 ; }
 .chosen-container .chosen-drop{ z-index: 1152 !important; }
 -->
 </style>
@@ -209,8 +213,8 @@ $memberActionTableOptions = array(
 									for="form-field-1">开始时间</label>
 								<div class="col-sm-7">
 									<div class="input-group">
-										<input type="text" id="form-field-1" placeholder="开始时间"
-											name="start_date" class="form-control date-picker" /><span
+										<input type="text" placeholder="开始时间"
+											name="start_date" class="form-control date-picker" data-date-format="yyyy-mm-dd" ><span
 											class="input-group-addon"> <i
 											class="fa fa-calendar bigger-110"></i>
 										</span>
@@ -224,8 +228,8 @@ $memberActionTableOptions = array(
 									for="form-field-1">结束时间</label>
 								<div class="col-sm-7">
 									<div class="input-group">
-										<input type="text" id="form-field-1" placeholder="结束时间"
-											name="end_date" class="form-control date-picker" /><span
+										<input type="text" placeholder="结束时间"
+											name="end_date" class="form-control date-picker" data-date-format="yyyy-mm-dd" ><span
 											class="input-group-addon"> <i
 											class="fa fa-calendar bigger-110"></i>
 										</span>

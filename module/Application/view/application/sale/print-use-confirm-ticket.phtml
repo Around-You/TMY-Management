@@ -5,6 +5,7 @@ $this->layout('layout/layout/none');
 <!--
 body{
 	font-size: 8px;
+
 }
 -->
 </style>
@@ -19,29 +20,16 @@ body{
     <td colspan="2">会员：<?=$member->name?>(<?=$member->code?>)</td>
   </tr>
   <tr align="center">
-    <td colspan="2">&nbsp;</td>
-  </tr>
-  <tr align="center">
     <td colspan="2">-------结账项目-------</td>
   </tr>
   <tr align="center">
-    <td colspan="2">名称：<?=$usedGoods->title?></td>
+    <td colspan="2"><?=$usedGoods->title?></td>
   </tr>
   <tr align="center">
-    <td colspan="2">项目：<?=$memberLog->action?> <?=$memberLog->count?>次</td>
-  </tr>
-  <tr align="center">
-    <td colspan="2">---------------------</td>
-  </tr>
-  <tr align="center">
-    <td colspan="2">&nbsp;</td>
+    <td colspan="2"><?=$memberLog->action?> <?=$memberLog->count?>次</td>
   </tr>
   <tr align="center">
     <td colspan="2">-------剩余项目-------</td>
-  </tr>
-  <tr align="center">
-    <td>名称</td>
-    <td>剩余</td>
   </tr>
   <?php foreach ($memberGoodsList as $memberGoodsItem):?>
   <tr align="center">
@@ -49,9 +37,6 @@ body{
     <td><?=$memberGoodsItem['detail']?></td>
   </tr>
   <?php endforeach;?>
-  <tr align="center">
-    <td colspan="2">---------------------</td>
-  </tr>
   <tr align="center">
     <td colspan="2">&nbsp;</td>
   </tr>
@@ -82,29 +67,16 @@ body{
     <td colspan="2">会员：<?=$member->name?>(<?=$member->code?>)</td>
   </tr>
   <tr align="center">
-    <td colspan="2">&nbsp;</td>
-  </tr>
-  <tr align="center">
     <td colspan="2">-------结账项目-------</td>
   </tr>
   <tr align="center">
-    <td colspan="2">名称：<?=$usedGoods->title?></td>
+    <td colspan="2"><?=$usedGoods->title?></td>
   </tr>
   <tr align="center">
-    <td colspan="2">项目：<?=$memberLog->action?> <?=$memberLog->count?>次</td>
-  </tr>
-  <tr align="center">
-    <td colspan="2">---------------------</td>
-  </tr>
-  <tr align="center">
-    <td colspan="2">&nbsp;</td>
+    <td colspan="2"><?=$memberLog->action?> <?=$memberLog->count?>次</td>
   </tr>
   <tr align="center">
     <td colspan="2">-------剩余项目-------</td>
-  </tr>
-  <tr align="center">
-    <td>名称</td>
-    <td>剩余</td>
   </tr>
   <?php foreach ($memberGoodsList as $memberGoodsItem):?>
   <tr align="center">
@@ -112,9 +84,6 @@ body{
     <td><?=$memberGoodsItem['detail']?></td>
   </tr>
   <?php endforeach;?>
-  <tr align="center">
-    <td colspan="2">---------------------</td>
-  </tr>
   <tr align="center">
     <td colspan="2">&nbsp;</td>
   </tr>
