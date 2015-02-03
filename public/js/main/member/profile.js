@@ -1,15 +1,5 @@
 var tmy_member_list = {
 	init : function() {
-		$('.chosen-select').chosen({
-			allow_single_deselect : true
-		});
-		$('.date-picker').datepicker({
-            language: 'zh',
-			autoclose: true,
-			todayHighlight: true
-		}).next().on('click', function(){
-			$(this).prev().focus();
-		});
 		$('#modal-form').on('shown.bs.modal', function() {
 			$(this).find('.chosen-container').css('width', '100%');
 			$(this).find('.chosen-container').each(function() {
@@ -24,10 +14,10 @@ var tmy_member_list = {
 	bindEvent : function() {
 		$(".time-card-only").hide();
 		$(".count-card-only").hide();
-		$(".goods-chosen-select").on('change', function() {
+		$("#goods_id").on('change', function() {
 			var type = '';
 			var count = 0;
-			$(".goods-chosen-select option:selected").each(function() {
+			$("#goods_id option:selected").each(function() {
 				type = $(this).data('goods-type');
 				count = $(this).data('goods-count');
 			});

@@ -20,7 +20,9 @@ return array(
             'formdatepicker' => 'SamFramework\Form\View\Helper\FormDatePicker',
             'flashMessenger' => 'SamFramework\Layout\View\Helper\FlashMessenger',
             'sidebar' => 'SamFramework\Layout\View\Helper\Sidebar',
-            'dataTable' => 'SamFramework\Layout\View\Helper\DataTable'
+            'dataTable' => 'SamFramework\Layout\View\Helper\DataTable',
+            'formcheckbox' => 'SamFramework\Form\View\Helper\FormCheckbox',
+            'formchosen' => 'SamFramework\Form\View\Helper\FormChosen',
         )
     ),
 
@@ -36,6 +38,7 @@ return array(
             'radio' => 'SamFramework\Form\Element\Radio',
             'datepicker' => 'SamFramework\Form\Element\DatePicker',
             'chosen' => 'SamFramework\Form\Element\Chosen',
+            'checkbox' => 'SamFramework\Form\Element\Checkbox',
         )
     ),
     'view_manager' => array(

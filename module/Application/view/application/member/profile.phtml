@@ -41,7 +41,10 @@ $memberGoodsTableOptions = array(
     'getListDataParams' => array(
         'member_id' => $member->id
     ),
-    'operatingCol' => false
+    'operatingCol' => array(
+        'editUrl' => '#',
+        'deleteUrl' => '#',
+    )
 );
 $memberActionTableOptions = array(
     'dataTableName' => 'memberAction',
@@ -144,15 +147,16 @@ $memberActionTableOptions = array(
 			<div class="col-xs-12">
 				<div class="tabbable">
 					<ul class="nav nav-tabs padding-18">
-						<li class="active"><a data-toggle="tab" href="#member-goods"> <i
-								class="purple ace-icon fa fa-credit-card bigger-120"></i> 消费卡管理
-						</a></li>
-
-						<li><a data-toggle="tab" href="#history"> <i
-								class="orange ace-icon fa fa-history bigger-120"></i> 卡消费明细
-						</a></li>
-
-
+						<li class="active">
+						  <a data-toggle="tab" href="#member-goods">
+						      <i class="purple ace-icon fa fa-credit-card bigger-120"></i> 消费卡管理
+						  </a>
+						</li>
+						<li>
+						  <a data-toggle="tab" href="#history">
+						      <i class="orange ace-icon fa fa-history bigger-120"></i> 卡消费明细
+						  </a>
+						</li>
 					</ul>
 
 					<div class="tab-content no-border padding-24">
@@ -160,7 +164,9 @@ $memberActionTableOptions = array(
 						<div id="member-goods" class="tab-pane in active">
 					       <?=$this->dataTable($memberGoodsTableOptions)?>
 						</div>
-						<div id="history" class="tab-pane"><?=$this->dataTable($memberActionTableOptions)?></div>
+						<div id="history" class="tab-pane">
+						  <?=$this->dataTable($memberActionTableOptions)?>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -175,86 +181,22 @@ $memberActionTableOptions = array(
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="blue bigger">续卡</h4>
 			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-xs-12">
-						<form action="" method="POST" name="buy_goods_form"
-							class="form-horizontal" role="form" id="buy_goods_form">
-							<input type="hidden" name="member_id" value="<?=$member->id?>">
-							<div class="form-group ">
-								<label for="form-field-select-3"
-									class="col-sm-3 control-label no-padding-right">商品卡</label>
-								<div class="col-sm-7">
-									<select class="chosen-select form-control goods-chosen-select"
-										data-placeholder="请选择商品" name="goods_id">
-										<option value="" data-goods-type=""></option>
-										<?php foreach ($goods as $goodsItem):?>
-										<option value="<?=$goodsItem['value']?>"
-											data-goods-type="<?=$goodsItem['attributes']['data-goods-type']?>"
-											data-goods-count="<?=$goodsItem['attributes']['data-goods-count']?>"><?=$goodsItem['label']?></option>
-										<?php endforeach;?>
-									</select>
-								</div>
-							</div>
-
-							<div class="form-group time-card-only">
-								<label class="col-sm-3 control-label no-padding-right"
-									for="form-field-1">是否开卡</label>
-								<div class="col-sm-7" style="padding-top: 7px;">
-									<label> <input id="checkbox-start" name="checkbox-start"
-										type="checkbox" class="ace" checked="checked" /> <span
-										class="lbl">现在开卡</span>
-									</label>
-								</div>
-							</div>
-
-							<div class="form-group time-card-only">
-								<label class="col-sm-3 control-label no-padding-right"
-									for="form-field-1">开始时间</label>
-								<div class="col-sm-7">
-									<div class="input-group">
-										<input type="text" placeholder="开始时间"
-											name="start_date" class="form-control date-picker" data-date-format="yyyy-mm-dd" ><span
-											class="input-group-addon"> <i
-											class="fa fa-calendar bigger-110"></i>
-										</span>
-									</div>
-								</div>
-							</div>
-
-
-							<div class="form-group time-card-only">
-								<label class="col-sm-3 control-label no-padding-right"
-									for="form-field-1">结束时间</label>
-								<div class="col-sm-7">
-									<div class="input-group">
-										<input type="text" placeholder="结束时间"
-											name="end_date" class="form-control date-picker" data-date-format="yyyy-mm-dd" ><span
-											class="input-group-addon"> <i
-											class="fa fa-calendar bigger-110"></i>
-										</span>
-									</div>
-								</div>
-							</div>
-
-							<div class="form-group count-card-only">
-								<label class="col-sm-3 control-label no-padding-right"
-									for="form-field-1">次数</label>
-								<div class="col-sm-7">
-									<input type="text" id="form-count" placeholder="次数"
-										name="count" class="form-control" value="0" />
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label class="col-sm-3 control-label no-padding-right"
-									for="form-field-1">备注</label>
-								<div class="col-sm-7">
-									<textarea rows="" cols="" class="form-control" placeholder="备注"
-										name="description"></textarea>
-								</div>
-							</div>
-						</form>
+			<div class="modal-body ">
+				<div class="row ">
+				    <div class="col-xs-1"></div>
+					<div class="col-xs-9">
+						<?php
+                        $form->prepare();
+                        echo $this->form()->openTag($form);
+                        echo $this->formHidden($form->get('member_id'));
+                        echo $this->formRow($form->get('goods_id'));
+                        echo $this->formRow($form->get('checkbox-start'),null,null,null,'time-card-only');
+                        echo $this->formRow($form->get('start_date'),null,null,null,'time-card-only');
+                        echo $this->formRow($form->get('end_date'),null,null,null,'time-card-only');
+                        echo $this->formRow($form->get('count'),null,null,null,'count-card-only');
+                        echo $this->formRow($form->get('description'));
+                        echo $this->form()->closeTag();
+                        ?>
 					</div>
 				</div>
 			</div>

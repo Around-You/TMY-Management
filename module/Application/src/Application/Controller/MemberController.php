@@ -18,6 +18,7 @@ use Application\Model\Goods\MemberGoods;
 use Application\Model\Json\DataTableResult;
 use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Predicate\Expression;
+use Application\Form\MemberGoodsForm;
 
 class MemberController extends AbstractActionController
 {
@@ -67,7 +68,7 @@ class MemberController extends AbstractActionController
     public function addAction()
     {
         $form = MemberForm::getInstance($this->getServiceLocator());
-//         $form->setMemberGoods($this->getGoodsForMemberForm());
+        // $form->setMemberGoods($this->getGoodsForMemberForm());
         $form->setStaff($this->getStaffForMemberForm());
         $request = $this->getRequest();
         $member = new Member();
@@ -79,16 +80,16 @@ class MemberController extends AbstractActionController
                 $memberTable = $this->getMemberTable();
                 $member = $memberTable->saveMember($form->getData());
 
-//                 if ($member->goods > 0) {
-//                     $goods = $this->getGoodsTable()->getOneById($member->goods);
-//                     $this->getSellLogTable()->addSellLog($goods, $member);
-//                     $memberGoods = new MemberGoods();
-//                     $memberGoods->setGoods($goods);
-//                     $memberGoods->member_id = $member->id;
-//                     $this->getMemberGoodsTable()->save($memberGoods);
-//                 }
+                // if ($member->goods > 0) {
+                // $goods = $this->getGoodsTable()->getOneById($member->goods);
+                // $this->getSellLogTable()->addSellLog($goods, $member);
+                // $memberGoods = new MemberGoods();
+                // $memberGoods->setGoods($goods);
+                // $memberGoods->member_id = $member->id;
+                // $this->getMemberGoodsTable()->save($memberGoods);
+                // }
                 $this->flashMessenger()->addSuccessMessage($member->name . ' 已添加');
-                return $this->redirect()->toUrl('/member/profile/'.$member->id);
+                return $this->redirect()->toUrl('/member/profile/' . $member->id);
             } else {
                 $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
@@ -145,6 +146,8 @@ class MemberController extends AbstractActionController
     {
         $id = (int) $this->params('id', 0);
         $goods = $this->getGoodsForMemberForm();
+        $form = MemberGoodsForm::getInstance($this->getServiceLocator());
+        $form->setGoods($goods);
         try {
             $member = $this->getMemberTable()->getOneById($id);
         } catch (\Exception $ex) {
@@ -152,9 +155,11 @@ class MemberController extends AbstractActionController
             return $this->redirect()->toUrl('/member');
         }
 
+        $form->get('member_id')->setValue($member->id);
         return array(
             'member' => $member,
-            'goods' => $goods
+            'goods' => $goods,
+            'form' => $form
         );
     }
 
@@ -178,7 +183,9 @@ class MemberController extends AbstractActionController
     public function getMemberLogListDataAction()
     {
         try {
-            $where = array( 'member_id' => $_GET['member_id']);
+            $where = array(
+                'member_id' => $_GET['member_id']
+            );
             $count = $this->getMemberLogTable()->getFetchAllCounts($where);
             $memberGoods = $this->getMemberLogTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 
