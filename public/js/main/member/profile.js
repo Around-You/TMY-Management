@@ -1,17 +1,10 @@
 var tmy_member_list = {
 	init : function() {
-		$('#modal-form').on('shown.bs.modal', function() {
-			$(this).find('.chosen-container').css('width', '100%');
-			$(this).find('.chosen-container').each(function() {
-				$(this).find('a:first-child').css('width', '100%');
-				$(this).find('.chosen-drop').css('width', '100%');
-				$(this).find('.chosen-search input').css('width', '100%');
-			});
 	
-		});
 		this.bindEvent();
 	},
 	bindEvent : function() {
+		var me = this;
 		$(".time-card-only").hide();
 		$(".count-card-only").hide();
 		$("#goods_id").on('change', function() {
@@ -49,7 +42,35 @@ var tmy_member_list = {
 				$(".time-card-only .date-picker").prop("disabled", true);
 			}
 		});
+		$('#modal-form').on('shown.bs.modal', function(event) {
+			$(this).find('.chosen-container').css('width', '100%');
+			$(this).find('.chosen-container').each(function() {
+				$(this).find('a:first-child').css('width', '100%');
+				$(this).find('.chosen-drop').css('width', '100%');
+				$(this).find('.chosen-search input').css('width', '100%');
+			});
+			me.initMemberGoodsForm(event);
+		});
 	},
+	initMemberGoodsForm: function(event){
+		console.log(event.relatedTarget);
+		var relatedTarget = event.relatedTarget;
+		$('#buy_goods_form')[0].reset();
+		if( $(relatedTarget).data("id") != undefined ){
+			var rowData = $memberGoods.row("#" + $(relatedTarget).data("id")).data();
+			console.log(rowData);
+			
+			$('#goods_id option[value="' + rowData.goods_id + '"]').prop('selected', true);
+			$('#goods_id').trigger('chosen:updated');
+			$('#goods_id').change();
+			
+			$('#buy_goods_form input[name="id"]').val(rowData.id);
+			$('#buy_goods_form input[name="count"]').val(rowData.count);
+			$('#buy_goods_form textarea[name="description"]').val(rowData.description);
+			$('#buy_goods_form input[name="start_date"]').val(rowData.start_date);
+			$('#buy_goods_form input[name="end_date"]').val(rowData.end_date);
+		}
+	}
 };
 
 $(function() {

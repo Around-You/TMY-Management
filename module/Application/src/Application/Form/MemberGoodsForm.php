@@ -30,6 +30,13 @@ class MemberGoodsForm extends Form
         $this->setAttribute('role', 'form');
         $this->setAttribute('class', 'form-horizontal');
         $this->add(array(
+            'name' => 'id',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'value' => 0
+            )
+        ));
+        $this->add(array(
             'name' => 'member_id',
             'type' => 'Hidden',
             'attributes' => array(

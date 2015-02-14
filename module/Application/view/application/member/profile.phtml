@@ -188,6 +188,7 @@ $memberActionTableOptions = array(
 						<?php
                         $form->prepare();
                         echo $this->form()->openTag($form);
+                        echo $this->formHidden($form->get('id'));
                         echo $this->formHidden($form->get('member_id'));
                         echo $this->formRow($form->get('goods_id'));
                         echo $this->formRow($form->get('checkbox-start'),null,null,null,'time-card-only');
