@@ -107,5 +107,12 @@ class MemberGoodsTable extends AbstractModelMapper
         }
         return $item;
     }
+
+    public function deleteById($id)
+    {
+        $this->getTableGateway()->delete(array(
+            'id' => (int) $id
+        ));
+    }
 }
 

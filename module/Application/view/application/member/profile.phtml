@@ -43,7 +43,7 @@ $memberGoodsTableOptions = array(
     ),
     'operatingCol' => array(
         'editModal' => '#modal-form',
-        'deleteUrl' => '#',
+        'deleteModal' => '#modal-confirm',
     )
 );
 $memberActionTableOptions = array(
@@ -214,5 +214,39 @@ $memberActionTableOptions = array(
 		</div>
 	</div>
 </div>
+
+<div id="modal-confirm" class="modal" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="blue" id="myModalLabel">确认</h4>
+			</div>
+
+			<div class="modal-body center">
+				<div class="row">
+					<div class="col-xs-12">
+                        <div class="modal-title">是否对 <span id="name-to-delete"></span> 执行删除操作？</div>
+                        <form id="delete_goods_form">
+                        <input type="hidden" name="id">
+                        </form>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button class="btn btn-sm" data-dismiss="modal">
+					<i class="ace-icon fa fa-times"></i>
+					否
+				</button>
+
+				<button class="btn btn-sm btn-primary" id="btn-delete-submit">
+					<i class="ace-icon fa fa-check"></i>
+					是
+				</button>
+			</div>
+		</div>
+	</div>
+</div><!-- PAGE CONTENT ENDS -->
 <!-- PAGE CONTENT ENDS -->
 

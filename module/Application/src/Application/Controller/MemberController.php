@@ -19,6 +19,7 @@ use Application\Model\Json\DataTableResult;
 use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Predicate\Expression;
 use Application\Form\MemberGoodsForm;
+use Application\Model\Json\JsonResult;
 
 class MemberController extends AbstractActionController
 {
@@ -68,7 +69,6 @@ class MemberController extends AbstractActionController
     public function addAction()
     {
         $form = MemberForm::getInstance($this->getServiceLocator());
-        // $form->setMemberGoods($this->getGoodsForMemberForm());
         $form->setStaff($this->getStaffForMemberForm());
         $request = $this->getRequest();
         $member = new Member();
@@ -79,15 +79,6 @@ class MemberController extends AbstractActionController
             if ($form->isValid()) {
                 $memberTable = $this->getMemberTable();
                 $member = $memberTable->saveMember($form->getData());
-
-                // if ($member->goods > 0) {
-                // $goods = $this->getGoodsTable()->getOneById($member->goods);
-                // $this->getSellLogTable()->addSellLog($goods, $member);
-                // $memberGoods = new MemberGoods();
-                // $memberGoods->setGoods($goods);
-                // $memberGoods->member_id = $member->id;
-                // $this->getMemberGoodsTable()->save($memberGoods);
-                // }
                 $this->flashMessenger()->addSuccessMessage($member->name . ' 已添加');
                 return $this->redirect()->toUrl('/member/profile/' . $member->id);
             } else {
@@ -193,6 +184,20 @@ class MemberController extends AbstractActionController
         } catch (\Exception $e) {
             print_r($e->getMessage());
             $returnJson = DataTableResult::buildResult();
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
+    public function deleteMemberGoodsAction()
+    {
+        try {
+            $id = $_GET['id'];
+            $this->getMemberGoodsTable()->deleteById($id);
+
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
         }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;

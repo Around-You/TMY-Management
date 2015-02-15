@@ -209,18 +209,30 @@ JS;
             $keyArray = array();
             foreach ($option['operatingCol'] as $key => $item) {
                 $keyArray[] = $key;
-                switch ($key) {
+                if (is_array($item)) {
+                	$type = $item['type'];
+                }else{
+                    $type = $key;
+                }
+                switch ($type) {
                     case "editUrl":
                         $href = $this->perpareParamatersOfUrl($item);
-                        $optColHtml .= " var editUrl = '<a href=\"{$href}\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
+                        $optColHtml .= " var {$key} = '<a href=\"{$href}\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
                         break;
                     case "deleteUrl":
                         $href = $this->perpareParamatersOfUrl($item);
-                        $optColHtml .= " var deleteUrl = '<a href=\"{$href}\"> <i class=\"ace-icon glyphicon glyphicon-remove\"></i>删除</a>';";
+                        $optColHtml .= " var {$key} = '<a href=\"{$href}\"> <i class=\"ace-icon glyphicon glyphicon-remove\"></i>删除</a>';";
                         break;
                     case "editModal":
-                        $optColHtml .= " var editModal = '<a href=\"{$item}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
+                        $optColHtml .= " var {$key} = '<a href=\"{$item}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
                         break;
+                    case "deleteModal":
+                        $optColHtml .= " var {$key} = '<a href=\"{$item}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>删除</a>';";
+                        break;
+                    case "confirmModal":
+                        $optColHtml .= " var {$key} = '<a href=\"{$item}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
+                        break;
+
                     default:
                 }
             }
