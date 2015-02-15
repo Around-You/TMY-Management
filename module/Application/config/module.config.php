@@ -39,7 +39,8 @@ return array(
             'Application\Controller\Member' => 'Application\Controller\MemberController',
             'Application\Controller\Sale' => 'Application\Controller\SaleController',
             'Application\Controller\Store' => 'Application\Controller\StoreController',
-            'Application\Controller\Staff' => 'Application\Controller\StaffController'
+            'Application\Controller\Staff' => 'Application\Controller\StaffController',
+            'Application\Controller\Console' => 'Application\Controller\ConsoleController'
         )
     ),
     'view_manager' => array(
@@ -71,7 +72,17 @@ return array(
     // Placeholder for console routes
     'console' => array(
         'router' => array(
-            'routes' => array()
+            'routes' => array(
+                'updateMemberGoodsState' => array(
+                    'options' => array(
+                        'route' => 'updateMemberGoodsState',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action' => 'updateMemberGoodsState'
+                        )
+                    )
+                )
+            )
         )
     )
 );

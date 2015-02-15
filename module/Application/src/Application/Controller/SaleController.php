@@ -166,7 +166,8 @@ class SaleController extends AbstractActionController
         $memberCode = $_GET['member_code'];
         try {
             $memberGoods = $table->fetchAll(array(
-                'member.code' => $memberCode
+                'member.code' => $memberCode,
+                'member_has_goods.enable' => 1
             ));
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, $memberGoods);
         } catch (\Exception $e) {
