@@ -18,10 +18,13 @@ var tmy_member_list = {
 				$(".time-card-only").show();
 				$(".count-card-only").hide();
 		
-			} else {
+			} else if(type == '次卡')  {
 				$(".time-card-only").hide();
 				$(".count-card-only").show();
 				$("#form-count").val(count);
+			} else{
+				$(".time-card-only").hide();
+				$(".count-card-only").hide();
 			}
 		});
 		$("#btn-submit-buy-modal").on("click", function() {
@@ -81,6 +84,9 @@ var tmy_member_list = {
 			$('#buy_goods_form textarea[name="description"]').val(rowData.description);
 			$('#buy_goods_form input[name="start_date"]').val(rowData.start_date);
 			$('#buy_goods_form input[name="end_date"]').val(rowData.end_date);
+		}else{
+			$('#goods_id').trigger('chosen:updated');
+			$('#goods_id').change();
 		}
 	},
 	initDeleteMemberGoodsForm: function(event){

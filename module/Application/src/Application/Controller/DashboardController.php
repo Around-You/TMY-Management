@@ -54,7 +54,8 @@ class DashboardController extends AbstractActionController
         for ($i = 0; $i < 30; $i ++) {
             $returnArr['x'][] = array(
                 strtotime("-{$i} days"),
-                date('m/d', strtotime("-{$i} days"))
+                date("m月
+                    d日", strtotime("-{$i} days"))
             );
         }
         $returnArr['sale'] = array_reverse($returnArr['sale']);
