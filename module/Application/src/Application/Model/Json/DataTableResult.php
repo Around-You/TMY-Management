@@ -17,6 +17,8 @@ class DataTableResult implements ArraySerializableInterface
 
     public $recordsFiltered = 0;
 
+    public $errorMessage = '';
+
     /**
      *
      * @var Array
@@ -99,5 +101,9 @@ class DataTableResult implements ArraySerializableInterface
         $order = $request['order'];
         $orderString = $columns[$order[0]['column']]['data'] . ' ' . $order[0]['dir'];
         return $orderString;
+    }
+
+    public function setErrorMessage($errorMessage){
+        $this->errorMessage = $errorMessage;
     }
 }

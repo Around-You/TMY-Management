@@ -4,11 +4,13 @@ namespace Application\Model\Member;
 use SamFramework\Model\AbstractModel;
 use Zend\InputFilter\InputFilter;
 /**
- *
+ * @property string statusString
  *
  */
 class Member extends AbstractModel
 {
+    const MEMBER_STATUS_NORMAL = 1;
+    const MEMBER_STATUS_DISABLE = 0;
 
     public $id = 0;
 
@@ -40,7 +42,8 @@ class Member extends AbstractModel
 
     public $update_time = '';
 
-    public $enable = 1;
+    public $status = 1;
+    public $is_deleted = 0;
 
     public $goods = 0;
 
@@ -56,7 +59,7 @@ class Member extends AbstractModel
     }
 
 
-    protected $exclude = array( 'referral_staff_name' );
+    protected $exclude = array( 'referral_staff_name','statusString' );
 
     public function getInputFilter()
     {
@@ -99,7 +102,8 @@ class Member extends AbstractModel
         $this->created_by_user = (isset($array['created_by_user'])) ? $array['created_by_user'] : $this->created_by_user;
         $this->created_time = (isset($array['created_time'])) ? $array['created_time'] : $this->created_time;
         $this->update_time = (isset($array['update_time'])) ? $array['update_time'] : $this->update_time;
-        $this->enable = (isset($array['enable'])) ? $array['enable'] : $this->enable;
+        $this->status = (isset($array['status'])) ? $array['status'] : $this->status;
+        $this->is_deleted = (isset($array['is_deleted'])) ? $array['is_deleted'] : $this->is_deleted;
         $this->description = (isset($array['description'])) ? $array['description'] : $this->description;
         $this->referral = (isset($array['referral'])) ? $array['referral'] : $this->referral;
         $this->referral_staff_name = (isset($array['referral_staff_name'])) ? $array['referral_staff_name'] : $this->referral_staff_name;
@@ -123,14 +127,25 @@ class Member extends AbstractModel
             'created_by_user' => $this->created_by_user,
             'created_time' => $this->created_time,
             'update_time' => $this->update_time,
-            'enable'=> $this->enable,
+            'status'=> $this->status,
+            'is_deleted'=> $this->is_deleted,
             'description'=> $this->description,
             'referral'=> $this->referral,
-            'referral_staff_name' => $this->referral_staff_name
+            'referral_staff_name' => $this->referral_staff_name,
+            'statusString' => $this->statusString
         );
         return $data;
     }
 
+    public function getStatusString(){
+        switch ($this->status){
+        	case Member::MEMBER_STATUS_NORMAL:
+        	    return '<span class="text-success">正常</span>';
+        	case Member::MEMBER_STATUS_DISABLE:
+        	    return '<span class="text-danger">禁用</span>';
+
+        }
+    }
 
 
 

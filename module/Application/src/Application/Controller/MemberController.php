@@ -53,7 +53,7 @@ class MemberController extends AbstractActionController
             $search = $_GET['search']['value'];
             $where = function (Where $where) use($search)
             {
-                $where->addPredicate(new Expression("member.enable = 1 and (member.code like '{$search}%' or member.phone like '{$search}%' or member.name like '{$search}%')"));
+                $where->addPredicate(new Expression("member.is_deleted = 0 and (member.code like '{$search}%' or member.phone like '{$search}%' or member.name like '{$search}%')"));
             };
             $count = $this->getMemberTable()->getFetchAllCounts($where);
             $products = $this->getMemberTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
@@ -61,6 +61,7 @@ class MemberController extends AbstractActionController
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
         } catch (\Exception $e) {
             $returnJson = DataTableResult::buildResult();
+            $returnJson->setErrorMessage($e->getMessage());
         }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;

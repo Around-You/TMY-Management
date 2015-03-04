@@ -114,11 +114,19 @@ class MemberTable extends AbstractModelMapper
         return $row;
     }
 
+    public function changeStatusById($id, $status){
+        $tableGateway = $this->getTableGateway();
+        $model = $this->getOneById($id);
+        $model->status = $status;
+        $this->saveMember($model);
+        return $model;
+    }
+
     public function deleteById($id)
     {
         $tableGateway = $this->getTableGateway();
         $model = $this->getOneById($id);
-        $model->enable = 0;
+        $model->is_deleted = 1;
         $this->saveMember($model);
         return $model;
     }
