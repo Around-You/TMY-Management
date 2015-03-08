@@ -85,6 +85,7 @@ var tmy_member_list = {
 			$('#buy_goods_form input[name="start_date"]').val(rowData.start_date);
 			$('#buy_goods_form input[name="end_date"]').val(rowData.end_date);
 		}else{
+			$('#buy_goods_form input[name="id"]').val(0);
 			$('#goods_id').trigger('chosen:updated');
 			$('#goods_id').change();
 		}
