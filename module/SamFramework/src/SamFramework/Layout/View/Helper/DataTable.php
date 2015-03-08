@@ -12,6 +12,7 @@ namespace SamFramework\Layout\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use Zend\View\Helper\InlineScript;
 use Zend\View\Helper\BasePath;
+use SamFramework\DataTable\DataTableOperatingColumn;
 
 /**
  * 参数 Options 例子
@@ -208,32 +209,37 @@ JS;
             $optColHtml = "{ data: null, orderable: false, render: function ( data, type, row ) {";
             $keyArray = array();
             foreach ($option['operatingCol'] as $key => $item) {
-                $keyArray[] = $key;
-                if (is_array($item)) {
-                	$type = $item['type'];
-                }else{
-                    $type = $key;
+
+                $operatingCol = new DataTableOperatingColumn();
+                $operatingCol->build($item, $key);
+                $keyArray[] = $operatingCol->colName;
+                if ($operatingCol->condition != '') {
+                    foreach ($operatingCol->condition as $key => $value){
+                        $optColHtml .= "if(row.{$key}=='{$value}'){";
+                    }
                 }
-                switch ($type) {
+                switch ($operatingCol->type) {
                     case "editUrl":
-                        $href = $this->perpareParamatersOfUrl($item);
-                        $optColHtml .= " var {$key} = '<a href=\"{$href}\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
+//                         $href = $this->perpareParamatersOfUrl($item);
+                        $optColHtml .= " var {$operatingCol->colName} = '<a href=\"{$operatingCol->url}\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
                         break;
                     case "deleteUrl":
-                        $href = $this->perpareParamatersOfUrl($item);
-                        $optColHtml .= " var {$key} = '<a href=\"{$href}\"> <i class=\"ace-icon glyphicon glyphicon-remove\"></i>删除</a>';";
+//                         $href = $this->perpareParamatersOfUrl($item);
+                        $optColHtml .= " var {$operatingCol->colName} = '<a href=\"{$operatingCol->url}\"> <i class=\"ace-icon glyphicon glyphicon-remove\"></i>删除</a>';";
                         break;
                     case "editModal":
-                        $optColHtml .= " var {$key} = '<a href=\"{$item}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
+                        $optColHtml .= " var {$operatingCol->colName} = '<a href=\"{$item}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
                         break;
                     case "deleteModal":
-                        $optColHtml .= " var {$key} = '<a href=\"{$item}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>删除</a>';";
+                        $optColHtml .= " var {$operatingCol->colName} = '<a href=\"#modal-confirm\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\" data-url=\"{$operatingCol->url}\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>{$operatingCol->label}</a>';";
                         break;
                     case "confirmModal":
-                        $optColHtml .= " var {$key} = '<a href=\"{$item}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
+                        $optColHtml .= " var {$operatingCol->colName} = '<a  href=\"#modal-confirm\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\" data-url=\"{$operatingCol->url}\"> {$operatingCol->label}</a>';";
                         break;
-
                     default:
+                }
+                if ($operatingCol->condition != '') {
+                    $optColHtml .= "}else{var {$operatingCol->colName} = ''}";
                 }
             }
 
@@ -242,10 +248,10 @@ JS;
 
         return $optColHtml;
     }
-
     protected function perpareParamatersOfUrl($url){
         $url = str_replace('<{RowId}>', "' + row.DT_RowId + '", $url);
         return $url;
     }
+
 }
 

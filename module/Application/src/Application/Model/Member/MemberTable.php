@@ -114,14 +114,6 @@ class MemberTable extends AbstractModelMapper
         return $row;
     }
 
-    public function changeStatusById($id, $status){
-        $tableGateway = $this->getTableGateway();
-        $model = $this->getOneById($id);
-        $model->status = $status;
-        $this->saveMember($model);
-        return $model;
-    }
-
     public function deleteById($id)
     {
         $tableGateway = $this->getTableGateway();
@@ -163,6 +155,24 @@ class MemberTable extends AbstractModelMapper
     {
         $member->point += round($point);
         $this->saveMember($member);
+    }
+
+    public function disableMemberById($id)
+    {
+        $tableGateway = $this->getTableGateway();
+        $model = $this->getOneById($id);
+        $model->status = Member::MEMBER_STATUS_DISABLE;
+        $this->saveMember($model);
+        return $model;
+    }
+
+    public function enableMemberById($id)
+    {
+        $tableGateway = $this->getTableGateway();
+        $model = $this->getOneById($id);
+        $model->status = Member::MEMBER_STATUS_NORMAL;
+        $this->saveMember($model);
+        return $model;
     }
 }
 

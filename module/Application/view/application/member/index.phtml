@@ -1,9 +1,13 @@
 <?php
+use Application\Model\Member\Member;
 $title = '会员列表';
 $this->layout()->currentItem = $title;
 $this->headTitle($title);
 
+$this->inlinescript()->appendFile($this->basePath('js/main/member/list.js'));
+
 $tableOptions = array(
+    'dataTableName' => 'member',
     'cols' => array(
         array(
             'title' => '会员卡号',
@@ -46,7 +50,29 @@ $tableOptions = array(
     'getListDataUrl' => '/member/getMemberListData',
     'operatingCol' => array(
         'editUrl' => '/member/profile/<{RowId}>',
-        'deleteUrl' => '/member/delete/<{RowId}>',
+        'deleteUrl' => array(
+            'url' => '/member/delete/<{RowId}>',
+            'type' => 'deleteUrl',
+            'condition' => array(
+                'status' => Member::MEMBER_STATUS_DISABLE
+            )
+        ),
+        'disable' => array(
+            'url' => '/member/disableMember/<{RowId}>',
+            'type' => 'confirmModal',
+            'label' => '禁用',
+            'condition' => array(
+                'status' => Member::MEMBER_STATUS_NORMAL
+            )
+        ),
+        'enable' => array(
+            'url' => '/member/enableMember/<{RowId}>',
+            'type' => 'confirmModal',
+            'label' => '启用',
+            'condition' => array(
+                'status' => Member::MEMBER_STATUS_DISABLE
+            )
+        )
     )
 )?>
 
@@ -65,5 +91,39 @@ $tableOptions = array(
             </div>
         </div>
     </div>
+</div>
+
+
+<div id="modal-confirm" class="modal" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="blue" id="myModalLabel">确认</h4>
+			</div>
+			<div class="modal-body center">
+				<div class="row">
+					<div class="col-xs-12">
+                        <div class="modal-title">是否对 <span id="item-name"></span> 执行<span id="item-operate"></span>操作？</div>
+                        <form id="modal_confirm_form">
+                        <input type="hidden" name="id">
+                        </form>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button class="btn btn-sm" data-dismiss="modal">
+					<i class="ace-icon fa fa-times"></i>
+					否
+				</button>
+
+				<button class="btn btn-sm btn-primary" id="btn-delete-submit">
+					<i class="ace-icon fa fa-check"></i>
+					是
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
 

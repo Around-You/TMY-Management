@@ -134,6 +134,32 @@ class MemberController extends AbstractActionController
         return $this->redirect()->toUrl('/member');
     }
 
+    public function disableMemberAction()
+    {
+        try {
+            $id = $this->params('id', 0);
+            $this->getMemberTable()->disableMemberById($id);
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
+    public function enableMemberAction()
+    {
+        try {
+            $id = $this->params('id', 0);
+            $this->getMemberTable()->enableMemberById($id);
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
     public function profileAction()
     {
         $id = (int) $this->params('id', 0);
