@@ -88,7 +88,7 @@ class MemberTable extends AbstractModelMapper
         $resultSet = $this->getTableGateway()->select(function (Select $select) use($code)
         {
             $select->where->like('code', $code . '%');
-            $select->where->equalTo('is_delete', 0);
+            $select->where->equalTo('is_deleted', 0);
             $select->where->equalTo('status', Member::MEMBER_STATUS_NORMAL);
         });
 
