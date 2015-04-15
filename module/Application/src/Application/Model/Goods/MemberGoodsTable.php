@@ -72,9 +72,16 @@ class MemberGoodsTable extends AbstractModelMapper
     {
         $tableGateway = $this->getTableGateway();
         $id = (int) $id;
-        $rowset = $tableGateway->select(array(
-            'id' => $id
-        ));
+        $rowset = $tableGateway->select(function (Select $select) use($id){
+            $select->where( array(
+                $this->tableName . '.id' => $id
+            ));
+            $select->join('goods', 'goods.id=goods_id', array(
+                'goods_title' => 'title',
+                'goods_type' => 'type',
+                'goods_code' => 'code'
+            ));
+        });
         $row = $rowset->current();
         if (! $row) {
             throw new \Exception("Could not find row $id");
@@ -99,6 +106,13 @@ class MemberGoodsTable extends AbstractModelMapper
             }
         }
         return $item;
+    }
+
+    public function deleteById($id)
+    {
+        $this->getTableGateway()->delete(array(
+            'id' => (int) $id
+        ));
     }
 }
 

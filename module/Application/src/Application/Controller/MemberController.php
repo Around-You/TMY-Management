@@ -18,6 +18,8 @@ use Application\Model\Goods\MemberGoods;
 use Application\Model\Json\DataTableResult;
 use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Predicate\Expression;
+use Application\Form\MemberGoodsForm;
+use Application\Model\Json\JsonResult;
 
 class MemberController extends AbstractActionController
 {
@@ -51,7 +53,7 @@ class MemberController extends AbstractActionController
             $search = $_GET['search']['value'];
             $where = function (Where $where) use($search)
             {
-                $where->addPredicate(new Expression("member.enable = 1 and (member.code like '{$search}%' or member.phone like '{$search}%' or member.name like '{$search}%')"));
+                $where->addPredicate(new Expression("member.is_deleted = 0 and (member.code like '{$search}%' or member.phone like '{$search}%' or member.name like '{$search}%')"));
             };
             $count = $this->getMemberTable()->getFetchAllCounts($where);
             $products = $this->getMemberTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
@@ -59,6 +61,7 @@ class MemberController extends AbstractActionController
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
         } catch (\Exception $e) {
             $returnJson = DataTableResult::buildResult();
+            $returnJson->setErrorMessage($e->getMessage());
         }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
@@ -67,7 +70,6 @@ class MemberController extends AbstractActionController
     public function addAction()
     {
         $form = MemberForm::getInstance($this->getServiceLocator());
-//         $form->setMemberGoods($this->getGoodsForMemberForm());
         $form->setStaff($this->getStaffForMemberForm());
         $request = $this->getRequest();
         $member = new Member();
@@ -78,17 +80,8 @@ class MemberController extends AbstractActionController
             if ($form->isValid()) {
                 $memberTable = $this->getMemberTable();
                 $member = $memberTable->saveMember($form->getData());
-
-//                 if ($member->goods > 0) {
-//                     $goods = $this->getGoodsTable()->getOneById($member->goods);
-//                     $this->getSellLogTable()->addSellLog($goods, $member);
-//                     $memberGoods = new MemberGoods();
-//                     $memberGoods->setGoods($goods);
-//                     $memberGoods->member_id = $member->id;
-//                     $this->getMemberGoodsTable()->save($memberGoods);
-//                 }
                 $this->flashMessenger()->addSuccessMessage($member->name . ' 已添加');
-                return $this->redirect()->toUrl('/member/profile/'.$member->id);
+                return $this->redirect()->toUrl('/member/profile/' . $member->id);
             } else {
                 $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
@@ -141,10 +134,38 @@ class MemberController extends AbstractActionController
         return $this->redirect()->toUrl('/member');
     }
 
+    public function disableMemberAction()
+    {
+        try {
+            $id = $this->params('id', 0);
+            $this->getMemberTable()->disableMemberById($id);
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
+    public function enableMemberAction()
+    {
+        try {
+            $id = $this->params('id', 0);
+            $this->getMemberTable()->enableMemberById($id);
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
     public function profileAction()
     {
         $id = (int) $this->params('id', 0);
         $goods = $this->getGoodsForMemberForm();
+        $form = MemberGoodsForm::getInstance($this->getServiceLocator());
+        $form->setGoods($goods);
         try {
             $member = $this->getMemberTable()->getOneById($id);
         } catch (\Exception $ex) {
@@ -152,9 +173,11 @@ class MemberController extends AbstractActionController
             return $this->redirect()->toUrl('/member');
         }
 
+        $form->get('member_id')->setValue($member->id);
         return array(
             'member' => $member,
-            'goods' => $goods
+            'goods' => $goods,
+            'form' => $form
         );
     }
 
@@ -178,7 +201,9 @@ class MemberController extends AbstractActionController
     public function getMemberLogListDataAction()
     {
         try {
-            $where = array( 'member_id' => $_GET['member_id']);
+            $where = array(
+                'member_id' => $_GET['member_id']
+            );
             $count = $this->getMemberLogTable()->getFetchAllCounts($where);
             $memberGoods = $this->getMemberLogTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 
@@ -186,6 +211,20 @@ class MemberController extends AbstractActionController
         } catch (\Exception $e) {
             print_r($e->getMessage());
             $returnJson = DataTableResult::buildResult();
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
+    public function deleteMemberGoodsAction()
+    {
+        try {
+            $id = $_GET['id'];
+            $this->getMemberGoodsTable()->deleteById($id);
+
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
         }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;

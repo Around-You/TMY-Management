@@ -2,10 +2,12 @@
 namespace SamFramework\Form\View\Helper;
 
 use Zend\Form\ElementInterface;
-use Zend\Form\Exception\DomainException;
 use Zend\View\Helper\InlineScript;
 use Zend\View\Helper\BasePath;
 use Zend\Form\View\Helper\FormSelect;
+
+use SamFramework\Form\Element\Select as SelectElement;
+use Zend\Form\Exception;
 
 class FormChosen extends FormSelect
 {
@@ -130,7 +132,7 @@ class FormChosen extends FormSelect
         $inlineScriptHelper->appendFile($this->getView()->basePath('js/chosen.jquery.js'));
         $inlineScriptHelper->captureStart();
 echo <<<JS
-$('input[name=$name]').chosen({
+$("select[name='$name']").chosen({
 	allow_single_deselect : true
 });
 JS;

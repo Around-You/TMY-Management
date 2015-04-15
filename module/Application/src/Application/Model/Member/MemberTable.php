@@ -88,7 +88,8 @@ class MemberTable extends AbstractModelMapper
         $resultSet = $this->getTableGateway()->select(function (Select $select) use($code)
         {
             $select->where->like('code', $code . '%');
-            $select->where->equalTo('enable', 1);
+            $select->where->equalTo('is_deleted', 0);
+            $select->where->equalTo('status', Member::MEMBER_STATUS_NORMAL);
         });
 
         return $resultSet;
@@ -118,7 +119,7 @@ class MemberTable extends AbstractModelMapper
     {
         $tableGateway = $this->getTableGateway();
         $model = $this->getOneById($id);
-        $model->enable = 0;
+        $model->is_deleted = 1;
         $this->saveMember($model);
         return $model;
     }
@@ -155,6 +156,24 @@ class MemberTable extends AbstractModelMapper
     {
         $member->point += round($point);
         $this->saveMember($member);
+    }
+
+    public function disableMemberById($id)
+    {
+        $tableGateway = $this->getTableGateway();
+        $model = $this->getOneById($id);
+        $model->status = Member::MEMBER_STATUS_DISABLE;
+        $this->saveMember($model);
+        return $model;
+    }
+
+    public function enableMemberById($id)
+    {
+        $tableGateway = $this->getTableGateway();
+        $model = $this->getOneById($id);
+        $model->status = Member::MEMBER_STATUS_NORMAL;
+        $this->saveMember($model);
+        return $model;
     }
 }
 

@@ -94,7 +94,7 @@ class SaleController extends AbstractActionController
                 $action->goods_id = $memberGoods->goods_id;
                 $action->member_id = $memberGoods->member_id;
                 $action->user_id = App::getUser()->id;
-                $action->action = '扣次/使用';
+                $action->action = $memberGoods->goods_type == '时间卡' ? '打印' : '扣次/使用';
                 $action->count = $count;
                 $this->getMemberLogTable()->save($action);
                 // add daily report
@@ -120,7 +120,8 @@ class SaleController extends AbstractActionController
         $member = $this->getMemberTable()->getOneById($memberLog->member_id);
         $usedGoods = $this->getGoodsTable()->getOneById($memberLog->goods_id);
         $memberGoods = $this->getMemberGoodsTable()->fetchAll(array(
-            'member.id' => $memberLog->member_id
+            'member.id' => $memberLog->member_id,
+            'goods_id' => $memberLog->goods_id
         ));
         ;
         return array(
@@ -165,7 +166,8 @@ class SaleController extends AbstractActionController
         $memberCode = $_GET['member_code'];
         try {
             $memberGoods = $table->fetchAll(array(
-                'member.code' => $memberCode
+                'member.code' => $memberCode,
+                'member_has_goods.enable' => 1
             ));
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, $memberGoods);
         } catch (\Exception $e) {

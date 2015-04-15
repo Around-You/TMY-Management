@@ -12,3 +12,7 @@ a {
 .input-group-addon{
 	cursor: pointer;
 }
+
+.form-horizontal input[type=checkbox].ace + .lbl{
+   margin-top: 7px;
+}

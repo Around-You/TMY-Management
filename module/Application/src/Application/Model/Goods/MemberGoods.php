@@ -38,6 +38,8 @@ class MemberGoods extends AbstractModel
 
     public $description = '';
 
+    public $enable = 1;
+
     protected $_status = NULL;
 
     /**
@@ -69,6 +71,7 @@ class MemberGoods extends AbstractModel
         $this->goods_type = (isset($array['goods_type'])) ? $array['goods_type'] : $this->goods_type;
         $this->description = (isset($array['description'])) ? $array['description'] : $this->description;
         $this->create_time = (isset($array['create_time'])) ? $array['create_time'] : $this->create_time;
+        $this->enable = (isset($array['enable'])) ? $array['enable'] : $this->enable;
     }
 
     public function getArrayCopy()
@@ -88,7 +91,8 @@ class MemberGoods extends AbstractModel
             'description' => $this->description,
             'detail' => $this->detail,
             'create_time' => $this->create_time,
-            'status' => $this->status
+            'status' => $this->status,
+            'enable' => $this->enable,
         );
         return $data;
     }
@@ -150,6 +154,10 @@ class MemberGoods extends AbstractModel
     {
         if ($this->count > 0) {
             $this->count -= $count;
+        }
+
+        if ($this->goods_type == '次卡' && $this->count == 0) {
+        	$this->enable = 0;
         }
     }
 }

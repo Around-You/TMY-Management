@@ -1,5 +1,8 @@
 <?php
 /**
+ * 本类是自动生成 datatable的助手类, 可以根据参数生成datatable的js代码
+ *
+ * DataTable 组件使用 jquery Datatable (http://www.datatables.net/)
  *
  * @author SamXiao
  *
@@ -9,6 +12,7 @@ namespace SamFramework\Layout\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use Zend\View\Helper\InlineScript;
 use Zend\View\Helper\BasePath;
+use SamFramework\DataTable\DataTableOperatingColumn;
 
 /**
  * 参数 Options 例子
@@ -153,20 +157,30 @@ var \${$this->dataTableName} = $('#{$this->dataTableName}').DataTable( {
 	ajax: {$ajaxOption},
 	columns: [
 JS;
+        echo $this->renderColumns();
+        echo $this->renderOperatingCol();
+        echo ']});';
+        $inlineScriptHelper->captureEnd();
+    }
+
+    protected function renderColumns()
+    {
+        $option = $this->getOptions();
+        $colHtml = '';
         foreach ($option['cols'] as $col) {
-            $orderable = isset($col['orderable'])? $col['orderable']:true;
+            $orderable = isset($col['orderable']) ? $col['orderable'] : true;
             if (isset($col['linkTarget'])) {
                 switch ($col['linkTarget']) {
                     case 'editLink':
-                        echo '{
+                        $colHtml .= '{
                         data: "' . $col['key'] . '", orderable: ' . $orderable . ',
                         render: function ( data, type, row ){
-    				        return "<a href=\"' . $option['operatingCol']['editUrl'] . '" + row.DT_RowId + "\">" + data + "</a>";
+    				        return \'<a href="' . $this->perpareParamatersOfUrl($option['operatingCol']['editUrl']) . '">\' + data + "</a>";
     				    } },';
                         break;
                     case 'none':
                     case false:
-                        echo '{ data: "' . $col['key'] . '", orderable: ' . $orderable . ' },';
+                        $colHtml .= '{ data: "' . $col['key'] . '", orderable: ' . $orderable . ' },';
                         break;
                     default:
                         $linkUrl = $col['linkTarget'];
@@ -174,31 +188,70 @@ JS;
                         if (isset($col['linkDataCol'])) {
                             $linkParme = '" + row.' . $col['linkDataCol'] . ' + "';
                         }
-                        echo '{
+                        $colHtml .= '{
                         data: "' . $col['key'] . '", orderable: ' . $orderable . ',
                         render: function ( data, type, row ){
     				        return "<a href=\"' . $linkUrl . $linkParme . '\">" + data + "</a>";
     				    } },';
                 }
             } else {
-                echo '{ data: "' . $col['key'] . '", orderable: ' . $orderable . ' },';
+                $colHtml .= '{ data: "' . $col['key'] . '", orderable: ' . $orderable . ' },';
             }
         }
-        if (isset($option['operatingCol']) && $option['operatingCol'] !== false) {
-            echo <<<JS
-        {
-            data: null,
-            orderable: false,
-            render: function ( data, type, row ) {
-                var editString = '<a href="{$option['operatingCol']['editUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-pencil"></i>编辑</a>';
-                var deleteString = '<a href="{$option['operatingCol']['deleteUrl']}' + row.DT_RowId + '"> <i class="ace-icon glyphicon glyphicon-remove"></i>删除</a>';
-                return editString + ' ' + deleteString;
-            }
-        }
-JS;
-        }
-        echo ']});';
-        $inlineScriptHelper->captureEnd();
+        return $colHtml;
     }
+
+    protected function renderOperatingCol()
+    {
+        $option = $this->getOptions();
+        $optColHtml = '';
+        if (isset($option['operatingCol']) && ! empty($option['operatingCol'])) {
+            $optColHtml = "{ data: null, orderable: false, render: function ( data, type, row ) {";
+            $keyArray = array();
+            foreach ($option['operatingCol'] as $key => $item) {
+
+                $operatingCol = new DataTableOperatingColumn();
+                $operatingCol->build($item, $key);
+                $keyArray[] = $operatingCol->colName;
+                if ($operatingCol->condition != '') {
+                    foreach ($operatingCol->condition as $key => $value){
+                        $optColHtml .= "if(row.{$key}=='{$value}'){";
+                    }
+                }
+                switch ($operatingCol->type) {
+                    case "editUrl":
+//                         $href = $this->perpareParamatersOfUrl($item);
+                        $optColHtml .= " var {$operatingCol->colName} = '<a href=\"{$operatingCol->url}\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
+                        break;
+                    case "deleteUrl":
+//                         $href = $this->perpareParamatersOfUrl($item);
+                        $optColHtml .= " var {$operatingCol->colName} = '<a href=\"{$operatingCol->url}\"> <i class=\"ace-icon glyphicon glyphicon-remove\"></i>删除</a>';";
+                        break;
+                    case "editModal":
+                        $optColHtml .= " var {$operatingCol->colName} = '<a href=\"{$item}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>编辑</a>';";
+                        break;
+                    case "deleteModal":
+                        $optColHtml .= " var {$operatingCol->colName} = '<a href=\"#modal-confirm\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\" data-url=\"{$operatingCol->url}\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>{$operatingCol->label}</a>';";
+                        break;
+                    case "confirmModal":
+                        $optColHtml .= " var {$operatingCol->colName} = '<a  href=\"#modal-confirm\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\" data-url=\"{$operatingCol->url}\"> {$operatingCol->label}</a>';";
+                        break;
+                    default:
+                }
+                if ($operatingCol->condition != '') {
+                    $optColHtml .= "}else{var {$operatingCol->colName} = ''}";
+                }
+            }
+
+            $optColHtml .= " return ".implode(" + ' ' + ", $keyArray).";}}";
+        }
+
+        return $optColHtml;
+    }
+    protected function perpareParamatersOfUrl($url){
+        $url = str_replace('<{RowId}>', "' + row.DT_RowId + '", $url);
+        return $url;
+    }
+
 }
 

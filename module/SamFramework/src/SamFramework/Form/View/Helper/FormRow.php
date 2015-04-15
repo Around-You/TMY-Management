@@ -10,11 +10,51 @@ use Zend\Form\View\Helper\FormElement;
 
 class FormRow extends ZVHFormRow
 {
+    protected $defaultWarpClass = 'form-group';
 
     protected $warpClass = 'form-group';
 
     protected $inputErrorClass = 'has-error';
 
+    /**
+     * Invoke helper as functor
+     *
+     * Proxies to {@link render()}.
+     *
+     * @param  null|ElementInterface $element
+     * @param  null|string           $labelPosition
+     * @param  bool                  $renderErrors
+     * @param  string|null           $partial
+     * @return string|FormRow
+     */
+    public function __invoke(ElementInterface $element = null, $labelPosition = null, $renderErrors = null, $partial = null, $warpClass = NULL)
+    {
+        if (!$element) {
+            return $this;
+        }
+
+        if ($labelPosition !== null) {
+            $this->setLabelPosition($labelPosition);
+        } elseif ($this->labelPosition === null) {
+            $this->setLabelPosition(self::LABEL_PREPEND);
+        }
+
+        if ($renderErrors !== null) {
+            $this->setRenderErrors($renderErrors);
+        }
+
+        if ($partial !== null) {
+            $this->setPartial($partial);
+        }
+
+        if ($warpClass != null) {
+        	$this->warpClass = $this->defaultWarpClass . ' ' . $warpClass;
+        }else{
+            $this->warpClass = $this->defaultWarpClass;
+        }
+
+        return $this->render($element);
+    }
     /**
      * Utility form helper that renders a label (if it exists), an element and errors
      *
@@ -77,14 +117,14 @@ class FormRow extends ZVHFormRow
                 $label = $escapeHtmlHelper($label);
             }
 
-            if ($element->hasAttribute('id') && ($element instanceof LabelAwareInterface && ! $element->getLabelOption('always_wrap'))) {
-                $labelOpen = '';
-                $labelClose = '';
-                $label = $labelHelper($element);
-            } else {
+//             if ($element->hasAttribute('id') && ($element instanceof LabelAwareInterface && ! $element->getLabelOption('always_wrap'))) {
+//                 $labelOpen = '';
+//                 $labelClose = '';
+//                 $label = $labelHelper($element);
+//             } else {
                 $labelOpen = $labelHelper->openTag($this->getLabelAttributes());
                 $labelClose = $labelHelper->closeTag();
-            }
+//             }
 
             if ($label !== '' && (! $element->hasAttribute('id')) || ($element instanceof LabelAwareInterface && $element->getLabelOption('always_wrap'))) {
                 $label = '<span>' . $label . '</span>';
