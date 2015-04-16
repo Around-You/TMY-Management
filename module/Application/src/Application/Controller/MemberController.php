@@ -203,7 +203,8 @@ class MemberController extends AbstractActionController
     {
         try {
             $where = array(
-                'member_id' => $_GET['member_id']
+                'member_id' => $_GET['member_id'],
+                'member_action_log.is_deleted' => 0
             );
             $count = $this->getMemberLogTable()->getFetchAllCounts($where);
             $memberGoods = $this->getMemberLogTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
