@@ -9,12 +9,16 @@ use SamFramework\Model\AbstractModel;
  */
 class MemberLog extends AbstractModel
 {
+    const MEMBER_LOG_ACTION_TYPE_PRINT = '打印';
+    const MEMBER_LOG_ACTION_TYPE_USE = '扣次/使用';
 
     public $id = 0;
 
     public $action = '';
 
     public $member_id = 0;
+
+    public $member_goods_id = NULL;
 
     public $member_name = '';
 
@@ -33,6 +37,10 @@ class MemberLog extends AbstractModel
     public $staff_name = '';
 
     public $count = 1;
+
+    public $is_deleted = 0;
+
+    public $delete_time = NULL;
 
     /**
      * exclude fields to save
@@ -59,7 +67,10 @@ class MemberLog extends AbstractModel
         $this->goods_code = (isset($array['goods_code'])) ? $array['goods_code'] : $this->goods_code;
         $this->goods_title = (isset($array['goods_title'])) ? $array['goods_title'] : $this->goods_title;
         $this->staff_name = (isset($array['staff_name'])) ? $array['staff_name'] : $this->staff_name;
+        $this->is_deleted = (isset($array['is_deleted'])) ? $array['is_deleted'] : $this->is_deleted;
+        $this->delete_time = (isset($array['delete_time'])) ? $array['delete_time'] : $this->delete_time;
         $this->count = (isset($array['count'])) ? $array['count'] : $this->count;
+        $this->member_goods_id = (isset($array['member_goods_id'])) ? $array['member_goods_id'] : $this->member_goods_id;
     }
 
     public function getArrayCopy()
@@ -76,7 +87,10 @@ class MemberLog extends AbstractModel
             'goods_code' => $this->goods_code,
             'goods_title' => $this->goods_title,
             'staff_name' => $this->staff_name,
-            'count' => $this->count
+            'count' => $this->count,
+            'is_deleted' => $this->is_deleted,
+            'delete_time' => $this->delete_time,
+            'member_goods_id' => $this->member_goods_id
         );
         return $data;
     }

@@ -73,11 +73,11 @@ class MemberLogTable extends AbstractModelMapper
             $tableGateway->insert($data);
             $item->id = $this->getTableGateway()->getLastInsertValue();
         } else {
-            // if ($this->getProduct($id)) {
-            // $tableGateway->update($data, array(
-            // 'id' => $id
-            // ));
-            // }
+            if ($this->getOneById($id)) {
+                $tableGateway->update($data, array(
+                    'id' => $id
+                ));
+            }
         }
         return $item;
     }
@@ -101,6 +101,15 @@ class MemberLogTable extends AbstractModelMapper
         }
 
         return $row;
+    }
+
+    public function deleteById($id)
+    {
+        $model = $this->getOneById($id);
+        $model->is_deleted = 1;
+        $model->delete_time = date('Y-m-d H:i:s');
+        $this->save($model);
+        return $model;
     }
 }
 

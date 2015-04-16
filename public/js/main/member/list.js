@@ -8,7 +8,6 @@ var tmy_member_list = {
 			me.initDeleteMemberGoodsForm(event);
 		});
 		$("#btn-delete-submit").on("click", function() {
-//			var data = $("#modal_confirm_form").serialize();
 			var url = $("#modal_confirm_form").attr("action");
 			$.getJSON(url, function(result) {
 				if(result.status == '1'){

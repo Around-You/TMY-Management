@@ -91,6 +91,7 @@ class SaleController extends AbstractActionController
                 $this->getMemberGoodsTable()->save($memberGoods);
                 // add action log
                 $action = new MemberLog();
+                $action->member_goods_id = $memberGoods->id;
                 $action->goods_id = $memberGoods->goods_id;
                 $action->member_id = $memberGoods->member_id;
                 $action->user_id = App::getUser()->id;
