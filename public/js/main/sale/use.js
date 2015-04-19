@@ -40,6 +40,7 @@ var main_sale_use = {
 	        if(result.status){
 	            var html = '<li><i class="ace-icon fa fa-caret-right blue"></i>姓名: ' + result.data.name + '</li>';
 	            html += '<li><i class="ace-icon fa fa-caret-right blue"></i>积分: ' + result.data.point + '</li>';
+	            html += '<li><i class="ace-icon fa fa-caret-right blue"></i>备注: ' + result.data.description + '</li>';
 	            $('.member-info-list').html(html);
 	            $('.member-info-list').data('code',memberCode);
 	        }else{

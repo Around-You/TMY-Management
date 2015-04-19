@@ -241,7 +241,7 @@ class MemberController extends AbstractActionController
             if ($log->action == MemberLog::MEMBER_LOG_ACTION_TYPE_USE) {
 
                 $memberGoods = $this->getMemberGoodsTable()->getOneById($log->member_goods_id);
-                $memberGoods->count ++;
+                $memberGoods->count += $log->count;
                 $memberGoods->enable = 1;
                 $this->getMemberGoodsTable()->save($memberGoods);
             }
