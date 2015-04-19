@@ -238,8 +238,7 @@ class MemberController extends AbstractActionController
             $id = $this->params('id', 0);
             $log = $this->getMemberLogTable()->getOneById($id);
             $this->getMemberLogTable()->deleteById($id);
-            if ($log->action == MemberLog::MEMBER_LOG_ACTION_TYPE_USE) {
-
+            if ($log->action == MemberLog::MEMBER_LOG_ACTION_TYPE_USE && $log->is_deleted == 0) {
                 $memberGoods = $this->getMemberGoodsTable()->getOneById($log->member_goods_id);
                 $memberGoods->count += $log->count;
                 $memberGoods->enable = 1;
