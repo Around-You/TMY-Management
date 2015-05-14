@@ -2,9 +2,9 @@
 use Application\Model\Member\Member;
 $title = '会员列表';
 $this->layout()->currentItem = $title;
-$this->headTitle($title);
+$this->headTitle( $title );
 
-$this->inlinescript()->appendFile($this->basePath('js/main/member/list.js'));
+$this->inlinescript()->appendFile( $this->basePath( 'js/main/member/list.js' ) );
 
 $tableOptions = array(
     'dataTableName' => 'member',
@@ -61,6 +61,7 @@ $tableOptions = array(
             'url' => '/member/disableMember/<{RowId}>',
             'type' => 'confirmModal',
             'label' => '禁用',
+            'modalName' => 'modal-disable',
             'condition' => array(
                 'status' => Member::MEMBER_STATUS_NORMAL
             )
@@ -77,24 +78,26 @@ $tableOptions = array(
 )?>
 
 <div class="page-header">
-<h1>
+	<h1>
     <?= $this->escapeHtml($title); ?>
-    <small><a href="/member/add"><i class="ace-icon glyphicon glyphicon-plus"></i>新增会员</a></small>
-</h1>
+    <small><a href="/member/add"><i
+				class="ace-icon glyphicon glyphicon-plus"></i>新增会员</a></small>
+	</h1>
 </div>
 <div class="row">
-    <div class="col-xs-12">
+	<div class="col-xs-12">
         <?=$this->flashMessenger()->render();?>
         <div class="row">
-            <div class="col-xs-12">
+			<div class="col-xs-12">
             <?=$this->dataTable($tableOptions)?>
             </div>
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 
 
-<div id="modal-confirm" class="modal" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="modal-confirm" class="modal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -104,23 +107,65 @@ $tableOptions = array(
 			<div class="modal-body center">
 				<div class="row">
 					<div class="col-xs-12">
-                        <div class="modal-title">是否对 <span id="item-name"></span> 执行<span id="item-operate"></span>操作？</div>
-                        <form id="modal_confirm_form">
-                        <input type="hidden" name="id">
-                        </form>
+						<div class="modal-title">
+							是否对 <span id="item-name"></span> 执行<span id="item-operate"></span>操作？
+						</div>
+						<form id="modal_confirm_form">
+							<input type="hidden" name="id">
+						</form>
 					</div>
 				</div>
 			</div>
 
 			<div class="modal-footer">
 				<button class="btn btn-sm" data-dismiss="modal">
-					<i class="ace-icon fa fa-times"></i>
-					否
+					<i class="ace-icon fa fa-times"></i> 否
 				</button>
 
 				<button class="btn btn-sm btn-primary" id="btn-delete-submit">
-					<i class="ace-icon fa fa-check"></i>
-					是
+					<i class="ace-icon fa fa-check"></i> 是
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="modal-disable" class="modal" tabindex="-1" role="dialog"
+	aria-labelledby="disableModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="blue" id="disableModalLabel">确认</h4>
+			</div>
+			<div class="modal-body center">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="modal-title">
+							是否对 <span class="item-name"></span> 执行禁用操作操作？
+						</div>
+						<form id="modal_disable_form" class="has-error">
+							<input type="hidden" name="id">
+							<select id="input-disable-type" name="disable-type">
+							       <option value="">请选择一个禁用原因</option>
+								<option value="1">用户违规</option>
+								<option value="2">用户丢卡</option>
+								<option value="3">用户暂停</option>
+								<option value="4">其他原因</option>
+							</select>
+							<div class="help-block col-xs-12 col-sm-reset"></div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button class="btn btn-sm" data-dismiss="modal">
+					<i class="ace-icon fa fa-times"></i> 否
+				</button>
+
+				<button class="btn btn-sm btn-primary" id="btn-disable-submit">
+					<i class="ace-icon fa fa-check"></i> 是
 				</button>
 			</div>
 		</div>

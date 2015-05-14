@@ -234,7 +234,7 @@ JS;
                         $optColHtml .= " var {$operatingCol->colName} = '<a href=\"#modal-confirm\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\" data-url=\"{$operatingCol->url}\"> <i class=\"ace-icon glyphicon glyphicon-pencil\"></i>{$operatingCol->label}</a>';";
                         break;
                     case "confirmModal":
-                        $optColHtml .= " var {$operatingCol->colName} = '<a  href=\"#modal-confirm\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\" data-url=\"{$operatingCol->url}\"> {$operatingCol->label}</a>';";
+                        $optColHtml .= " var {$operatingCol->colName} = '<a  href=\"#{$operatingCol->modalName}\" data-id=\"' + row.DT_RowId + '\" class=\"modal-button\" data-toggle=\"modal\" data-url=\"{$operatingCol->url}\"> {$operatingCol->label}</a>';";
                         break;
                     default:
                 }

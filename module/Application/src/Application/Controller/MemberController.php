@@ -139,7 +139,8 @@ class MemberController extends AbstractActionController
     {
         try {
             $id = $this->params('id', 0);
-            $this->getMemberTable()->disableMemberById($id);
+            $type = $_GET['disable-type'];
+            $this->getMemberTable()->disableMemberById($id, $type);
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
         } catch (\Exception $e) {
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
