@@ -40,6 +40,7 @@ var main_sale_use = {
 	        if(result.status){
 	            var html = '<li><i class="ace-icon fa fa-caret-right blue"></i>姓名: ' + result.data.name + '</li>';
 	            html += '<li><i class="ace-icon fa fa-caret-right blue"></i>积分: ' + result.data.point + '</li>';
+	            html += '<li><i class="ace-icon fa fa-caret-right blue"></i>备注: ' + result.data.description + '</li>';
 	            $('.member-info-list').html(html);
 	            $('.member-info-list').data('code',memberCode);
 	        }else{
@@ -58,6 +59,7 @@ var main_sale_use = {
 	        		var row = '<tr data-id="' + item.id + '" data-title="' + item.goods_title + '"><td class="center">' + rownum + '</td>';
 		        	row += '<td>' + item.goods_title + '</td>';
 		        	row += '<td>'+ item.detail + '</td>';
+		        	row += '<td>'+ item.description + '</td>';
 		        	row += '<td><a href="javascript:void(0)" class="use-goods-btn green"> <i class="ace-icon glyphicon glyphicon-check green"></i>扣次</a></td>';
 		        	row += '</tr>';
 		            $('#goods-tbl tbody').append(row);

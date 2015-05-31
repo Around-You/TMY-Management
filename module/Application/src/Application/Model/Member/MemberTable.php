@@ -158,11 +158,12 @@ class MemberTable extends AbstractModelMapper
         $this->saveMember($member);
     }
 
-    public function disableMemberById($id)
+    public function disableMemberById($id,$type)
     {
         $tableGateway = $this->getTableGateway();
         $model = $this->getOneById($id);
         $model->status = Member::MEMBER_STATUS_DISABLE;
+        $model->disable_type = $type;
         $this->saveMember($model);
         return $model;
     }

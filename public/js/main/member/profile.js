@@ -38,11 +38,20 @@ var tmy_member_list = {
 			});
 		});
 		$("#btn-delete-submit").on("click", function() {
-			var data = $("#delete_goods_form").serialize();
-			$.getJSON("/member/deleteMemberGoods", data, function(result) {
+//			var data = $("#delete_goods_form").serialize();
+//			$.getJSON("/member/deleteMemberGoods", data, function(result) {
+//				if(result.status == '1'){
+//					$('#modal-confirm').modal('hide');
+//					$memberGoods.draw();
+//				}
+//			});
+			
+			var url = $("#modal_confirm_form").attr("action");
+			$.getJSON(url, function(result) {
 				if(result.status == '1'){
 					$('#modal-confirm').modal('hide');
 					$memberGoods.draw();
+					$memberAction.draw();
 				}
 			});
 		});
@@ -92,11 +101,16 @@ var tmy_member_list = {
 	},
 	initDeleteMemberGoodsForm: function(event){
 		var relatedTarget = event.relatedTarget;
+		var dataTable = eval( '$' + $(relatedTarget).closest('table').attr('id') );
+//		console.log(dataTable);
 		if( $(relatedTarget).data("id") != undefined ){
-			var rowData = $memberGoods.row("#" + $(relatedTarget).data("id")).data();
-			console.log(rowData);
-			$('#name-to-delete').text(rowData.goods_title);
-			$('#modal-confirm input[name="id"]').val(rowData.id);
+			var rowData = dataTable.row("#" + $(relatedTarget).data("id")).data();
+//			console.log(rowData);
+			var modal = $('#modal-confirm');
+			$(modal).find("form").attr('action', $(relatedTarget).data("url"));
+			$(modal).find("#item-operate").text($(relatedTarget).text());
+			$(modal).find("#item-name").text(rowData.goods_title);
+//			$(modal).find('input[name="id"]').val(rowData.id);
 		}
 	}
 };

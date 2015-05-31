@@ -20,6 +20,7 @@ use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Predicate\Expression;
 use Application\Form\MemberGoodsForm;
 use Application\Model\Json\JsonResult;
+use Application\Model\Logs\MemberLog;
 
 class MemberController extends AbstractActionController
 {
@@ -138,7 +139,8 @@ class MemberController extends AbstractActionController
     {
         try {
             $id = $this->params('id', 0);
-            $this->getMemberTable()->disableMemberById($id);
+            $type = $_GET['disable-type'];
+            $this->getMemberTable()->disableMemberById($id, $type);
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
         } catch (\Exception $e) {
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
@@ -202,7 +204,8 @@ class MemberController extends AbstractActionController
     {
         try {
             $where = array(
-                'member_id' => $_GET['member_id']
+                'member_id' => $_GET['member_id'],
+                'member_action_log.is_deleted' => 0
             );
             $count = $this->getMemberLogTable()->getFetchAllCounts($where);
             $memberGoods = $this->getMemberLogTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
@@ -219,8 +222,29 @@ class MemberController extends AbstractActionController
     public function deleteMemberGoodsAction()
     {
         try {
-            $id = $_GET['id'];
+            $id = $this->params('id', 0);
             $this->getMemberGoodsTable()->deleteById($id);
+
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
+        } catch (\Exception $e) {
+            $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_FAILED);
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
+
+    public function deleteMemberLogAction()
+    {
+        try {
+            $id = $this->params('id', 0);
+            $log = $this->getMemberLogTable()->getOneById($id);
+            $this->getMemberLogTable()->deleteById($id);
+            if ($log->action == MemberLog::MEMBER_LOG_ACTION_TYPE_USE && $log->is_deleted == 0) {
+                $memberGoods = $this->getMemberGoodsTable()->getOneById($log->member_goods_id);
+                $memberGoods->count += $log->count;
+                $memberGoods->enable = 1;
+                $this->getMemberGoodsTable()->save($memberGoods);
+            }
 
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
         } catch (\Exception $e) {

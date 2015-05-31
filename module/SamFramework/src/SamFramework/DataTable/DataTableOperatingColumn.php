@@ -14,6 +14,8 @@ class DataTableOperatingColumn
 
     public $colName = '';
 
+    public $modalName = 'modal-confirm';
+
     protected $typeMapping = array(
         'editUrl' => '编辑',
         'deleteUrl' => '删除',
@@ -42,6 +44,9 @@ class DataTableOperatingColumn
             }
             if (isset($config['condition'])) {
                 $this->condition = $config['condition'];
+            }
+            if(isset($config['modalName'])){
+                $this->modalName = $config['modalName'];
             }
         } else {
             $this->type = $colName;
