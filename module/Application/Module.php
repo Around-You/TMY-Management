@@ -13,6 +13,9 @@ use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ResponseInterface as Response;
 use Zend\Mvc\Application;
 
+use Zend\Validator\AbstractValidator;
+use Zend\Navigation\Page\Mvc;
+
 class Module
 {
 
@@ -33,6 +36,18 @@ class Module
             $this,
             'registerJsonStrategy'
         ), 100);
+
+
+        $translator = $e->getApplication()->getServiceManager()->get('translator');
+
+        $translator->addTranslationFile(
+            'phpArray',
+            'vendor/zendframework/zendframework/resources/languages/zh/Zend_Validate.php', //or Zend_Captcha
+            'default',
+            'zh_CN'
+        );
+
+        AbstractValidator::setDefaultTranslator($translator);
     }
 
     /**

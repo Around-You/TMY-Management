@@ -21,6 +21,7 @@ use Zend\Db\Sql\Predicate\Expression;
 use Application\Form\MemberGoodsForm;
 use Application\Model\Json\JsonResult;
 use Application\Model\Logs\MemberLog;
+use Zend\Validator\AbstractValidator;
 
 class MemberController extends AbstractActionController
 {
@@ -109,14 +110,15 @@ class MemberController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = $request->getPost();
-            $data['goods'] = 0;
-            $form->setInputFilter($member->getInputFilter());
+//             var_dump(AbstractValidator::getDefaultTranslator());exit();
+//             $data['goods'] = 0;
+//             $form->setInputFilter($member->getInputFilter());
             $form->setData($data);
             if ($form->isValid()) {
                 $memberTable = $this->getMemberTable();
                 $member = $memberTable->saveMember($member);
                 $this->flashMessenger()->addSuccessMessage('会员 ' . $member->name . ' 已编辑');
-                return $this->redirect()->toUrl('/member');
+                return $this->redirect()->toUrl('/member/profile/' . $member->id);
             } else {
                 $this->flashMessenger()->addErrorMessage($form->getMessages());
             }

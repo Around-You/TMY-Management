@@ -32,12 +32,13 @@ class Member extends AbstractModel
     public $update_time = '';
     public $status = 1;
     public $is_deleted = 0;
-    public $goods = 0;
+//     public $goods = 0;
     public $description = '';
     public $referral = NULL;
     public $referral_staff_name = '';
     public $disable_type = 0;
     public $password = '';
+    public $confirm_password = '';
 
     public function __construct()
     {
@@ -66,6 +67,40 @@ class Member extends AbstractModel
                         )
                     )
                 ) );
+            $inputFilter->add(
+                array(
+                    'name' => 'password',
+                    'required' => true,
+                    'filters' => array(
+                        array(
+                            'name' => 'StripTags'
+                        ),
+                        array(
+                            'name' => 'StringTrim'
+                        )
+                    )
+                ) );
+            $inputFilter->add(
+                array(
+                    'name' => 'confirm_password',
+                    'required' => true,
+                    'filters' => array(
+                        array(
+                            'name' => 'StripTags'
+                        ),
+                        array(
+                            'name' => 'StringTrim'
+                        )
+                    ),
+                    'validators' => array(
+                        array(
+                            'name' => 'Identical',
+                            'options' => array(
+                                'token' => 'password'
+                            )
+                        )
+                    )
+                ) );
             $this->inputFilter = $inputFilter;
         }
 
@@ -85,7 +120,7 @@ class Member extends AbstractModel
         $this->parent_name = (isset( $array['parent_name'] )) ? $array['parent_name'] : $this->parent_name;
         $this->gender = (isset( $array['gender'] )) ? $array['gender'] : $this->gender;
         $this->dob = (isset( $array['dob'] )) ? $array['dob'] : $this->dob;
-        $this->goods = (isset( $array['goods'] )) ? $array['goods'] : $this->goods;
+//         $this->goods = (isset( $array['goods'] )) ? $array['goods'] : $this->goods;
         $this->created_at_store = (isset( $array['created_at_store'] )) ? $array['created_at_store'] : $this->created_at_store;
         $this->created_by_user = (isset( $array['created_by_user'] )) ? $array['created_by_user'] : $this->created_by_user;
         $this->created_time = (isset( $array['created_time'] )) ? $array['created_time'] : $this->created_time;
@@ -97,6 +132,7 @@ class Member extends AbstractModel
         $this->referral_staff_name = (isset( $array['referral_staff_name'] )) ? $array['referral_staff_name'] : $this->referral_staff_name;
         $this->disable_type = (isset( $array['disable_type'] )) ? $array['disable_type'] : $this->disable_type;
         $this->password = (isset( $array['password'] )) ? $array['password'] : $this->password;
+        $this->confirm_password = (isset( $array['confirm_password'] )) ? $array['confirm_password'] : $this->confirm_password;
     }
 
     public function getArrayCopy()
@@ -125,8 +161,7 @@ class Member extends AbstractModel
             'statusString' => $this->statusString,
             'disable_type' => $this->disable_type,
             'password' => $this->password
-        )
-        ;
+        );
         return $data;
     }
 
@@ -138,6 +173,17 @@ class Member extends AbstractModel
             case Member::MEMBER_STATUS_DISABLE:
                 return '<span class="text-danger">禁用</span>';
         }
+    }
+
+    public function encryptPassword( $password = NULL, $salt = NULL )
+    {
+        if ( $password == NULL ) {
+            $password = $this->password;
+        }
+        if ( $salt == NULL ) {
+            $salt = $this->login_name;
+        }
+        return md5( $password . $salt );
     }
 }
 

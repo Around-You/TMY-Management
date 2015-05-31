@@ -96,7 +96,7 @@ class Staff extends AbstractModel
                 ),
                 'validators' => array(
                     array(
-                        'name' => 'Zend\Validator\Identical',
+                        'name' => 'Identical',
                         'options' => array(
                             'token' => 'password'
                         )
