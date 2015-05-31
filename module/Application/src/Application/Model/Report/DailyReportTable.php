@@ -123,10 +123,11 @@ class DailyReportTable extends AbstractModelMapper
         $this->save($report);
     }
 
-    public function addSaleCount()
+    public function addSaleCountAndAmount($amount)
     {
         $report = $this->getOneByDate();
         $report->sale_count++;
+        $report->sale_amount += $amount;
         $this->save($report);
     }
 

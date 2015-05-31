@@ -32,7 +32,7 @@ class SaleController extends AbstractActionController
             $memberGoods = new MemberGoods();
             $memberGoods->exchangeArray($_GET);
             $this->getMemberGoodsTable()->save($memberGoods);
-            $this->getDailyReportTable()->addSaleCount();
+            $this->getDailyReportTable()->addSaleCountAndAmount($goods->price);
             $this->getSellLogTable()->addSellLog($goods, $member);
             $returnJson = JsonResult::buildResult(JsonResult::JSON_RESULT_SUCCESSFUL, array());
         } catch (\Exception $e) {
@@ -62,7 +62,7 @@ class SaleController extends AbstractActionController
                     if ($goods->isVirtual()) {
                         $this->addToMemberGoods($goods, $member);
                     }
-                    $this->getDailyReportTable()->addSaleCount();
+                    $this->getDailyReportTable()->addSaleCountAndAmount($goods->price);
                     $goods->doBuyGoods();
                     $this->getGoodsTable()->save($goods);
                 }

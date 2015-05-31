@@ -19,6 +19,8 @@ class DailyReport extends AbstractModel
 
     public $sale_count = 0;
 
+    public $sale_amount = 0;
+
 
     /**
      * exclude fields to save
@@ -31,6 +33,7 @@ class DailyReport extends AbstractModel
         $this->date = (isset($array['date'])) ? $array['date'] : $this->date;
         $this->member_count = (isset($array['member_count'])) ? $array['member_count'] : $this->member_count;
         $this->sale_count = (isset($array['sale_count'])) ? $array['sale_count'] : $this->sale_count;
+        $this->sale_amount = (isset($array['sale_amount'])) ? $array['sale_amount'] : $this->sale_amount;
     }
 
     public function getArrayCopy()
@@ -40,6 +43,7 @@ class DailyReport extends AbstractModel
             'date' => $this->date,
             'member_count' => $this->member_count,
             'sale_count' => $this->sale_count,
+            'sale_amount' => $this->sale_amount
         );
         return $data;
     }
