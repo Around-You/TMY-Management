@@ -1,0 +1,33 @@
+<?php
+$title = '店铺设置';
+$this->layout()->currentItem = $title;
+$this->headTitle($title);
+echo $this->pageHeader( $title );
+?>
+
+<?php $this->flashMessenger()->render();?>
+
+<?php
+$form->setAttribute('class', 'form-horizontal');
+$form->setAttribute('role', 'form');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+?>
+<div class="col-md-6">
+<?php
+echo $this->formRow($form->get('fake_sale_amount'));
+?>
+</div>
+<div class="col-md-6">
+</div>
+<div class="form-group">
+    <div class="col-sm-offset-1 col-sm-12">
+        <?=$this->formActions($form->get('submit'));?>
+    </div>
+</div>
+<?php
+// echo $this->formActions( $form->get('cancel'), $form->get('submit'));
+echo $this->form()->closeTag();
+?>

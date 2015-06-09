@@ -11,8 +11,10 @@ namespace Application\Controller;
 
 use Zend\View\Model\JsonModel;
 use Application\Model\Json\DataTableResult;
+use Application\Form\Store\SettingForm;
 use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Predicate\Expression;
+use Application\Model\Report\DailyReport;
 
 class StoreController extends AbstractActionController
 {
@@ -75,5 +77,26 @@ class StoreController extends AbstractActionController
         }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
         return $viewModel;
+    }
+
+    public function settingAction(){
+        $form = SettingForm::getInstance($this->getServiceLocator());
+
+        $request = $this->getRequest();
+        $model = $this->getDailyReportTable()->getOneByDate();
+        $form->bind($model);
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $model = $this->getDailyReportTable()->save($model);
+                $this->flashMessenger()->addSuccessMessage('当日营业额已修改');
+            } else {
+                // print_r($form->getMessages());
+            }
+        }
+
+        return array(
+            'form' => $form
+        );
     }
 }

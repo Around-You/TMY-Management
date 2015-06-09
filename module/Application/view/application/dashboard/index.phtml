@@ -53,7 +53,7 @@ use SamFramework\Core\App;
 
 								<div class="infobox-data">
 									<span class="infobox-data-number"><?=$today->sale_count?></span>
-									<div class="infobox-content">商品销售</div>
+									<div class="infobox-content">商品销售(数量)</div>
 								</div>
 
 							</div>
@@ -64,8 +64,8 @@ use SamFramework\Core\App;
 								</div>
 
 								<div class="infobox-data">
-									<span class="infobox-data-number"><?=money_format('%.2n',$today->sale_amount*App::getUser()->fake_log_discount)?></span>
-									<div class="infobox-content">商品销售</div>
+									<span class="infobox-data-number"><?=money_format('%.2n',$today->fake_sale_amount)?></span>
+									<div class="infobox-content">商品销售(金额)</div>
 								</div>
 
 							</div>

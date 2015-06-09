@@ -61,12 +61,12 @@ abstract class AbstractModel implements InputFilterAwareInterface, ArraySerializ
 
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
-        throw new \Exception("Please set InputFilter");
+        throw new \Exception("Please set setInputFilter");
     }
 
     public function getInputFilter()
     {
-        throw new \Exception("Please set InputFilter");
+        throw new \Exception("Please set getInputFilter");
     }
 
     /**
