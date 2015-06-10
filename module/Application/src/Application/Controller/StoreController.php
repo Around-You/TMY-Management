@@ -89,6 +89,7 @@ class StoreController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $model = $this->getDailyReportTable()->save($model);
+                $form->bind($model);
                 $this->flashMessenger()->addSuccessMessage('当日营业额已修改');
             } else {
                 // print_r($form->getMessages());
