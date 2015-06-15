@@ -1,0 +1,35 @@
+<?php
+$title = '历史数据';
+$this->layout()->currentItem = $title;
+$this->headTitle($title);
+$tableOptions = array(
+    'cols' => array(
+        array(
+            'title' => '日期',
+            'key' => 'date'
+        ),
+        array(
+            'title' => '金额',
+            'key' => 'fake_sale_amount'
+        ),
+    ),
+    'getListDataUrl' => '/store/getDailyLogData',
+    'operatingCol' => false
+)?>
+
+<div class="page-header">
+<h1>
+    <?= $this->escapeHtml($title); ?>
+</h1>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <?=$this->flashMessenger()->render();?>
+        <div class="row">
+            <div class="col-xs-12">
+                <?=$this->dataTable($tableOptions)?>
+            </div>
+        </div>
+    </div>
+</div>
+

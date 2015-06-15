@@ -142,6 +142,7 @@ class DataTable extends AbstractHelper
             'data' => isset($option['getListDataParams']) ? $option['getListDataParams'] : array()
         );
         $ajaxOption = json_encode($ajaxOption);
+        $orderOption = isset($option['order'])?$option['order']: '[0,"desc"]';
         $inlineScriptHelper->captureStart();
         echo <<<JS
 var \${$this->dataTableName} = $('#{$this->dataTableName}').DataTable( {
@@ -155,6 +156,7 @@ var \${$this->dataTableName} = $('#{$this->dataTableName}').DataTable( {
 	lengthChange: false,
 	info: true,
 	ajax: {$ajaxOption},
+    order: [{$orderOption}],
 	columns: [
 JS;
         echo $this->renderColumns();

@@ -100,4 +100,29 @@ class StoreController extends AbstractActionController
             'form' => $form
         );
     }
+
+    public function historyAction(){
+        return array();
+    }
+
+    public function getDailyLogDataAction()
+    {
+        try {
+//             $search = $_GET['search']['value'];
+//             $where = function (Where $where) use($search)
+//             {
+//                 if (! empty($search)) {
+//                     $where->addPredicate(new Expression(" goods.code like '{$search}%' or member.code like '{$search}%' "));
+//                 }
+//             };
+            $count = $this->getDailyReportTable()->getFetchAllCounts();
+            $logs = $this->getDailyReportTable()->fetchAll(array(), $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
+
+            $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $logs);
+        } catch (\Exception $e) {
+            $returnJson = DataTableResult::buildResult();
+        }
+        $viewModel = new JsonModel($returnJson->getArrayCopy());
+        return $viewModel;
+    }
 }
