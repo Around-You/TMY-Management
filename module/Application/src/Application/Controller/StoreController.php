@@ -66,13 +66,14 @@ class StoreController extends AbstractActionController
             $search = $_GET['search']['value'];
             $where = function (Where $where) use($search)
             {
-                $where->addPredicate(new Expression(" member.enable = 1 and ( goods.code like '{$search}%' or member.code like '{$search}%' ) "));
+                $where->addPredicate(new Expression(" member.status = 1 and ( goods.code like '{$search}%' or member.code like '{$search}%' ) "));
             };
             $count = $this->getMemberLogTable()->getFetchAllCounts($where);
             $logs = $this->getMemberLogTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 
             $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $logs);
         } catch (\Exception $e) {
+            echo $e->getMessage();
             $returnJson = DataTableResult::buildResult();
         }
         $viewModel = new JsonModel($returnJson->getArrayCopy());
