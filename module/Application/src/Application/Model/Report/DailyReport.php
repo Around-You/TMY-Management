@@ -6,7 +6,7 @@ use Zend\InputFilter\InputFilter;
 
 /**
  *
- * @property string priceString
+ * @property string dateString
  *
  */
 class DailyReport extends AbstractModel
@@ -18,10 +18,11 @@ class DailyReport extends AbstractModel
     public $sale_amount = 0;
     public $fake_sale_amount = 0;
 
+
     /**
      * exclude fields to save
      */
-    protected $exclude = array();
+    protected $exclude = array('dateString');
 
     public function exchangeArray( array $array )
     {
@@ -41,7 +42,8 @@ class DailyReport extends AbstractModel
             'member_count' => $this->member_count,
             'sale_count' => $this->sale_count,
             'sale_amount' => $this->sale_amount,
-            'fake_sale_amount' => $this->fake_sale_amount
+            'fake_sale_amount' => $this->fake_sale_amount,
+            'dateString' => $this->dateString
         );
         return $data;
     }
@@ -68,6 +70,10 @@ class DailyReport extends AbstractModel
         }
 
         return $this->inputFilter;
+    }
+
+    public function getDateString(){
+        return date('Y-m-d',strtotime($this->date));
     }
 }
 

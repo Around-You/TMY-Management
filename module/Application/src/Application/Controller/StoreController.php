@@ -81,16 +81,21 @@ class StoreController extends AbstractActionController
 
     public function settingAction(){
         $form = SettingForm::getInstance($this->getServiceLocator());
-
+        $id = (int) $this->params('id', 0);
         $request = $this->getRequest();
-        $model = $this->getDailyReportTable()->getOneByDate();
+        if ($id>0) {
+        	$model = $this->getDailyReportTable()->getOneById($id);
+        }else{
+            $model = $this->getDailyReportTable()->getOneByDate();
+        }
         $form->bind($model);
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $model = $this->getDailyReportTable()->save($model);
                 $form->bind($model);
-                $this->flashMessenger()->addSuccessMessage('当日营业额已修改');
+                $this->flashMessenger()->addSuccessMessage($model->dateString . ' 营业额已修改');
+                return $this->redirect()->toUrl('/store/history');
             } else {
                 // print_r($form->getMessages());
             }
@@ -115,6 +120,7 @@ class StoreController extends AbstractActionController
 //                     $where->addPredicate(new Expression(" goods.code like '{$search}%' or member.code like '{$search}%' "));
 //                 }
 //             };
+            $_GET['columns'][0]['data'] = 'date'; // dateString 不能排序  修改为 date 列
             $count = $this->getDailyReportTable()->getFetchAllCounts();
             $logs = $this->getDailyReportTable()->fetchAll(array(), $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
 

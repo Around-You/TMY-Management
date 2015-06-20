@@ -6,7 +6,7 @@ $tableOptions = array(
     'cols' => array(
         array(
             'title' => '日期',
-            'key' => 'date'
+            'key' => 'dateString'
         ),
         array(
             'title' => '金额',
@@ -14,7 +14,9 @@ $tableOptions = array(
         ),
     ),
     'getListDataUrl' => '/store/getDailyLogData',
-    'operatingCol' => false
+    'operatingCol' => array(
+        'editUrl' => '/store/setting/<{RowId}>'
+    )
 )?>
 
 <div class="page-header">
