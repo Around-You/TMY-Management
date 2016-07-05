@@ -58,8 +58,13 @@ class MemberController extends AbstractActionController
             };
             $count = $this->getMemberTable()->getFetchAllCounts($where);
             $products = $this->getMemberTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
-
-            $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $products);
+            $arrProducts = $products->toArray();
+            foreach ($arrProducts as $key => $product){
+                $arrProducts[$key]['DT_RowId'] = $product['id'];
+                $arrProducts[$key]['created_time'] = date('Y-m-d', strtotime($product['created_time']));
+                $arrProducts[$key]['dob'] = date('Y-m-d', strtotime($product['dob']));
+            }
+            $returnJson = DataTableResult::buildResult($_GET['draw'], $count, $arrProducts);
         } catch (\Exception $e) {
             $returnJson = DataTableResult::buildResult();
             $returnJson->setErrorMessage($e->getMessage());

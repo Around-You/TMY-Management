@@ -40,6 +40,8 @@ class DataTable extends AbstractHelper
     protected $options;
 
     protected $dataTableName = 'defaultDataTable';
+    
+    public $searching = true;
 
     /**
      *
@@ -143,6 +145,7 @@ class DataTable extends AbstractHelper
         );
         $ajaxOption = json_encode($ajaxOption);
         $orderOption = isset($option['order'])?$option['order']: '[0,"desc"]';
+        $searching = isset($option['searching'])?$option['searching']: 'true';
         $inlineScriptHelper->captureStart();
         echo <<<JS
 var \${$this->dataTableName} = $('#{$this->dataTableName}').DataTable( {
@@ -152,7 +155,7 @@ var \${$this->dataTableName} = $('#{$this->dataTableName}').DataTable( {
     processing: false,
     serverSide: true,
     bAutoWidth: false,
-	searching: true,
+	searching: {$searching},
 	lengthChange: false,
 	info: true,
 	ajax: {$ajaxOption},

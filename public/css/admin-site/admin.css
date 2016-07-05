@@ -16,3 +16,21 @@ a {
 .form-horizontal input[type=checkbox].ace + .lbl{
    margin-top: 7px;
 }
+
+.container-search{
+	border: 1px solid #ddd;
+	padding:  10px 0;
+	margin-bottom: 10px;
+}
+.container-search .row{
+	margin: 0px;
+}
+.container-search .form-group{
+	margin-bottom: 5px;	
+}
+
+.container-search .form-submit-group{
+	position: absolute;
+	right: 30px;
+	z-index: 20;
+}
