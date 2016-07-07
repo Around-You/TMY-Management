@@ -4,80 +4,15 @@ $title = '会员列表';
 $this->layout()->currentItem = $title;
 $this->headTitle( $title );
 
+
+$this->inlinescript()->appendFile( $this->basePath( 'js/dataTables/jquery.dataTables.js' ) );
+$this->inlinescript()->appendFile( $this->basePath( 'js/dataTables/jquery.dataTables.bootstrap.js' ) );
+$this->inlinescript()->appendFile( $this->basePath( 'js/date-time/bootstrap-datepicker.js' ) );
+$this->inlinescript()->appendFile( $this->basePath( 'js/date-time/bootstrap-datepicker.zh.js' ) );
 $this->inlinescript()->appendFile( $this->basePath( 'js/main/member/list.js' ) );
 
-$tableOptions = array(
-    'dataTableName' => 'member',
-//     'searching' => 'false',
-    'cols' => array(
-        array(
-            'title' => '会员卡号',
-            'key' => 'code',
-            'linkTarget' => 'editLink'
-        ),
-        array(
-            'title' => '宝贝名称',
-            'key' => 'name'
-        ),
-        array(
-            'title' => '手机/电话',
-            'key' => 'phone'
-        ),
-        array(
-            'title' => '监护人名称',
-            'key' => 'parent_name'
-        ),
-        array(
-            'title' => '积分',
-            'key' => 'point'
-        ),
-        array(
-            'title' => '办卡日期',
-            'key' => 'created_time'
-        ),
-        array(
-            'title' => '会员生日',
-            'key' => 'dob'
-        ),
-        array(
-            'title' => '经办人',
-            'key' => 'referral_staff_name'
-        ),
-        array(
-            'title' => '状态',
-            'key' => 'statusString'
-        )
-    ),
-    'getListDataUrl' => '/member/getMemberListData',
-    'operatingCol' => array(
-        'editUrl' => '/member/profile/<{RowId}>',
-        'deleteUrl' => array(
-            'url' => '/member/delete/<{RowId}>',
-            'type' => 'deleteUrl',
-            'condition' => array(
-                'status' => Member::MEMBER_STATUS_DISABLE
-            )
-        ),
-        'disable' => array(
-            'url' => '/member/disableMember/<{RowId}>',
-            'type' => 'confirmModal',
-            'label' => '禁用',
-            'modalName' => 'modal-disable',
-            'condition' => array(
-                'status' => Member::MEMBER_STATUS_NORMAL
-            )
-        ),
-        'enable' => array(
-            'url' => '/member/enableMember/<{RowId}>',
-            'type' => 'confirmModal',
-            'label' => '启用',
-            'condition' => array(
-                'status' => Member::MEMBER_STATUS_DISABLE
-            )
-        )
-    )
-)?>
 
+?>
 <div class="page-header">
 	<h1>
     <?= $this->escapeHtml($title); ?>
@@ -91,7 +26,22 @@ $tableOptions = array(
         <?= $this->partial( '/application/member/_search.phtml', []);?>
         <div class="row">
 			<div class="col-xs-12">
-            <?=$this->dataTable($tableOptions)?>
+            	<table id="member" class="table table-striped table-bordered table-hover">
+                	<thead>
+                    	<tr>
+                        	<th>会员卡号</th>
+                        	<th>宝贝名称</th>
+                        	<th>手机/电话</th>
+                        	<th>监护人名称</th>
+                        	<th>积分</th>
+                        	<th>办卡日期</th>
+                        	<th>会员生日</th>
+                        	<th>经办人</th>
+                        	<th>状态</th>
+                        	<th></th>
+                    	</tr>
+                	</thead>
+            	</table>
             </div>
 		</div>
 	</div>
@@ -174,3 +124,8 @@ $tableOptions = array(
 	</div>
 </div>
 
+<script type="text/javascript">
+    //<!--
+
+    //-->
+</script>

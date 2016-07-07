@@ -51,10 +51,7 @@ class MemberController extends AbstractActionController
     public function getMemberListDataAction()
     {
         try {
-            $search = $_GET['search']['value'];
-            $where = function (Where $where) use($search)
             {
-                $where->addPredicate(new Expression("member.is_deleted = 0 and (member.code like '{$search}%' or member.phone like '{$search}%' or member.name like '{$search}%')"));
             };
             $count = $this->getMemberTable()->getFetchAllCounts($where);
             $products = $this->getMemberTable()->fetchAll($where, $_GET['start'], $_GET['length'], DataTableResult::getOrderString($_GET));
