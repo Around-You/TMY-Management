@@ -60,7 +60,7 @@ class MemberController extends AbstractActionController
                 if( !empty($searchArr['name']) ){ $where->like('member.name', '%' . $searchArr['name'] . '%'); }
                 if( !empty($searchArr['code']) ){ $where->like('member.code', '%' . $searchArr['code'] . '%'); }
                 if( !empty($searchArr['phone']) ){ $where->like('member.phone', '%' . $searchArr['phone'] . '%'); }
-                if( $searchArr['status'] !== '' ){ $where->equalTo('member.status', $searchArr['status']); }
+                if( $searchArr['status'] != '' ){ $where->equalTo('member.status', $searchArr['status']); }
                 if( !empty($searchArr['dob']) ){ $where->addPredicate(new Expression("right(date_format(member.dob,'%Y-%m-%d'),5) = '{$searchArr['dob']}'")); }
             };
             
