@@ -79,12 +79,16 @@ var tmy_member_list = {
 	
 	initList: function(){
 		tmy_member_list.memberList = $('#member').DataTable( {
-			dom: "lrtip",
+			dom: 'Tlrtip',
+	        "tableTools": {
+	            "sSwfPath": "/js/dataTables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+	            "aButtons": [ "xls" ]
+	        },
 		    processing: false,
 		    serverSide: true,
 		    bAutoWidth: false,
 			searching: true,
-			lengthChange: false,
+			lengthChange: true,
 			info: true,
 			ajax: {
 				"url":"\/member\/getMemberListData","data":{

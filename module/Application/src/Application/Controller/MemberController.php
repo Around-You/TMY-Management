@@ -53,14 +53,15 @@ class MemberController extends AbstractActionController
         try {
             $searchStr = $_GET['search']['value'];
             parse_str($searchStr, $searchArr);
+          
             $where = function (Where $where) use($searchArr)
             {
                 $where->equalTo('is_deleted', 0);
                 if( !empty($searchArr['name']) ){ $where->like('member.name', '%' . $searchArr['name'] . '%'); }
                 if( !empty($searchArr['code']) ){ $where->like('member.code', '%' . $searchArr['code'] . '%'); }
                 if( !empty($searchArr['phone']) ){ $where->like('member.phone', '%' . $searchArr['phone'] . '%'); }
+                if( $searchArr['status'] !== '' ){ $where->equalTo('member.status', $searchArr['status']); }
                 if( !empty($searchArr['dob']) ){ $where->addPredicate(new Expression("right(date_format(member.dob,'%Y-%m-%d'),5) = '{$searchArr['dob']}'")); }
-//                 $where->addPredicate(new Expression("member.is_deleted = 0 and (member.code like '{$search}%' or member.phone like '{$search}%' or member.name like '{$search}%')"));
             };
             
             $count = $this->getMemberTable()->getFetchAllCounts($where);

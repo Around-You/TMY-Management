@@ -7,6 +7,7 @@ $this->headTitle( $title );
 
 $this->inlinescript()->appendFile( $this->basePath( 'js/dataTables/jquery.dataTables.js' ) );
 $this->inlinescript()->appendFile( $this->basePath( 'js/dataTables/jquery.dataTables.bootstrap.js' ) );
+$this->inlinescript()->appendFile( $this->basePath( 'js/dataTables/extensions/TableTools/js/dataTables.tableTools.js' ) );
 $this->inlinescript()->appendFile( $this->basePath( 'js/date-time/bootstrap-datepicker.js' ) );
 $this->inlinescript()->appendFile( $this->basePath( 'js/date-time/bootstrap-datepicker.zh.js' ) );
 $this->inlinescript()->appendFile( $this->basePath( 'js/main/member/list.js' ) );
@@ -123,9 +124,3 @@ $this->inlinescript()->appendFile( $this->basePath( 'js/main/member/list.js' ) )
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript">
-    //<!--
-
-    //-->
-</script>
